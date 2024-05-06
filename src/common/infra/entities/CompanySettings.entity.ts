@@ -1,9 +1,10 @@
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import { Base } from './Base';
 import { Company } from './Company.entity';
+import type { ISetting } from '../../domain/entities/ICompanySetting';
 
 @Entity({ name: 'company_settings' })
-export class Setting extends Base {
+export class Setting extends Base implements ISetting {
   @Column({ length: 100 })
   logoUrl: string;
 

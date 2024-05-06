@@ -12,9 +12,10 @@ import { Aeco } from './Aeco.entity';
 import { Promotion } from './Promotion.entity';
 import { Setting } from './CompanySettings.entity';
 import { UserCompanyPermissions } from './Permission.entity';
+import type { ICompany } from '../../domain/entities/ICompany';
 
 @Entity({ name: 'companies' })
-export class Company extends Base {
+export class Company extends Base implements ICompany {
   @Column({ length: 100 })
   name: string;
 
