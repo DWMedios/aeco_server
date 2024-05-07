@@ -19,14 +19,14 @@ export class Base {
   @UpdateDateColumn({
     select: false,
     type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
+    default: null,
   })
   updatedAt?: Date;
 
   @DeleteDateColumn({
     select: false,
     type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
+    default: null,
   })
   deletedAt?: Date;
 }
