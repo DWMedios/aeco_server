@@ -16,7 +16,7 @@ import type { ICompany } from '../../domain/entities/ICompany';
 
 @Entity({ name: 'companies' })
 export class Company extends Base implements ICompany {
-  @Column({ length: 100 })
+  @Column({ length: 100, unique: true })
   name: string;
 
   @Column({ length: 13, unique: true })

@@ -24,7 +24,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async create(createUser: CreateUserDto): Promise<Partial<IUser>> {
-    const user = this.userRepository.create(createUser);
+    const { companyId, ...newUser } = createUser;
+    const user = this.userRepository.create(newUser);
+    user.companies = [{ id: companyId } as any];
     await this.userRepository.save(user);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
