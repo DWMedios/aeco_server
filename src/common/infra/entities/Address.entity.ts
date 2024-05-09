@@ -1,9 +1,10 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Aeco } from './Aeco.entity';
 import { Base } from './Base';
+import type { IAddress } from '../../domain/entities/IAddress';
 
 @Entity('addresses')
-export class Address extends Base {
+export class Address extends Base implements IAddress {
   @Column()
   postalCode: number;
 

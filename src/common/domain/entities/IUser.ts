@@ -9,7 +9,6 @@ export interface IUser {
   photoUrl?: string | null;
   gender?: string;
   password?: string;
-  isActive: boolean;
   companyId?: number;
   companies: ICompany[];
   userCompanyPermissions: IUserCompanyPermissions[];

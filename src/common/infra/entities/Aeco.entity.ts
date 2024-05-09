@@ -3,6 +3,7 @@ import { Base } from './Base';
 import { Ticket } from './Ticket.entity';
 import { Company } from './Company.entity';
 import { Address } from './Address.entity';
+import type { IAeco } from '../../domain/entities/IAeco';
 
 export enum AecoStatus {
   ENABLED = 'enabled',
@@ -10,7 +11,7 @@ export enum AecoStatus {
 }
 
 @Entity('aecos')
-export class Aeco extends Base {
+export class Aeco extends Base implements IAeco {
   @Column()
   name: string;
 

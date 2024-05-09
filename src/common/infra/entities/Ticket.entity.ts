@@ -1,9 +1,10 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { Base } from './Base';
 import { Aeco } from './Aeco.entity';
+import type { ITicket } from '../../domain/entities/ITicket';
 
 @Entity()
-export class Ticket extends Base {
+export class Ticket extends Base implements ITicket {
   @Column({ length: 100 })
   folio: string;
 
