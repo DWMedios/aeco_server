@@ -14,7 +14,7 @@ import { Setting } from './CompanySettings.entity';
 import { UserCompanyPermissions } from './Permission.entity';
 import type { ICompany } from '../../domain/entities/ICompany';
 
-@Entity({ name: 'companies' })
+@Entity('companies')
 export class Company extends Base implements ICompany {
   @Column({ length: 100, unique: true })
   name: string;
