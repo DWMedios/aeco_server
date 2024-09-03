@@ -1,28 +1,31 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { Base } from './Base';
 import { Aeco } from './Aeco.entity';
-import type { ITicket } from '../../domain/entities/ITicket';
+import { RewardCategory } from './RewardCategory.entity';
 
-@Entity('tickets')
-export class Ticket extends Base implements ITicket {
+@Entity('rewards')
+export class Reward extends Base {
   @Column({ length: 100 })
-  folio: string;
+  name: string;
 
   @Column({ length: 100 })
-  method: string;
-
-  @Column('jsonb')
-  summary: Record<string, any>;
+  icon: string;
 
   @Column({ default: 0 })
-  totalCans: number;
+  order: number;
 
   @Column({ default: 0 })
-  totalBottles: number;
+  status: number;
 
   @Column({ nullable: true })
   aecoId: number;
 
   @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
   aeco: Aeco;
+
+  @Column({ nullable: true })
+  categoryId: number;
+
+  @ManyToOne(() => RewardCategory, (category) => category.rewards)
+  category: RewardCategory;
 }

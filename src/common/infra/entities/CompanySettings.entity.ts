@@ -9,7 +9,7 @@ export class Setting extends Base implements ISetting {
   logoUrl: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  colors: Record<string, any>[];
+  metadata: Record<string, any>[];
 
   @Column()
   companyId: number;

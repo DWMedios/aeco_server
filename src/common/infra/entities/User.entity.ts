@@ -5,7 +5,7 @@ import { Company } from './Company.entity';
 import { UserCompanyPermissions } from './Permission.entity';
 import type { IUser } from '../../domain/entities/IUser';
 
-@Entity({ name: 'users' })
+@Entity('users')
 export class User extends Base implements IUser {
   @Column({ nullable: false, length: 100 })
   name: string;
