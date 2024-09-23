@@ -1,7 +1,7 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import type { IAddress } from '../../domain/entities/IAddress';
 import { Aeco } from './Aeco.entity';
 import { Base } from './Base';
-import type { IAddress } from '../../domain/entities/IAddress';
 
 @Entity('addresses')
 export class Address extends Base implements IAddress {
