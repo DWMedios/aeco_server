@@ -1,9 +1,10 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Base } from './Base';
-import { Ticket } from './Ticket.entity';
-import { Company } from './Company.entity';
-import { Address } from './Address.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import type { IAeco } from '../../domain/entities/IAeco';
+import { Address } from './Address.entity';
+import { Base } from './Base';
+import { Company } from './Company.entity';
+import { Page } from './Page.entity';
+import { Ticket } from './Ticket.entity';
 
 export enum AecoStatus {
   ENABLED = 'enabled',
@@ -42,4 +43,7 @@ export class Aeco extends Base implements IAeco {
 
   @OneToMany(() => Ticket, (ticket) => ticket.aeco)
   tickets: Ticket[];
+
+  @OneToMany(() => Page, (page) => page.aeco)
+  pages: Page[];
 }
