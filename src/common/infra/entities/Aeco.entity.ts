@@ -26,6 +26,9 @@ export class Aeco extends Base implements IAeco {
   @Column({ default: false })
   isOnline: boolean;
 
+  @Column({ unique: true })
+  serialNumber: string;
+
   @Column('jsonb')
   currentCoords: Record<string, any>;
 

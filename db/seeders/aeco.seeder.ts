@@ -28,6 +28,7 @@ export default class AecoSeeder implements Seeder {
       name: 'AECO Main',
       status: AecoStatus.ENABLED,
       isOnline: true,
+      serialNumber: 'AECO123456',
       currentCoords: { latitude: 40.7128, longitude: -74.006 },
       companyId: company.id,
       addressId: address.id,

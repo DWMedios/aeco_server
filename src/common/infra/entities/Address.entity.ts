@@ -17,7 +17,7 @@ export class Address extends Base implements IAddress {
   @Column('jsonb')
   coords: Record<string, any>;
 
-  @Column('jsonb', { array: true })
+  @Column('jsonb')
   geometry: Record<string, any>[];
 
   @OneToMany(() => Aeco, (aeco) => aeco.address)

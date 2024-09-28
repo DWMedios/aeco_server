@@ -40,7 +40,4 @@ export class Company extends Base implements ICompany {
 
   @OneToMany(() => Promotion, (promotion) => promotion.company)
   promotions: Promotion[];
-
-  // @OneToMany(() => Publicity, publicity => publicity.company)
-  // publicities: Publicity[];
 }

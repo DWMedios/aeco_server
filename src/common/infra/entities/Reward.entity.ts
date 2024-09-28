@@ -9,13 +9,16 @@ export class Reward extends Base {
   name: string;
 
   @Column({ length: 100 })
-  icon: string;
+  image: string;
 
   @Column({ default: 0 })
   order: number;
 
   @Column({ default: 0 })
   status: number;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata: Record<string, any>[];
 
   @Column({ nullable: true })
   aecoId: number;

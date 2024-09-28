@@ -1,19 +1,18 @@
-import 'reflect-metadata';
-import { runSeeder } from 'typeorm-extension';
-import AppDataSource from '../../db/typeorm.config';
-import MainSeeder from './main.seeder';
-const run = async () => {
-  try {
-    await AppDataSource.initialize();
+import { configOptions } from '../typeorm.config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { runSeeders, SeederOptions } from 'typeorm-extension';
+import AecoSeeder from './aeco.seeder';
+import CompanySeeder from './company.seeder';
 
-    await runSeeder(AppDataSource, MainSeeder);
-
-    console.log('Seeders ejecutados correctamente');
-  } catch (error) {
-    console.error('Error al ejecutar los seeders', error);
-  } finally {
-    await AppDataSource.destroy();
-  }
+const options: DataSourceOptions & SeederOptions = {
+  ...configOptions,
+  seedTracking: true,
+  seedTableName: 'seeds_typeorm',
+  seeds: [CompanySeeder, AecoSeeder],
 };
 
-run();
+const datasource = new DataSource(options);
+datasource.initialize().then(async () => {
+  await runSeeders(datasource);
+  process.exit();
+});

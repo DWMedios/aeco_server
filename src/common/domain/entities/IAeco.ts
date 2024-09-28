@@ -6,6 +6,7 @@ export interface IAeco {
   name: string;
   status: AecoStatus;
   isOnline: boolean;
+  serialNumber: string;
   currentCoords?: Record<string, any> | null;
   companyId?: number;
   addressId?: number;

@@ -5,9 +5,6 @@ import { Reward } from './Reward.entity';
 @Entity('reward_categories')
 export class RewardCategory extends Base {
   @Column({ length: 100 })
-  folio: string;
-
-  @Column({ length: 100 })
   name: string;
 
   @Column({ default: 0 })
