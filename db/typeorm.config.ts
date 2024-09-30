@@ -17,7 +17,10 @@ export const configOptions: PostgresConnectionOptions & DataSourceOptions = {
   synchronize: false,
   logging: configService.get('NODE_ENV') === 'development',
   entities: [__dirname + '/../src/common/infra/entities/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  migrations: [
+    __dirname + '/migrations/*{.ts,.js}',
+    __dirname + '/seeders/*{.ts,.js}',
+  ],
   migrationsTableName: 'migrations_typeorm',
 }
 

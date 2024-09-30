@@ -22,9 +22,9 @@
     "migration:run": "npm run typeorm migration:run -- -d ./db/typeorm.config.ts",
     "migration:generate": "npm run typeorm -- -d ./db/typeorm.config.ts migration:generate ./db/migrations/$npm_config_name",
     "migration:create": "npm run typeorm -- migration:create ./db/migrations/$npm_config_name",
+    "seeder:create": "npm run typeorm -- migration:create ./db/seeders/$npm_config_name",
     "migration:revert": "npm run typeorm -- -d ./db/typeorm.config.ts migration:revert",
-    "migration:show": "npm run typeorm -- migration:show -d ./db/typeorm.config.ts",
-    "seed:run": "ts-node ./db/seeders/seed.ts"
+    "migration:show": "npm run typeorm -- migration:show -d ./db/typeorm.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -70,7 +70,6 @@
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typeorm-extension": "^3.6.1",
     "typescript": "^5.1.3"
   },
   "jest": {

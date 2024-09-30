@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class FirstMigration1727474175417 implements MigrationInterface {
-  name = 'FirstMigration1727474175417'
+export class FirstMigration1727739171278 implements MigrationInterface {
+  name = 'FirstMigration1727739171278'
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -29,7 +29,7 @@ export class FirstMigration1727474175417 implements MigrationInterface {
       `CREATE TYPE "public"."user_company_permissions_role_enum" AS ENUM('admin', 'user', 'guest')`,
     )
     await queryRunner.query(
-      `CREATE TABLE "user_company_permissions" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "permissions" jsonb array NOT NULL, "role" "public"."user_company_permissions_role_enum" NOT NULL, "userId" integer NOT NULL, "companyId" integer NOT NULL, CONSTRAINT "PK_009a581f526624f0dde6026a768" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "user_company_permissions" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "permissions" jsonb NOT NULL, "role" "public"."user_company_permissions_role_enum" NOT NULL, "userId" integer NOT NULL, "companyId" integer NOT NULL, CONSTRAINT "PK_009a581f526624f0dde6026a768" PRIMARY KEY ("id"))`,
     )
     await queryRunner.query(
       `CREATE TABLE "companies" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "rfc" character varying(13) NOT NULL, CONSTRAINT "UQ_3dacbb3eb4f095e29372ff8e131" UNIQUE ("name"), CONSTRAINT "UQ_c0eaf27eab430da819643655682" UNIQUE ("rfc"), CONSTRAINT "PK_d4bc3e82a314fa9e29f652c2c22" PRIMARY KEY ("id"))`,
@@ -38,10 +38,10 @@ export class FirstMigration1727474175417 implements MigrationInterface {
       `CREATE TABLE "users" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "email" character varying NOT NULL, "phone" character varying(20), "position" character varying(50), "photoUrl" character varying, "gender" character varying(20), "password" character varying NOT NULL, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     )
     await queryRunner.query(
-      `CREATE TABLE "rewards" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "image" character varying(100) NOT NULL, "order" integer NOT NULL DEFAULT '0', "status" integer NOT NULL DEFAULT '0', "metadata" jsonb, "aecoId" integer, "categoryId" integer, CONSTRAINT "PK_3d947441a48debeb9b7366f8b8c" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "reward_categories" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "status" integer NOT NULL DEFAULT '0', "order" integer NOT NULL, CONSTRAINT "PK_5d22a5b77861b4464b0a3541534" PRIMARY KEY ("id"))`,
     )
     await queryRunner.query(
-      `CREATE TABLE "reward_categories" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "status" integer NOT NULL DEFAULT '0', "order" integer NOT NULL, CONSTRAINT "PK_5d22a5b77861b4464b0a3541534" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "rewards" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "name" character varying(100) NOT NULL, "image" character varying(100) NOT NULL, "order" integer NOT NULL DEFAULT '0', "status" integer NOT NULL DEFAULT '0', "metadata" jsonb, "aecoId" integer, "categoryId" integer, CONSTRAINT "PK_3d947441a48debeb9b7366f8b8c" PRIMARY KEY ("id"))`,
     )
     await queryRunner.query(
       `CREATE TABLE "promotions_aecos" ("promotionsId" integer NOT NULL, "aecosId" integer NOT NULL, CONSTRAINT "PK_5344935f988f798044d0ddf867e" PRIMARY KEY ("promotionsId", "aecosId"))`,
@@ -162,8 +162,8 @@ export class FirstMigration1727474175417 implements MigrationInterface {
       `DROP INDEX "public"."IDX_3c1c1194f8d78a5c3864d57306"`,
     )
     await queryRunner.query(`DROP TABLE "promotions_aecos"`)
-    await queryRunner.query(`DROP TABLE "reward_categories"`)
     await queryRunner.query(`DROP TABLE "rewards"`)
+    await queryRunner.query(`DROP TABLE "reward_categories"`)
     await queryRunner.query(`DROP TABLE "users"`)
     await queryRunner.query(`DROP TABLE "companies"`)
     await queryRunner.query(`DROP TABLE "user_company_permissions"`)

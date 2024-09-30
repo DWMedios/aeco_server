@@ -15,7 +15,7 @@ export class UserCompanyPermissions
   extends Base
   implements IUserCompanyPermissions
 {
-  @Column('jsonb', { array: true })
+  @Column('jsonb')
   permissions: Record<string, boolean>[]
 
   @Column('enum', { enum: UserRole })
