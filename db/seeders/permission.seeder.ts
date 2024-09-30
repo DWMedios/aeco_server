@@ -1,22 +1,22 @@
-import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
-import { Company } from '../../src/common/infra/entities/Company.entity';
+import { DataSource } from 'typeorm'
+import { Seeder } from 'typeorm-extension'
+import { Company } from '../../src/common/infra/entities/Company.entity'
 import {
   UserCompanyPermissions,
   UserRole,
-} from '../../src/common/infra/entities/Permission.entity';
-import { User } from '../../src/common/infra/entities/User.entity';
+} from '../../src/common/infra/entities/Permission.entity'
+import { User } from '../../src/common/infra/entities/User.entity'
 
 export default class PermissionSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
     const permissionRepository = dataSource.getRepository(
       UserCompanyPermissions,
-    );
-    const userRepository = dataSource.getRepository(User);
-    const companyRepository = dataSource.getRepository(Company);
+    )
+    const userRepository = dataSource.getRepository(User)
+    const companyRepository = dataSource.getRepository(Company)
 
-    const users = await userRepository.find();
-    const companies = await companyRepository.find();
+    const users = await userRepository.find()
+    const companies = await companyRepository.find()
 
     for (const user of users) {
       for (const company of companies) {
@@ -30,8 +30,8 @@ export default class PermissionSeeder implements Seeder {
           role: user.email.includes('admin') ? UserRole.ADMIN : UserRole.USER,
           userId: user.id,
           companyId: company.id,
-        });
-        await permissionRepository.save(userCompanyPermission);
+        })
+        await permissionRepository.save(userCompanyPermission)
       }
     }
   }

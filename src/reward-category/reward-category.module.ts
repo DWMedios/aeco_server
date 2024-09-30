@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { RewardCategoryController } from './reward-category.controller';
-import { RewardCategoryService } from './reward-category.service';
+import { Module } from '@nestjs/common'
+import { RewardCategoryController } from './infra/reward-category.controller'
+import { RewardCategoryService } from './app/reward-category.service'
 
 @Module({
   controllers: [RewardCategoryController],
-  providers: [RewardCategoryService]
+  providers: [RewardCategoryService],
 })
 export class RewardCategoryModule {}

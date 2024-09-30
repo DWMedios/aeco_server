@@ -1,6 +1,6 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { IPageService, PAGE_SERVICE } from '../domain/IPageService';
-import type { CreatePageDto } from '../domain/dto/PageDto';
+import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { IPageService, PAGE_SERVICE } from '../domain/IPageService'
+import type { CreatePageDto } from '../domain/dto/PageDto'
 
 @Controller('pages')
 export class PagesController {
@@ -11,6 +11,6 @@ export class PagesController {
 
   @Post()
   async create(@Body() createPage: CreatePageDto) {
-    return await this.pageService.create(createPage);
+    return await this.pageService.create(createPage)
   }
 }

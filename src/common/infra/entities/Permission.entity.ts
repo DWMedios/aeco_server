@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { Base } from './Base';
-import { User } from './User.entity';
-import { Company } from './Company.entity';
-import type { IUserCompanyPermissions } from '../../domain/entities/IPermission';
+import { Column, Entity, ManyToOne } from 'typeorm'
+import { Base } from './Base'
+import { User } from './User.entity'
+import { Company } from './Company.entity'
+import type { IUserCompanyPermissions } from '../../domain/entities/IPermission'
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -16,20 +16,20 @@ export class UserCompanyPermissions
   implements IUserCompanyPermissions
 {
   @Column('jsonb', { array: true })
-  permissions: Record<string, boolean>[];
+  permissions: Record<string, boolean>[]
 
   @Column('enum', { enum: UserRole })
-  role: UserRole;
+  role: UserRole
 
   @Column()
-  userId: number;
+  userId: number
 
   @Column()
-  companyId: number;
+  companyId: number
 
   @ManyToOne(() => User, (user) => user.userCompanyPermissions)
-  user: User;
+  user: User
 
   @ManyToOne(() => Company, (company) => company.userCompanyPermissions)
-  company: Company;
+  company: Company
 }

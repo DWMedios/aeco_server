@@ -1,34 +1,34 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
-import { Base } from './Base';
-import { Aeco } from './Aeco.entity';
-import { RewardCategory } from './RewardCategory.entity';
+import { Entity, Column, ManyToOne } from 'typeorm'
+import { Base } from './Base'
+import { Aeco } from './Aeco.entity'
+import { RewardCategory } from './RewardCategory.entity'
 
 @Entity('rewards')
 export class Reward extends Base {
   @Column({ length: 100 })
-  name: string;
+  name: string
 
   @Column({ length: 100 })
-  image: string;
+  image: string
 
   @Column({ default: 0 })
-  order: number;
+  order: number
 
   @Column({ default: 0 })
-  status: number;
+  status: number
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>[];
+  metadata: Record<string, any>[]
 
   @Column({ nullable: true })
-  aecoId: number;
+  aecoId: number
 
   @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
-  aeco: Aeco;
+  aeco: Aeco
 
   @Column({ nullable: true })
-  categoryId: number;
+  categoryId: number
 
   @ManyToOne(() => RewardCategory, (category) => category.rewards)
-  category: RewardCategory;
+  category: RewardCategory
 }

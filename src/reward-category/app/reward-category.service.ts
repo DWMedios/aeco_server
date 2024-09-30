@@ -1,10 +1,10 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import type { IRewardCategory } from '../../common/domain/entities/IRewardCategory';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import type { IRewardCategory } from '../../common/domain/entities/IRewardCategory'
 import {
   IRewardCategoryRepository,
   REWARD_CATEGORY_REPOSITORY,
-} from '../../shared/domain/repositories/IRewardCategoryRepository';
-import type { CreateRewardCategoryDto } from '../domain/dto/RewardCategoryDto';
+} from '../../shared/domain/repositories/IRewardCategoryRepository'
+import type { CreateRewardCategoryDto } from '../domain/dto/RewardCategoryDto'
 
 @Injectable()
 export class RewardCategoryService {
@@ -18,10 +18,10 @@ export class RewardCategoryService {
   ): Promise<IRewardCategory> {
     const exists = await this.rewardCategoryRepository.exists({
       name: newRewardCategory.name,
-    });
+    })
 
-    if (exists) throw new BadRequestException('Page already exists');
+    if (exists) throw new BadRequestException('Page already exists')
 
-    return await this.rewardCategoryRepository.create(newRewardCategory);
+    return await this.rewardCategoryRepository.create(newRewardCategory)
   }
 }

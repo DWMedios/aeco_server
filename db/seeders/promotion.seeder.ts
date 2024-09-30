@@ -1,16 +1,16 @@
-import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
-import { Company } from '../../src/common/infra/entities/Company.entity';
-import { Promotion } from '../../src/common/infra/entities/Promotion.entity';
+import { DataSource } from 'typeorm'
+import { Seeder } from 'typeorm-extension'
+import { Company } from '../../src/common/infra/entities/Company.entity'
+import { Promotion } from '../../src/common/infra/entities/Promotion.entity'
 
 export default class PromotionSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
-    const promotionRepository = dataSource.getRepository(Promotion);
-    const companyRepository = dataSource.getRepository(Company);
+    const promotionRepository = dataSource.getRepository(Promotion)
+    const companyRepository = dataSource.getRepository(Company)
 
-    const company = await companyRepository.findOne({ where: {} });
+    const company = await companyRepository.findOne({ where: {} })
     if (!company) {
-      throw new Error('No company found. Please run the CompanySeeder first.');
+      throw new Error('No company found. Please run the CompanySeeder first.')
     }
 
     const promotions = [
@@ -32,11 +32,11 @@ export default class PromotionSeeder implements Seeder {
         isEnabled: true,
         companyId: company.id,
       },
-    ];
+    ]
 
     for (const promotionData of promotions) {
-      const promotion = promotionRepository.create(promotionData);
-      await promotionRepository.save(promotion);
+      const promotion = promotionRepository.create(promotionData)
+      await promotionRepository.save(promotion)
     }
   }
 }

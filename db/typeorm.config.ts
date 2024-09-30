@@ -1,11 +1,11 @@
-import { ConfigService } from '@nestjs/config';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { config } from 'dotenv';
+import { ConfigService } from '@nestjs/config'
+import { DataSource, DataSourceOptions } from 'typeorm'
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
+import { config } from 'dotenv'
 
-config();
+config()
 
-const configService = new ConfigService();
+const configService = new ConfigService()
 
 export const configOptions: PostgresConnectionOptions & DataSourceOptions = {
   type: 'postgres',
@@ -19,6 +19,6 @@ export const configOptions: PostgresConnectionOptions & DataSourceOptions = {
   entities: [__dirname + '/../src/common/infra/entities/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations_typeorm',
-};
+}
 
-export default new DataSource(configOptions);
+export default new DataSource(configOptions)

@@ -1,10 +1,10 @@
-import { DataSource } from 'typeorm';
-import { Seeder } from 'typeorm-extension';
-import { RewardCategory } from '../../src/common/infra/entities/RewardCategory.entity';
+import { DataSource } from 'typeorm'
+import { Seeder } from 'typeorm-extension'
+import { RewardCategory } from '../../src/common/infra/entities/RewardCategory.entity'
 
 export default class RewardCategorySeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<any> {
-    const repository = dataSource.getRepository(RewardCategory);
+    const repository = dataSource.getRepository(RewardCategory)
     await repository.insert([
       {
         name: 'Predial',
@@ -21,6 +21,6 @@ export default class RewardCategorySeeder implements Seeder {
       {
         name: 'Tarjeta',
       },
-    ]);
+    ])
   }
 }

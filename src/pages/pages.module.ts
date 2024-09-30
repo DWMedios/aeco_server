@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { PagesController } from './pages.controller';
-import { PagesService } from './pages.service';
+import { Module } from '@nestjs/common'
+import { PagesController } from './infra/pages.controller'
+import { PagesService } from './app/pages.service'
 
 @Module({
   controllers: [PagesController],
-  providers: [PagesService]
+  providers: [PagesService],
 })
 export class PagesModule {}

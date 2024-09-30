@@ -1,9 +1,9 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import type { IPage } from '../../../common/domain/entities/IPage';
-import { Page } from '../../../common/infra/entities/Page.entity';
-import type { CreatePageDto } from '../../../pages/domain/dto/PageDto';
-import type { IPageRepository } from '../../domain/repositories/IPageRepository';
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import type { IPage } from '../../../common/domain/entities/IPage'
+import { Page } from '../../../common/infra/entities/Page.entity'
+import type { CreatePageDto } from '../../../pages/domain/dto/PageDto'
+import type { IPageRepository } from '../../domain/repositories/IPageRepository'
 
 export class PageRepository implements IPageRepository {
   constructor(
@@ -12,14 +12,14 @@ export class PageRepository implements IPageRepository {
   ) {}
 
   async exists(filter: { id?: number; name?: string }): Promise<boolean> {
-    if (!filter) return false;
+    if (!filter) return false
 
-    const whereClause: { id?: number; name?: string } = {};
+    const whereClause: { id?: number; name?: string } = {}
 
-    if (filter.id) whereClause.id = filter.id;
-    if (filter.name) whereClause.name = filter.name;
+    if (filter.id) whereClause.id = filter.id
+    if (filter.name) whereClause.name = filter.name
 
-    return this.PageRepository.exists({ where: whereClause });
+    return this.PageRepository.exists({ where: whereClause })
   }
 
   async create(createPage: CreatePageDto): Promise<IPage> {
@@ -27,7 +27,7 @@ export class PageRepository implements IPageRepository {
       .insert()
       .values(createPage)
       .returning('*')
-      .execute();
-    return qb.raw[0];
+      .execute()
+    return qb.raw[0]
   }
 }

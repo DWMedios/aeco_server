@@ -1,6 +1,6 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { IRewardService, REWARD_SERVICE } from '../domain/IRewardService';
-import type { CreateRewardDto } from '../domain/dto/RewardDto';
+import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { IRewardService, REWARD_SERVICE } from '../domain/IRewardService'
+import type { CreateRewardDto } from '../domain/dto/RewardDto'
 
 @Controller('rewards')
 export class RewardsController {
@@ -11,6 +11,6 @@ export class RewardsController {
 
   @Post()
   async create(@Body() createReward: CreateRewardDto) {
-    return await this.rewardService.create(createReward);
+    return await this.rewardService.create(createReward)
   }
 }

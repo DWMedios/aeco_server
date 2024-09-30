@@ -3,30 +3,30 @@ import {
   DeleteDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from 'typeorm'
 
 export abstract class Base {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @CreateDateColumn({
     select: false,
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createdAt?: Date;
+  createdAt?: Date
 
   @UpdateDateColumn({
     select: false,
     type: 'timestamptz',
     default: null,
   })
-  updatedAt?: Date;
+  updatedAt?: Date
 
   @DeleteDateColumn({
     select: false,
     type: 'timestamptz',
     default: null,
   })
-  deletedAt?: Date;
+  deletedAt?: Date
 }

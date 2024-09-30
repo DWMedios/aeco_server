@@ -1,12 +1,12 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator'
 
 export class CreateRewardDto {
   @IsString()
-  name: string;
+  name: string
 
   @IsString()
-  metadata: string;
+  metadata: string
 
   @IsNumber()
-  aecoId: number;
+  aecoId: number
 }

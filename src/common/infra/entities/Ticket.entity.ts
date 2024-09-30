@@ -1,28 +1,28 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
-import { Base } from './Base';
-import { Aeco } from './Aeco.entity';
-import type { ITicket } from '../../domain/entities/ITicket';
+import { Entity, Column, ManyToOne } from 'typeorm'
+import { Base } from './Base'
+import { Aeco } from './Aeco.entity'
+import type { ITicket } from '../../domain/entities/ITicket'
 
 @Entity('tickets')
 export class Ticket extends Base implements ITicket {
   @Column({ length: 100 })
-  folio: string;
+  folio: string
 
   @Column({ length: 100 })
-  method: string;
+  method: string
 
   @Column('jsonb')
-  summary: Record<string, any>;
+  summary: Record<string, any>
 
   @Column({ default: 0 })
-  totalCans: number;
+  totalCans: number
 
   @Column({ default: 0 })
-  totalBottles: number;
+  totalBottles: number
 
   @Column({ nullable: true })
-  aecoId: number;
+  aecoId: number
 
   @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
-  aeco: Aeco;
+  aeco: Aeco
 }

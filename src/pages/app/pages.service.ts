@@ -1,10 +1,10 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { IPage } from 'src/common/domain/entities/IPage';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import { IPage } from 'src/common/domain/entities/IPage'
 import {
   IPageRepository,
   PAGE_REPOSITORY,
-} from '../../shared/domain/repositories/IPageRepository';
-import { CreatePageDto } from '../domain/dto/PageDto';
+} from '../../shared/domain/repositories/IPageRepository'
+import { CreatePageDto } from '../domain/dto/PageDto'
 
 @Injectable()
 export class PagesService {
@@ -17,10 +17,10 @@ export class PagesService {
     const exists = await this.pageRepository.exists({
       name: newPage.name,
       aecoId: newPage.aecoId,
-    });
+    })
 
-    if (exists) throw new BadRequestException('Page already exists');
+    if (exists) throw new BadRequestException('Page already exists')
 
-    return await this.pageRepository.create(newPage);
+    return await this.pageRepository.create(newPage)
   }
 }
