@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfig, DatabaseConfig } from './common/infra/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { AppConfig, DatabaseConfig } from './common/infra/config';
 import { CompanyModule } from './company/company.module';
+import { DmsModule } from './dms/dms.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CompanyModule } from './company/company.module';
     }),
     UserModule,
     CompanyModule,
+    DmsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
