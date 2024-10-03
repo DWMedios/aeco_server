@@ -1,5 +1,5 @@
-import { IReward } from 'src/common/domain/entities/IReward'
-import { CreateRewardDto } from 'src/rewards/domain/dto/RewardDto'
+import type { IReward } from '../../../common/domain/entities/IReward'
+import type { CreateRewardDto } from '../../../rewards/domain/dto/RewardDto'
 
 export const REWARD_REPOSITORY = Symbol('IRewardRepository')
 

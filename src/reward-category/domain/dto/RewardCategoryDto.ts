@@ -1,11 +1,15 @@
-import { IsNumber, IsString } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class CreateRewardCategoryDto {
   @IsString()
   name: string
 
-  @IsString()
-  metadata: string
+  @IsOptional()
+  @IsBoolean()
+  status?: boolean
+
+  @IsNumber()
+  order: number
 
   @IsNumber()
   aecoId: number

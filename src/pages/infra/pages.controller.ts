@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common'
-import { IPageService, PAGE_SERVICE } from '../domain/IPageService'
+import { PAGE_SERVICE, type IPageService } from '../domain/IPageService'
 import type { CreatePageDto } from '../domain/dto/PageDto'
 
 @Controller('pages')
