@@ -1,45 +1,56 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Base } from './Base';
-import { Ticket } from './Ticket.entity';
-import { Company } from './Company.entity';
-import { Address } from './Address.entity';
-import type { IAeco } from '../../domain/entities/IAeco';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
+import { Address } from './Address.entity'
+import { Base } from './Base'
+import { Company } from './Company.entity'
+import { Page } from './Page.entity'
+import { Ticket } from './Ticket.entity'
+import { RewardCategory } from './RewardCategory.entity'
+import type { IAeco } from '../../domain/entities/IAeco'
 
 export enum AecoStatus {
   ENABLED = 'enabled',
   DISABLED = 'disabled',
 }
 
-@Entity('aecos')
+@Entity({ name: 'aecos' })
 export class Aeco extends Base implements IAeco {
   @Column()
-  name: string;
+  name: string
 
   @Column('enum', {
     enum: AecoStatus,
     default: AecoStatus.DISABLED,
     nullable: false,
   })
-  status: AecoStatus;
+  status: AecoStatus
 
   @Column({ default: false })
-  isOnline: boolean;
+  isOnline: boolean
 
-  @Column('jsonb')
-  currentCoords: Record<string, any>;
+  @Column({ unique: true })
+  serialNumber: string
+
+  @Column({ type: 'jsonb', nullable: true })
+  currentCoords: Record<string, any>
 
   @Column()
-  companyId: number;
+  companyId: number
 
   @Column()
-  addressId: number;
+  addressId: number
 
   @ManyToOne(() => Company, (company) => company.aecos)
-  company: Company;
+  company: Company
 
   @ManyToOne(() => Address, (address) => address.aecos)
-  address: Address;
+  address: Address
 
   @OneToMany(() => Ticket, (ticket) => ticket.aeco)
-  tickets: Ticket[];
+  tickets: Ticket[]
+
+  @OneToMany(() => Page, (page) => page.aeco)
+  pages: Page[]
+
+  @OneToMany(() => RewardCategory, (category) => category.aeco)
+  rewardCategories: RewardCategory[]
 }
