@@ -1,5 +1,5 @@
-import { IPage } from 'src/common/domain/entities/IPage'
-import { CreatePageDto } from './dto/PageDto'
+import type { IPage } from '../../common/domain/entities/IPage'
+import type { CreatePageDto } from './dto/PageDto'
 
 export const PAGE_SERVICE = Symbol('IPageService')
 
