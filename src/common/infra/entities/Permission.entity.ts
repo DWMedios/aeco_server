@@ -10,12 +10,12 @@ export enum UserRole {
   GUEST = 'guest',
 }
 
-@Entity('user_company_permissions')
+@Entity({ name: 'user_company_permissions' })
 export class UserCompanyPermissions
   extends Base
   implements IUserCompanyPermissions
 {
-  @Column('jsonb')
+  @Column({ type: 'jsonb', nullable: true })
   permissions: Record<string, boolean>[]
 
   @Column('enum', { enum: UserRole })

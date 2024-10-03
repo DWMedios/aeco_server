@@ -1,7 +1,8 @@
+import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
 import type { ICompany } from './ICompany'
 
-export interface IPromotion {
+export interface IPromotion extends IBase {
   order: number
   name: string
   description: string

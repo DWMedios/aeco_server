@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
-import { IPage } from '../../domain/entities/IPage'
 import { Aeco } from './Aeco.entity'
 import { Base } from './Base'
+import type { IPage } from '../../domain/entities/IPage'
 
 @Entity({ name: 'pages' })
 export class Page extends Base implements IPage {

@@ -3,7 +3,7 @@ import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
 import type { ITicket } from '../../domain/entities/ITicket'
 
-@Entity('tickets')
+@Entity({ name: 'tickets' })
 export class Ticket extends Base implements ITicket {
   @Column({ length: 100 })
   folio: string
@@ -11,7 +11,7 @@ export class Ticket extends Base implements ITicket {
   @Column({ length: 100 })
   method: string
 
-  @Column('jsonb')
+  @Column({ type: 'jsonb', nullable: true })
   summary: Record<string, any>
 
   @Column({ default: 0 })

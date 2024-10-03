@@ -1,10 +1,10 @@
 import { Entity, Column, ManyToOne } from 'typeorm'
 import { Base } from './Base'
-import { Aeco } from './Aeco.entity'
 import { RewardCategory } from './RewardCategory.entity'
+import type { IReward } from '../../domain/entities/IReward'
 
-@Entity('rewards')
-export class Reward extends Base {
+@Entity({ name: 'rewards' })
+export class Reward extends Base implements IReward {
   @Column({ length: 100 })
   name: string
 
@@ -14,17 +14,11 @@ export class Reward extends Base {
   @Column({ default: 0 })
   order: number
 
-  @Column({ default: 0 })
-  status: number
+  @Column({ nullable: true, default: true, type: 'bool' })
+  status: boolean
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>[]
-
-  @Column({ nullable: true })
-  aecoId: number
-
-  @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
-  aeco: Aeco
 
   @Column({ nullable: true })
   categoryId: number

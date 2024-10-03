@@ -1,13 +1,12 @@
-import type { IAeco } from './IAeco'
+import type { IBase } from './IBase'
 import type { IRewardCategory } from './IRewardCategory'
 
-export interface IReward {
+export interface IReward extends IBase {
   name: string
-  icon: string
+  image: string
   order: number
-  status: number
-  aecoId: number
-  aeco: IAeco
+  status: boolean
+  metadata: Record<string, any>[]
   categoryId: number
   category: IRewardCategory
 }

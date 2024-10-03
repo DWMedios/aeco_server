@@ -3,7 +3,7 @@ import type { IAddress } from '../../domain/entities/IAddress'
 import { Aeco } from './Aeco.entity'
 import { Base } from './Base'
 
-@Entity('addresses')
+@Entity({ name: 'addresses' })
 export class Address extends Base implements IAddress {
   @Column()
   postalCode: number

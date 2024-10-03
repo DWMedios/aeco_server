@@ -1,8 +1,9 @@
-import { UserRole } from '../../infra/entities/Permission.entity'
+import type { IBase } from './IBase'
 import type { ICompany } from './ICompany'
 import type { IUser } from './IUser'
+import { UserRole } from '../../infra/entities/Permission.entity'
 
-export interface IUserCompanyPermissions {
+export interface IUserCompanyPermissions extends IBase {
   permissions: Record<string, boolean>[]
   role: UserRole
   userId: number

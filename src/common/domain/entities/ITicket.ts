@@ -1,6 +1,7 @@
+import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
 
-export interface ITicket {
+export interface ITicket extends IBase {
   folio: string
   method: string
   summary: Record<string, any>

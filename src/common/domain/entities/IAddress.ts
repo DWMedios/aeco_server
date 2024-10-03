@@ -1,6 +1,7 @@
+import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
 
-export interface IAddress {
+export interface IAddress extends IBase {
   postalCode: number
   street: string
   state: string
