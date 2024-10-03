@@ -9,7 +9,7 @@ export class Page extends Base implements IPage {
   name: string
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>[]
+  metadata: Record<string, any>
 
   @Column()
   aecoId: number

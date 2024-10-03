@@ -9,7 +9,8 @@ import type { IUserRepository } from '../../domain/repositories/IUserRepository'
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<IUser>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<IUser>,
   ) {}
 
   async exists(email: string): Promise<boolean> {

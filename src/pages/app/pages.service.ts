@@ -1,13 +1,14 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
-import { IPage } from 'src/common/domain/entities/IPage'
+import type { IPage } from '../../common/domain/entities/IPage'
+import type { CreatePageDto } from '../domain/dto/PageDto'
+import type { IPageService } from '../domain/IPageService'
 import {
-  IPageRepository,
   PAGE_REPOSITORY,
+  type IPageRepository,
 } from '../../shared/domain/repositories/IPageRepository'
-import { CreatePageDto } from '../domain/dto/PageDto'
 
 @Injectable()
-export class PagesService {
+export class PagesService implements IPageService {
   constructor(
     @Inject(PAGE_REPOSITORY)
     private readonly pageRepository: IPageRepository,
