@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Param, Query } from '@nestjs/common';
+import { DeleteFileDto } from '../domain/dtos/DeleteFileDto';
 import { PresignedGetUrlDto } from '../domain/dtos/PresignedGetUrlDto';
 import { PresignedUploadUrlDto } from '../domain/dtos/PresignedUploadUrlDto';
 import { DMS_SERVICE, type IDmsService } from '../domain/IDmsService';
@@ -17,10 +18,15 @@ export class DmsController {
     return presignedUrl;
   }
 
-  @Get('get-presigned-url')
+  @Get('/get-presigned-url')
   async getPresignedGetUrl(@Query() query: PresignedGetUrlDto) {
     const url = await this.dmsService.presignedGetUrl(query);
     return { url };
+  }
+
+  @Delete(':key')
+  async deleteFile(@Param() { key }: DeleteFileDto) {
+    return this.dmsService.delete(key);
   }
 
   // @Post('/file')
@@ -53,10 +59,5 @@ export class DmsController {
   // @Get('/signed-url/:key')
   // async getSingedUrl(@Param('key') key: string) {
   //   return this.dmsService.getPresignedSignedUrl(key);
-  // }
-
-  // @Delete(':key')
-  // async deleteFile(@Param('key') key: string) {
-  //   return this.dmsService.deleteFile(key);
   // }
 }

@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -90,6 +91,21 @@ export class DmsRepository implements IDmsRepository {
       });
 
       return signedUrl;
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async delete(key: string): Promise<any> {
+    try {
+      const command = new DeleteObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      });
+
+      await this.client.send(command);
+
+      return { message: 'File deleted successfully' };
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

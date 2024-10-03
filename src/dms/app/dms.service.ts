@@ -19,4 +19,7 @@ export class DmsService implements IDmsService {
   async presignedGetUrl(data: PresignedGetUrlDto): Promise<any> {
     return await this.dmsRepository.generatePresignedGetUrl(data);
   }
+  async delete(data: string): Promise<any> {
+    return await this.dmsRepository.delete(data);
+  }
 }
