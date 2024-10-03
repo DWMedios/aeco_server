@@ -1,6 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsString } from 'class-validator'
 
 export class DeleteFileDto {
   @IsString()
-  key: string;
+  key: string
 }

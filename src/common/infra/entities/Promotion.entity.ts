@@ -1,36 +1,36 @@
-import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { Base } from './Base';
-import { Aeco } from './Aeco.entity';
-import { Company } from './Company.entity';
-import type { IPromotion } from '../../domain/entities/IPromotion';
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
+import { Base } from './Base'
+import { Aeco } from './Aeco.entity'
+import { Company } from './Company.entity'
+import type { IPromotion } from '../../domain/entities/IPromotion'
 
-@Entity('promotions')
+@Entity({ name: 'promotions' })
 export class Promotion extends Base implements IPromotion {
   @Column({ default: 0 })
-  order: number;
+  order: number
 
   @Column({ length: 100 })
-  name: string;
+  name: string
 
   @Column({ length: 100 })
-  description: string;
+  description: string
 
   @Column({ default: 0 })
-  changeQty: number;
+  changeQty: number
 
   @Column({ length: 100 })
-  logoUrl: string;
+  logoUrl: string
 
   @Column({ default: false })
-  isEnabled: boolean;
+  isEnabled: boolean
 
   @Column({ nullable: true })
-  companyId: number;
+  companyId: number
 
   @ManyToOne(() => Company, (company) => company.promotions)
-  company: Company;
+  company: Company
 
   @ManyToMany(() => Aeco)
   @JoinTable({ name: 'promotions_aecos' })
-  aecosDenied: Aeco[];
+  aecosDenied: Aeco[]
 }
