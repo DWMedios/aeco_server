@@ -7,6 +7,9 @@ export class PresignedUploadUrlDto {
   })
   fileType: string
 
+  @IsString()
+  fileName: string
+
   @IsNumber()
   @IsOptional()
   companyId: number

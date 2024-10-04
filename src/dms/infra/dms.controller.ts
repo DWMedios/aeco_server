@@ -11,14 +11,14 @@ export class DmsController {
     private readonly dmsService: IDmsService,
   ) {}
 
-  @Get('/presigned-url')
+  @Get('/presigned-upload-url')
   async generatePresignedUrl(@Query() query: PresignedUploadUrlDto) {
     const presignedUrl = await this.dmsService.presignedUploadUrl(query)
 
     return presignedUrl
   }
 
-  @Get('/get-presigned-url')
+  @Get('/presigned-get-url')
   async getPresignedGetUrl(@Query() query: PresignedGetUrlDto) {
     const url = await this.dmsService.presignedGetUrl(query)
     return { url }
