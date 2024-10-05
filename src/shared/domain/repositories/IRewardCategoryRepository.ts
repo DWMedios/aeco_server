@@ -1,4 +1,4 @@
-import type { IRewardCategory } from '../../../common/domain/entities/IRewardCategory'
+import type { IRewardCategory } from '@domain-entities'
 import type { CreateRewardCategoryDto } from '../../../reward-category/domain/dto/RewardCategoryDto'
 
 export const REWARD_CATEGORY_REPOSITORY = Symbol('IRewardCategoryRepository')

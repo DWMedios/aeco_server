@@ -29,8 +29,8 @@ export class CreateAecoSeeder1727733221625 implements MigrationInterface {
     if (!addressId) console.error('Address not found')
 
     await queryRunner.query(
-      `INSERT INTO ${aecoTable} (name, status, "isOnline", "serialNumber", "currentCoords", "companyId", "addressId") 
-        VALUES ('AECO Main', '${AecoStatus.ENABLED}', true, 'AECO123456', '{"latitude": 40.7128, "longitude": -74.006}', ${companyId}, ${addressId})`,
+      `INSERT INTO ${aecoTable} (name, status, "isOnline", "initialSetup", "needsUpdate", "serialNumber", "currentCoords", "companyId", "addressId") 
+        VALUES ('AECO Main', '${AecoStatus.ENABLED}', true, true, true, 'AECO123456', '{"latitude": 40.7128, "longitude": -74.006}', ${companyId}, ${addressId})`,
     )
   }
 
