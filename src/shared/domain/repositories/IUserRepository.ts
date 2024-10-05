@@ -1,4 +1,4 @@
-import type { IUser } from '@domain-entities'
+import type { IUser } from '@common/domain/entities'
 import type { CreateUserDto } from '../../../user/domain/dto/UserDto'
 
 export const USER_REPOSITORY = Symbol('IUserRepository')

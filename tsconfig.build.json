@@ -6,11 +6,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "paths": {
+      "@common/*": ["src/common/*"],
       "@shared/*": ["src/shared/*"],
-      "@infra-repositories": ["src/shared/infra/repositories"],
-      "@domain-repositories": ["src/shared/domain/repositories"],
-      "@infra-entities": ["src/common/infra/entities"],
-      "@domain-entities": ["src/common/domain/entities"],
     }
   },
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"],

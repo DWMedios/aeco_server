@@ -1,9 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
-import type { ICompany } from '@domain-entities'
+import type { ICompany } from '@common/domain/entities'
 import {
   COMPANY_REPOSITORY,
   type ICompanyRepository,
-} from '@domain-repositories'
+} from '@shared/domain/repositories'
 import type { CreateCompanyDto } from '../domain/dto/CompanyDto'
 import type { ICompanyService } from '../domain/ICompanyService'
 

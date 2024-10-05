@@ -1,9 +1,9 @@
 import type { Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { User } from '@infra-entities'
-import type { IUser } from '@domain-entities'
-import type { IUserRepository } from '@domain-repositories'
+import { User } from '@common/infra/entities'
+import type { IUser } from '@common/domain/entities'
+import type { IUserRepository } from '@shared/domain/repositories'
 import type { CreateUserDto } from '../../../user/domain/dto/UserDto'
 
 @Injectable()
