@@ -1,8 +1,8 @@
 import type { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Company } from '@infra-entities'
-import type { ICompany } from '@domain-entities'
-import type { ICompanyRepository } from '@domain-repositories'
+import { Company } from '@common/infra/entities'
+import type { ICompany } from '@common/domain/entities'
+import type { ICompanyRepository } from '@shared/domain/repositories'
 import type { CreateCompanyDto } from '../../../company/domain/dto/CompanyDto'
 
 export class CompanyRepository implements ICompanyRepository {

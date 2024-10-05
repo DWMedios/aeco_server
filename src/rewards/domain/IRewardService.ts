@@ -1,4 +1,4 @@
-import type { IReward } from '@domain-entities'
+import type { IReward } from '@common/domain/entities'
 import type { CreateRewardDto } from './dto/RewardDto'
 
 export const REWARD_SERVICE = Symbol('IRewardService')

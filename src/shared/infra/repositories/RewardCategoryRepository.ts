@@ -1,8 +1,8 @@
 import type { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RewardCategory } from '@infra-entities'
-import type { IRewardCategory } from '@domain-entities'
-import type { IRewardCategoryRepository } from '@domain-repositories'
+import { RewardCategory } from '@common/infra/entities'
+import type { IRewardCategory } from '@common/domain/entities'
+import type { IRewardCategoryRepository } from '@shared/domain/repositories'
 import type { CreateRewardCategoryDto } from '../../../reward-category/domain/dto/RewardCategoryDto'
 
 export class RewardCategoryRepository implements IRewardCategoryRepository {

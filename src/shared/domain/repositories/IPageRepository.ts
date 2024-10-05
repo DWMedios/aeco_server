@@ -1,4 +1,4 @@
-import type { IPage } from '@domain-entities'
+import type { IPage } from '@common/domain/entities'
 import type { CreatePageDto } from '../../../pages/domain/dto/PageDto'
 
 export const PAGE_REPOSITORY = Symbol('IPageRepository')
