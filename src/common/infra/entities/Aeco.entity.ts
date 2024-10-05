@@ -27,6 +27,12 @@ export class Aeco extends Base implements IAeco {
   @Column({ default: false })
   isOnline: boolean
 
+  @Column({ default: true })
+  initialSetup: boolean
+
+  @Column({ default: false })
+  needsUpdate: boolean
+
   @Column({ unique: true })
   serialNumber: string
 

@@ -9,6 +9,7 @@ import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { RewardsModule } from './rewards/rewards.module'
 import { RewardCategoryModule } from './reward-category/reward-category.module'
+import { AecosModule } from './aecos/aecos.module'
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RewardCategoryModule } from './reward-category/reward-category.module'
     PagesModule,
     RewardsModule,
     RewardCategoryModule,
+    AecosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

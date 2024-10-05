@@ -1,0 +1,5 @@
+export * from './ICompanyRepository'
+export * from './IPageRepository'
+export * from './IRewardCategoryRepository'
+export * from './IRewardRepository'
+export * from './IUserRepository'

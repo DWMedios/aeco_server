@@ -1,9 +1,9 @@
 import type { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Page } from '../../../common/infra/entities/Page.entity'
-import type { IPage } from '../../../common/domain/entities/IPage'
+import { Page } from '@infra-entities'
+import type { IPage } from '@domain-entities'
+import type { IPageRepository } from '@domain-repositories'
 import type { CreatePageDto } from '../../../pages/domain/dto/PageDto'
-import type { IPageRepository } from '../../domain/repositories/IPageRepository'
 
 export class PageRepository implements IPageRepository {
   constructor(

@@ -16,6 +16,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@shared/*": ["src/shared/*"],
+      "@infra-repositories": ["src/shared/infra/repositories"],
+      "@domain-repositories": ["src/shared/domain/repositories"],
+      "@infra-entities": ["src/common/infra/entities"],
+      "@domain-entities": ["src/common/domain/entities"],
+    }
   }
 }
