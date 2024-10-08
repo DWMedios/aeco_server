@@ -1,4 +1,4 @@
-import type { ICompany } from '../../../common/domain/entities/ICompany'
+import type { ICompany } from '@common/domain/entities'
 import type { CreateCompanyDto } from '../../../company/domain/dto/CompanyDto'
 
 export const COMPANY_REPOSITORY = Symbol('ICompanyRepository')

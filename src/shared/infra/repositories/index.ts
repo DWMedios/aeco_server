@@ -1,0 +1,6 @@
+export * from './AecoRepository'
+export * from './CompanyRepository'
+export * from './PageRepository'
+export * from './RewardCategoryRepository'
+export * from './RewardRepository'
+export * from './UserRepository'

@@ -10,6 +10,8 @@ export interface IAeco extends IBase {
   name: string
   status: AecoStatus
   isOnline: boolean
+  initialSetup: boolean
+  needsUpdate: boolean
   serialNumber: string
   currentCoords?: Record<string, any> | null
   companyId?: number

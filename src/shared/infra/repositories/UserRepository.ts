@@ -1,10 +1,10 @@
 import type { Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { User } from '../../../common/infra/entities/User.entity'
-import type { IUser } from '../../../common/domain/entities/IUser'
+import { User } from '@common/infra/entities'
+import type { IUser } from '@common/domain/entities'
+import type { IUserRepository } from '@shared/domain/repositories'
 import type { CreateUserDto } from '../../../user/domain/dto/UserDto'
-import type { IUserRepository } from '../../domain/repositories/IUserRepository'
 
 @Injectable()
 export class UserRepository implements IUserRepository {

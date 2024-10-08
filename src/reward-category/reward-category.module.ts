@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { REWARD_CATEGORY_REPOSITORY } from '@shared/domain/repositories'
+import { RewardCategoryRepository } from '@shared/infra/repositories'
+import { RewardCategory } from '@common/infra/entities'
 import { RewardCategoryController } from './infra/reward-category.controller'
-import { RewardCategoryService } from './app/reward-category.service'
 import { REWARD_CATEGORY_SERVICE } from './domain/IRewardCategoryService'
-import { REWARD_CATEGORY_REPOSITORY } from '../shared/domain/repositories/IRewardCategoryRepository'
-import { RewardCategoryRepository } from '../shared/infra/repositories/RewardCategoryRepository'
-import { RewardCategory } from '../common/infra/entities/RewardCategory.entity'
+import { RewardCategoryService } from './app/reward-category.service'
 
 @Module({
   imports: [TypeOrmModule.forFeature([RewardCategory])],

@@ -6,7 +6,7 @@ const usersTable = 'users'
 const permissionsTable = 'user_company_permissions'
 const companyTable = 'companies'
 
-export class CreateUsers1727734811500 implements MigrationInterface {
+export class CreateUsersSeeder1727734811500 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const adminPassword = await bcrypt.hash('admin_password', 10)
     const userPassword = await bcrypt.hash('user_password', 10)

@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserService } from './app/user.service'
-import { USER_SERVICE } from './domain/IUserService'
+import { Company, User } from '@common/infra/entities'
+import { COMPANY_REPOSITORY, USER_REPOSITORY } from '@shared/domain/repositories'
+import { CompanyRepository, UserRepository } from '@shared/infra/repositories'
 import { UserController } from './infra/user.controller'
-import { User } from '../common/infra/entities/User.entity'
-import { USER_REPOSITORY } from '../shared/domain/repositories/IUserRepository'
-import { UserRepository } from '../shared/infra/repositories/UserRepository'
-import { COMPANY_REPOSITORY } from '../shared/domain/repositories/ICompanyRepository'
-import { CompanyRepository } from '../shared/infra/repositories/CompanyRepository'
-import { Company } from '../common/infra/entities/Company.entity'
+import { USER_SERVICE } from './domain/IUserService'
+import { UserService } from './app/user.service'
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Company])],

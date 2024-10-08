@@ -1,15 +1,13 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common'
-import type { IUser } from '../../common/domain/entities/IUser'
-import type { CreateUserDto } from '../domain/dto/UserDto'
-import type { IUserService } from '../domain/IUserService'
+import type { IUser } from '@common/domain/entities'
 import {
   USER_REPOSITORY,
-  type IUserRepository,
-} from '../../shared/domain/repositories/IUserRepository'
-import {
   COMPANY_REPOSITORY,
+  type IUserRepository,
   type ICompanyRepository,
-} from '../../shared/domain/repositories/ICompanyRepository'
+} from '@shared/domain/repositories'
+import type { CreateUserDto } from '../domain/dto/UserDto'
+import type { IUserService } from '../domain/IUserService'
 
 @Injectable()
 export class UserService implements IUserService {

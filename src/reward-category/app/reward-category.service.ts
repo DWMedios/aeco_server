@@ -1,11 +1,11 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
-import type { IRewardCategory } from '../../common/domain/entities/IRewardCategory'
-import type { CreateRewardCategoryDto } from '../domain/dto/RewardCategoryDto'
-import type { IRewardCategoryService } from '../domain/IRewardCategoryService'
+import type { IRewardCategory } from '@common/domain/entities'
 import {
   REWARD_CATEGORY_REPOSITORY,
   type IRewardCategoryRepository,
-} from '../../shared/domain/repositories/IRewardCategoryRepository'
+} from '@shared/domain/repositories'
+import type { IRewardCategoryService } from '../domain/IRewardCategoryService'
+import type { CreateRewardCategoryDto } from '../domain/dto/RewardCategoryDto'
 
 @Injectable()
 export class RewardCategoryService implements IRewardCategoryService {
