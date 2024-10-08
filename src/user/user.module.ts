@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Company, User } from '@common/infra/entities'
-import { COMPANY_REPOSITORY, USER_REPOSITORY } from '@shared/domain/repositories'
+import {
+  COMPANY_REPOSITORY,
+  USER_REPOSITORY,
+} from '@shared/domain/repositories'
 import { CompanyRepository, UserRepository } from '@shared/infra/repositories'
 import { UserController } from './infra/user.controller'
 import { USER_SERVICE } from './domain/IUserService'
