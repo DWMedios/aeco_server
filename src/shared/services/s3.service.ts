@@ -7,7 +7,12 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import type { IBaseS3, IUploadUrl } from '@shared/domain/S3Type'
+import type {
+  IBaseS3,
+  IResponseMessage,
+  IResponseUploadUrl,
+  IUploadUrl,
+} from '@shared/domain/S3Type'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
@@ -39,7 +44,7 @@ export class S3Service {
   async generatePresignedUploadUrl({
     fileType,
     fileName,
-  }: IUploadUrl): Promise<{ url: string; key: string }> {
+  }: IUploadUrl): Promise<IResponseUploadUrl> {
     try {
       const mimeType =
         fileType === 'mp4'
@@ -84,7 +89,7 @@ export class S3Service {
     }
   }
 
-  async deleteFile(key: string): Promise<{ message: string }> {
+  async deleteFile({ key }: IBaseS3): Promise<IResponseMessage> {
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.bucketName,

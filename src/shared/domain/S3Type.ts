@@ -7,7 +7,10 @@ export interface IUploadUrl {
   fileName: string
 }
 
-export interface IResponseUploadUrl {
+export interface IResponseUploadUrl extends IBaseS3 {
   url: string
-  key: string
+}
+
+export interface IResponseMessage {
+  message: string
 }
