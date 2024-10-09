@@ -5,11 +5,12 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { InternalServerErrorException } from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { IDelete, IGetUrl, IUploadUrl } from '@shared/domain/S3Type'
+import { IBaseS3, IUploadUrl } from '@shared/domain/S3Type'
 import { v4 as uuidv4 } from 'uuid'
 
+@Injectable()
 export class S3Service {
   private client: S3Client
   private bucketName: string
@@ -21,9 +22,6 @@ export class S3Service {
       'S3_SECRET_ACCESS_KEY',
     )
     this.bucketName = this.configService.get<string>('S3_BUCKET_NAME')
-    if (!this.bucketName) {
-      throw new Error('S3_BUCKET_NAME is missing in environment variables')
-    }
 
     if (!s3Region || !accessKeyId || !secretAccessKey || !this.bucketName) {
       throw new Error('Missing S3 configuration in environment variables')
@@ -71,7 +69,7 @@ export class S3Service {
     }
   }
 
-  async generatePresignedGetUrl({ key }: IGetUrl): Promise<string> {
+  async generatePresignedGetUrl({ key }: IBaseS3): Promise<string> {
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
@@ -86,7 +84,7 @@ export class S3Service {
     }
   }
 
-  async deleteFile({ key }: IDelete): Promise<{ message: string }> {
+  async deleteFile(key: string): Promise<{ message: string }> {
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.bucketName,
