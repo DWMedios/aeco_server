@@ -1,11 +1,17 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import type {
   IBaseS3,
@@ -13,12 +19,13 @@ import type {
   IResponseUploadUrl,
   IUploadUrl,
 } from '@shared/domain/S3Type'
-import { v4 as uuidv4 } from 'uuid'
+import type { IS3Service } from '@shared/domain/services/IS3Service'
 
 @Injectable()
-export class S3Service {
+export class S3Service implements IS3Service {
   private client: S3Client
   private bucketName: string
+  private expiration: number
 
   constructor(private readonly configService: ConfigService) {
     const s3Region = this.configService.get<string>('S3_REGION')
@@ -26,9 +33,16 @@ export class S3Service {
     const secretAccessKey = this.configService.get<string>(
       'S3_SECRET_ACCESS_KEY',
     )
+    const expiration = Number(this.configService.get<string>('EXPIRATION'))
     this.bucketName = this.configService.get<string>('S3_BUCKET_NAME')
 
-    if (!s3Region || !accessKeyId || !secretAccessKey || !this.bucketName) {
+    if (
+      !s3Region ||
+      !accessKeyId ||
+      !secretAccessKey ||
+      !this.bucketName ||
+      !expiration
+    ) {
       throw new Error('Missing S3 configuration in environment variables')
     }
 
@@ -65,7 +79,9 @@ export class S3Service {
         },
       })
 
-      const url = await getSignedUrl(this.client, command, { expiresIn: 3600 })
+      const url = await getSignedUrl(this.client, command, {
+        expiresIn: this.expiration,
+      })
       return { url, key }
     } catch (error) {
       throw new InternalServerErrorException(
@@ -91,6 +107,7 @@ export class S3Service {
 
   async deleteFile({ key }: IBaseS3): Promise<IResponseMessage> {
     try {
+      await this.fileExist(key)
       const command = new DeleteObjectCommand({
         Bucket: this.bucketName,
         Key: key,
@@ -100,6 +117,20 @@ export class S3Service {
       return { message: 'File deleted successfully' }
     } catch (error) {
       throw new InternalServerErrorException('Error deleting file')
+    }
+  }
+
+  async fileExist(key: string): Promise<IResponseMessage> {
+    try {
+      const headCommand = new HeadObjectCommand({
+        Bucket: this.bucketName,
+        Key: key,
+      })
+
+      await this.client.send(headCommand)
+      return { message: 'File exists' }
+    } catch (error) {
+      throw new NotFoundException(`File with key ${key} not found`)
     }
   }
 }

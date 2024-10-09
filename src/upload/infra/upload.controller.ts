@@ -10,12 +10,12 @@ export class UploadController {
     private readonly uploadService: IUploadService,
   ) {}
 
-  @Post('/media')
+  @Post('media')
   async generatePresignedUrl(@Body() body: UploadUrlDto) {
     return await this.uploadService.uploadUrl(body)
   }
 
-  @Delete('/:key')
+  @Delete(':key')
   async deleteFile(@Param() params: IBaseS3) {
     return await this.uploadService.delete(params)
   }

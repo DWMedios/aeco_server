@@ -10,7 +10,7 @@ import { PagesModule } from './pages/pages.module'
 import { RewardCategoryModule } from './reward-category/reward-category.module'
 import { RewardsModule } from './rewards/rewards.module'
 import { UserModule } from './user/user.module'
-import { UploadModule } from './upload/upload.module';
+import { UploadModule } from './upload/upload.module'
 
 @Module({
   imports: [
