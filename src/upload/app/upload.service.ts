@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { IS3Service, S3_SERVICES } from '@shared/domain/services/IS3Service'
-import { IUploadService } from '../domain/IUploadService'
-import { UploadUrlDto } from '../domain/dto/PresignedUploadUrlDto'
+import {
+  type IS3Service,
+  S3_SERVICES,
+} from '@shared/domain/services/IS3Service'
+import type { IUploadService } from '../domain/IUploadService'
+import type { UploadUrlDto } from '../domain/dto/PresignedUploadUrlDto'
 
 @Injectable()
 export class UploadService implements IUploadService {

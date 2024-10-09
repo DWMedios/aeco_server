@@ -7,7 +7,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { IBaseS3, IUploadUrl } from '@shared/domain/S3Type'
+import type { IBaseS3, IUploadUrl } from '@shared/domain/S3Type'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()

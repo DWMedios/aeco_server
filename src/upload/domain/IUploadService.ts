@@ -1,4 +1,4 @@
-import { UploadUrlDto } from './dto/PresignedUploadUrlDto'
+import type { UploadUrlDto } from './dto/PresignedUploadUrlDto'
 
 export const UPLOAD_SERVICE = Symbol('IUploadService')
 
