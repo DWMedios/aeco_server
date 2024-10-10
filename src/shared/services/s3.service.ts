@@ -7,7 +7,11 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import type {
   IBaseS3,
@@ -65,7 +69,7 @@ export class S3Service implements IS3Service {
 
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
-        Key: key,
+        Key: `${key}`,
         ContentType: mimeType,
         ACL: 'public-read',
         Metadata: {
@@ -121,11 +125,15 @@ export class S3Service implements IS3Service {
         Bucket: this.bucketName,
         Key: key,
       })
-
       await this.client.send(headCommand)
       return { message: 'File exists' }
     } catch (error) {
-      throw new InternalServerErrorException(`File with key ${key} not found`)
+      if (error.name === 'NotFound') {
+        throw new NotFoundException(`File with key ${key} not found`)
+      }
+      throw new InternalServerErrorException(
+        `Error checking file with key ${key}`,
+      )
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Inject, Param, Post } from '@nestjs/common'
 import { type IUploadService, UPLOAD_SERVICE } from '../domain/IUploadService'
-import type { UploadUrlDto } from '../domain/dto/UploadUrlDto'
+import { UploadUrlDto } from '../domain/dto/UploadUrlDto'
 import { BaseUploadDto } from '../domain/dto/BaseUploadDto'
 
 @Controller('upload')
