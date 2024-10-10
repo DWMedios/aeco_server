@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Inject, Param, Post } from '@nestjs/common'
-import type { IBaseS3 } from '@shared/domain/S3Type'
 import { type IUploadService, UPLOAD_SERVICE } from '../domain/IUploadService'
 import type { UploadUrlDto } from '../domain/dto/UploadUrlDto'
+import { BaseUploadDto } from '../domain/dto/BaseUploadDto'
 
 @Controller('upload')
 export class UploadController {
@@ -16,7 +16,7 @@ export class UploadController {
   }
 
   @Delete(':key')
-  async deleteFile(@Param() params: IBaseS3) {
+  async deleteFile(@Param() params: BaseUploadDto) {
     return await this.uploadService.delete(params)
   }
 }

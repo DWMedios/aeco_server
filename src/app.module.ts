@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { AecosModule } from './aecos/aecos.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { AppConfig, DatabaseConfig } from './common/infra/config'
+import { AppConfig, DatabaseConfig, S3Config } from './common/infra/config'
 import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { RewardCategoryModule } from './reward-category/reward-category.module'
@@ -16,7 +16,7 @@ import { UploadModule } from './upload/upload.module'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [AppConfig, DatabaseConfig],
+      load: [AppConfig, DatabaseConfig, S3Config],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
