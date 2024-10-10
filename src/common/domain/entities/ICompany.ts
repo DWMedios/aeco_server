@@ -1,5 +1,5 @@
-import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
+import type { IBase } from './IBase'
 import type { ISetting } from './ICompanySetting'
 import type { IUserCompanyPermissions } from './IPermission'
 import type { IPromotion } from './IPromotion'

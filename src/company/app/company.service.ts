@@ -1,5 +1,5 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import type { ICompany } from '@common/domain/entities'
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import {
   COMPANY_REPOSITORY,
   type ICompanyRepository,
