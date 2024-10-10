@@ -17,6 +17,7 @@ export class UploadService implements IUploadService {
     @Inject(S3_SERVICES)
     private readonly s3Service: IS3Service,
   ) {}
+
   uploadUrl(uploadUrl: UploadUrlDto): Promise<IResponseUploadUrl> {
     return this.s3Service.generatePresignedUploadUrl(uploadUrl)
   }
