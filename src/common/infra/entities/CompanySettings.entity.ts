@@ -6,7 +6,7 @@ import type { ISetting } from '../../domain/entities/ICompanySetting'
 @Entity({ name: 'company_settings' })
 export class Setting extends Base implements ISetting {
   @Column({ length: 100 })
-  logoUrl: string
+  key: string
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>[]

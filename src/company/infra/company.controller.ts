@@ -29,16 +29,21 @@ export class CompanyController {
 
   @Post()
   async create(@Body() createCompany: CreateCompanyDto) {
-    return await this.companyService.create(createCompany)
+    return await this.companyService.createWithSettings(createCompany)
   }
 
   @Patch(':id')
   async update(@Param('id') id: number, @Body() company: UpdateCompanyDto) {
-    return await this.companyService.update(company, id)
+    return await this.companyService.updateWithSettings(company, id)
   }
 
   @Delete(':id')
   async delete(@Param('id') id: number) {
     return await this.companyService.delete(id)
+  }
+
+  @Get('settings/:id')
+  async setting(@Param('id') id: number) {
+    return await this.companyService.settings(id)
   }
 }

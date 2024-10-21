@@ -12,5 +12,6 @@ export interface IResponseUploadUrl extends IBaseS3 {
 }
 
 export interface IResponseMessage {
+  status: number
   message: string
 }

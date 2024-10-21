@@ -1,4 +1,6 @@
-import { IsString } from 'class-validator'
+import { IsOptional, IsString, ValidateNested } from 'class-validator'
+import { CreateSettingsDto } from './CreateSettingsDto'
+import { Type } from 'class-transformer'
 
 export class CreateCompanyDto {
   @IsString()
@@ -6,4 +8,9 @@ export class CreateCompanyDto {
 
   @IsString()
   rfc: string
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateSettingsDto)
+  settings?: CreateSettingsDto
 }
