@@ -26,7 +26,7 @@ export class Company extends Base implements ICompany {
   @JoinTable({ name: 'companies_users' })
   users: User[]
 
-  @OneToOne(() => Setting, (setting) => setting.company)
+  @OneToOne(() => Setting, (setting) => setting.company, { cascade: true })
   settings: Setting
 
   @OneToMany(

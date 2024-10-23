@@ -8,9 +8,9 @@ import type { IUser } from './IUser'
 export interface ICompany extends IBase {
   name: string
   rfc: string
-  users: IUser[]
-  settings: ISetting
-  userCompanyPermissions: IUserCompanyPermissions[]
-  aecos: IAeco[]
-  promotions: IPromotion[]
+  users?: IUser[]
+  settings?: ISetting
+  userCompanyPermissions?: IUserCompanyPermissions[]
+  aecos?: IAeco[]
+  promotions?: IPromotion[]
 }

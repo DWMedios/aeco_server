@@ -18,7 +18,7 @@ export class CreateCompanySeeder1727731819942 implements MigrationInterface {
     if (!companyId) console.error('Company not found')
 
     await queryRunner.query(
-      `INSERT INTO ${companySettingsTable} ("logoUrl", metadata, "companyId") VALUES ('https://example.com/logos/aeco_company.png', '{"defaultCurrency": "USD"}', ${companyId})`,
+      `INSERT INTO ${companySettingsTable} ("key", metadata, "companyId") VALUES ('71402166-9e0a-47d2-851a-322381b4c1cd', '{"defaultCurrency": "USD"}', ${companyId})`,
     )
   }
 

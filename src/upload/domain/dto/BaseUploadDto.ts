@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class BaseUploadDto {
   @IsString()
-  key: string
+  @IsNotEmpty()
+  readonly key: string
 }
