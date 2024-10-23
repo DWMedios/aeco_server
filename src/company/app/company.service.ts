@@ -49,7 +49,6 @@ export class CompanyService implements ICompanyService {
     const exists = await this.companyRepository.exists({
       name: newCompany.name,
     })
-    console.log('🚀 ~ CompanyService ~ create ~ exists:', exists)
 
     if (exists) throw new BadRequestException('Company already exists')
 

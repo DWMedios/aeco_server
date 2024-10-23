@@ -13,12 +13,10 @@ export class SettingsRepository implements ISettingRepository {
   ) {}
 
   async exists(companyId: number): Promise<boolean> {
-    if (!companyId) return false
-
     return this.repository.exists({ where: { companyId } })
   }
 
-  async find(companyId: number): Promise<ISetting> {
+  async find(companyId: number): Promise<ISetting | null> {
     return this.repository.findOne({ where: { companyId } })
   }
 
