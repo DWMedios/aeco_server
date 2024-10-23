@@ -1,9 +1,10 @@
-import { IsOptional, IsString } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class UpdateSettingsDto {
   @IsString()
   @IsOptional()
-  key?: string
+  @IsNotEmpty()
+  readonly key?: string
 
   @IsString()
   @IsOptional()

@@ -1,9 +1,10 @@
-import { IsOptional, IsString } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class CreateSettingsDto {
   @IsString()
-  key?: string
+  @IsNotEmpty()
+  readonly key?: string
 
   @IsOptional()
-  metadata?: Record<string, any>
+  readonly metadata?: Record<string, any>
 }

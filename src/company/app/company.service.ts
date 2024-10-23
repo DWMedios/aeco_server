@@ -4,27 +4,20 @@ import {
   COMPANY_REPOSITORY,
   type ICompanyRepository,
 } from '@shared/domain/repositories'
-import { getFileUrlIfExists } from '@shared/utils/FileHelper'
-import {
-  SETTING_REPOSITORY,
-  type ISettingRepository,
-} from '@shared/domain/repositories/ISettingRepository'
 import {
   S3_SERVICES,
   type IS3Service,
 } from '@shared/domain/services/IS3Service'
+import { CompanySerializer } from '../domain/serializers/CompanySerializer'
 import type { ICompanyService } from '../domain/ICompanyService'
 import type { UpdateCompanyDto } from '../domain/dto/UpdateCompanyDto'
 import type { CreateCompanyDto } from '../domain/dto/CompanyDto'
-import { CompanySerializer } from '../domain/serializers/CompanySerializer'
 
 @Injectable()
 export class CompanyService implements ICompanyService {
   constructor(
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: ICompanyRepository,
-    @Inject(SETTING_REPOSITORY)
-    private readonly settingRepository: ISettingRepository,
     @Inject(S3_SERVICES)
     private readonly s3Service: IS3Service,
   ) {}
@@ -37,8 +30,7 @@ export class CompanyService implements ICompanyService {
 
     const company = await this.companyRepository.find(id)
 
-    const fileUrl = await getFileUrlIfExists(
-      this.s3Service,
+    const fileUrl = await this.s3Service.getFileUrlIfExists(
       company.settings?.key,
     )
 
@@ -62,13 +54,17 @@ export class CompanyService implements ICompanyService {
 
     if (exists) throw new BadRequestException('Company already exists')
 
-    const fileUrl = await getFileUrlIfExists(
-      this.s3Service,
+    const fileUrl = await this.s3Service.getFileUrlIfExists(
       company.settings?.key,
     )
 
-    const companyCreated =
-      await this.companyRepository.createWithSettings(company)
+    const companyCreated = await this.companyRepository.createWithSettings({
+      ...company,
+      settings: {
+        ...company.settings,
+        key: fileUrl ?? null,
+      },
+    })
 
     return CompanySerializer.fromCompanyWithSettings(companyCreated, fileUrl)
   }
@@ -93,15 +89,21 @@ export class CompanyService implements ICompanyService {
 
     if (!exists) throw new BadRequestException('Company not found')
 
-    const fileUrl = await getFileUrlIfExists(
-      this.s3Service,
-      exists.settings?.key,
-    )
+    let fileUrl: string | null = null
+    if (exists.settings?.key)
+      fileUrl = await this.s3Service.getFileUrlIfExists(exists.settings?.key)
 
     const companyUpdated = await this.companyRepository.updateWithSettings(
       exists,
-      company,
+      {
+        ...company,
+        settings: {
+          ...company.settings,
+          key: fileUrl,
+        },
+      },
     )
+
     return CompanySerializer.fromCompanyWithSettings(companyUpdated, fileUrl)
   }
 

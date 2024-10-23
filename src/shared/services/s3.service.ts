@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -7,18 +6,9 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import {
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import type {
-  IBaseS3,
-  IResponseMessage,
-  IResponseUploadUrl,
-  IUploadUrl,
-} from '@shared/domain/S3Type'
+import type { IUploadUrl } from '@shared/domain/S3Type'
 import type { IS3Service } from '@shared/domain/services/IS3Service'
 
 @Injectable()
@@ -56,21 +46,13 @@ export class S3Service implements IS3Service {
   async generatePresignedUploadUrl({
     fileType,
     fileName,
-  }: IUploadUrl): Promise<IResponseUploadUrl> {
+    pathFile,
+  }: IUploadUrl): Promise<string> {
     try {
-      const mimeType =
-        fileType === 'mp4'
-          ? 'video/mp4'
-          : fileType === 'png'
-            ? 'image/png'
-            : 'image/jpg'
-
-      const key = `${uuidv4()}`
-
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
-        Key: `${key}`,
-        ContentType: mimeType,
+        Key: pathFile,
+        ContentType: fileType,
         ACL: 'public-read',
         Metadata: {
           fileName,
@@ -80,7 +62,7 @@ export class S3Service implements IS3Service {
       const url = await getSignedUrl(this.client, command, {
         expiresIn: this.expiration,
       })
-      return { url, key }
+      return url
     } catch (error) {
       throw new InternalServerErrorException(
         'Error generating presigned upload URL',
@@ -88,7 +70,7 @@ export class S3Service implements IS3Service {
     }
   }
 
-  async getPresignedViewUrl({ key }: IBaseS3): Promise<string> {
+  async getPresignedUrl(key: string): Promise<string> {
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
@@ -105,7 +87,7 @@ export class S3Service implements IS3Service {
     }
   }
 
-  async deleteFile({ key }: IBaseS3): Promise<IResponseMessage> {
+  async deleteFile(key: string): Promise<boolean> {
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.bucketName,
@@ -113,30 +95,30 @@ export class S3Service implements IS3Service {
       })
 
       await this.client.send(command)
-      return { status: HttpStatus.OK, message: 'File deleted successfully' }
+      return true
     } catch (error) {
-      throw new InternalServerErrorException('Error deleting file')
+      console.error(error)
+      return false
     }
   }
 
-  async fileExist({ key }: IBaseS3): Promise<IResponseMessage> {
+  async fileExist(key: string): Promise<boolean> {
     try {
       const headCommand = new HeadObjectCommand({
         Bucket: this.bucketName,
         Key: key,
       })
       await this.client.send(headCommand)
-      return { status: HttpStatus.OK, message: 'File exists' }
+      return true
     } catch (error) {
-      if (error.name === 'NotFound') {
-        return {
-          status: HttpStatus.NOT_FOUND,
-          message: `File with key ${key} not found`,
-        }
-      }
-      throw new InternalServerErrorException(
-        `Error checking file with key ${key}`,
-      )
+      console.error(error)
+      return false
     }
+  }
+
+  async getFileUrlIfExists(key: string): Promise<string | null> {
+    const fileExists = await this.fileExist(key)
+    if (!fileExists) return null
+    return await this.getPresignedUrl(key)
   }
 }

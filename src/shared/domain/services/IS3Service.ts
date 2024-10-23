@@ -1,14 +1,11 @@
-import { BaseUploadDto } from 'src/upload/domain/dto/BaseUploadDto'
 import type { UploadUrlDto } from '../../../upload/domain/dto/UploadUrlDto'
-import type { IResponseMessage, IResponseUploadUrl } from '../S3Type'
 
 export const S3_SERVICES = Symbol('IS3Service')
 
 export interface IS3Service {
-  generatePresignedUploadUrl(
-    uploadtUrl: UploadUrlDto,
-  ): Promise<IResponseUploadUrl | null>
-  getPresignedViewUrl(data: BaseUploadDto): Promise<string>
-  deleteFile(data: BaseUploadDto): Promise<IResponseMessage>
-  fileExist(exist: BaseUploadDto): Promise<IResponseMessage>
+  generatePresignedUploadUrl(uploadtUrl: UploadUrlDto): Promise<string>
+  getPresignedUrl(key: string): Promise<string>
+  deleteFile(key: string): Promise<boolean>
+  fileExist(key: string): Promise<boolean>
+  getFileUrlIfExists(key: string): Promise<string | null>
 }

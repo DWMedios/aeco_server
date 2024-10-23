@@ -5,11 +5,11 @@ import { Type } from 'class-transformer'
 export class UpdateCompanyDto {
   @IsString()
   @IsOptional()
-  name?: string
+  readonly name?: string
 
   @IsString()
   @IsOptional()
-  rfc?: string
+  readonly rfc?: string
 
   @IsOptional()
   @ValidateNested()
