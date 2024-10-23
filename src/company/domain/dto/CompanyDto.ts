@@ -1,6 +1,6 @@
+import { Type } from 'class-transformer'
 import { IsOptional, IsString, ValidateNested } from 'class-validator'
 import { CreateSettingsDto } from './CreateSettingsDto'
-import { Type } from 'class-transformer'
 
 export class CreateCompanyDto {
   @IsString()

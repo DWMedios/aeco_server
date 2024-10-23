@@ -1,21 +1,21 @@
-import type { ICompany } from '@common/domain/entities'
 import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import type { ICompany } from '@common/domain/entities'
 import {
   COMPANY_REPOSITORY,
   type ICompanyRepository,
 } from '@shared/domain/repositories'
-import type { CreateCompanyDto } from '../domain/dto/CompanyDto'
-import type { ICompanyService } from '../domain/ICompanyService'
-import type { UpdateCompanyDto } from '../domain/dto/UpdateCompanyDto'
+import { getFileUrlIfExists } from '@shared/utils/FileHelper'
 import {
   SETTING_REPOSITORY,
   type ISettingRepository,
 } from '@shared/domain/repositories/ISettingRepository'
-import { CompanySettingSerializer } from '../domain/serializers/SetingsSerializer'
 import {
   S3_SERVICES,
   type IS3Service,
 } from '@shared/domain/services/IS3Service'
+import type { ICompanyService } from '../domain/ICompanyService'
+import type { UpdateCompanyDto } from '../domain/dto/UpdateCompanyDto'
+import type { CreateCompanyDto } from '../domain/dto/CompanyDto'
 import { CompanySerializer } from '../domain/serializers/CompanySerializer'
 
 @Injectable()
@@ -35,13 +35,21 @@ export class CompanyService implements ICompanyService {
     })
     if (!exists) throw new BadRequestException('Company not found')
 
-    return await this.companyRepository.find(id)
+    const company = await this.companyRepository.find(id)
+
+    const fileUrl = await getFileUrlIfExists(
+      this.s3Service,
+      company.settings?.key,
+    )
+
+    return CompanySerializer.fromCompanyWithSettings(company, fileUrl)
   }
 
   async create(newCompany: CreateCompanyDto): Promise<ICompany> {
     const exists = await this.companyRepository.exists({
       name: newCompany.name,
     })
+    console.log('🚀 ~ CompanyService ~ create ~ exists:', exists)
 
     if (exists) throw new BadRequestException('Company already exists')
 
@@ -55,101 +63,55 @@ export class CompanyService implements ICompanyService {
 
     if (exists) throw new BadRequestException('Company already exists')
 
-    const created = await this.companyRepository.createWithSettings(company)
+    const fileUrl = await getFileUrlIfExists(
+      this.s3Service,
+      company.settings?.key,
+    )
 
-    let viewfile = null
-    if (created.settings?.key) {
-      let fileexist = await this.s3Service.fileExist({
-        key: created.settings.key,
-      })
+    const companyCreated =
+      await this.companyRepository.createWithSettings(company)
 
-      if (fileexist.status !== 200) {
-        await this.settingRepository.update({ key: null }, created.settings.id)
-        fileexist = null
-      } else {
-        viewfile = await this.s3Service.getPresignedViewUrl({
-          key: created.settings.key,
-        })
-      }
-    }
-    return CompanySerializer.fromCompanyWithSettings(created, viewfile)
+    return CompanySerializer.fromCompanyWithSettings(companyCreated, fileUrl)
   }
 
   async update(
     company: UpdateCompanyDto,
-    id: number,
+    companyId: number,
   ): Promise<Partial<ICompany>> {
     const exists = await this.companyRepository.exists({
-      id,
+      id: companyId,
     })
     if (!exists) throw new BadRequestException('Company not found')
 
-    return await this.companyRepository.update(company, id)
+    return await this.companyRepository.update(company, companyId)
   }
 
   async updateWithSettings(
     company: UpdateCompanyDto,
-    id: number,
+    companyId: number,
   ): Promise<ICompany> {
-    const exists = await this.companyRepository.find(id)
+    const exists = await this.companyRepository.find(companyId)
 
     if (!exists) throw new BadRequestException('Company not found')
 
-    const updated = await this.companyRepository.updateWithSettings(
+    const fileUrl = await getFileUrlIfExists(
+      this.s3Service,
+      exists.settings?.key,
+    )
+
+    const companyUpdated = await this.companyRepository.updateWithSettings(
       exists,
       company,
     )
-
-    let viewfile = null
-    if (updated.settings?.key) {
-      let fileexist = await this.s3Service.fileExist({
-        key: updated.settings.key,
-      })
-
-      if (fileexist.status !== 200) {
-        await this.settingRepository.update({ key: null }, updated.settings.id)
-        fileexist = null
-      } else {
-        viewfile = await this.s3Service.getPresignedViewUrl({
-          key: updated.settings.key,
-        })
-      }
-    }
-    return CompanySerializer.fromCompanyWithSettings(updated, viewfile)
+    return CompanySerializer.fromCompanyWithSettings(companyUpdated, fileUrl)
   }
 
-  async delete(id: number): Promise<any> {
+  async delete(companyId: number): Promise<boolean> {
     const exists = await this.companyRepository.exists({
-      id,
+      id: companyId,
     })
     if (!exists) throw new BadRequestException('Company not found')
 
-    return await this.companyRepository.delete(id)
-  }
-
-  async settings(companyId: number): Promise<any> {
-    const exists = await this.settingRepository.exists(companyId)
-
-    if (!exists) throw new BadRequestException('Settings not found')
-
-    const setting = await this.settingRepository.find(companyId)
-    if (setting && setting.key) {
-      let fileexist = await this.s3Service.fileExist({ key: setting.key })
-
-      if (fileexist.status !== 200) {
-        await this.settingRepository.update({ key: null }, setting.id)
-        fileexist = null
-      }
-
-      const viewfile = await this.s3Service.getPresignedViewUrl({
-        key: setting.key,
-      })
-
-      const settingsResponse = CompanySettingSerializer.fromCompanySetting(
-        setting,
-        null,
-      )
-      return settingsResponse
-    }
+    return await this.companyRepository.delete(companyId)
   }
 }

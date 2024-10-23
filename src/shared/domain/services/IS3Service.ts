@@ -8,7 +8,7 @@ export interface IS3Service {
   generatePresignedUploadUrl(
     uploadtUrl: UploadUrlDto,
   ): Promise<IResponseUploadUrl | null>
-  getPresignedViewUrl(data: BaseUploadDto): Promise<IResponseMessage>
+  getPresignedViewUrl(data: BaseUploadDto): Promise<string>
   deleteFile(data: BaseUploadDto): Promise<IResponseMessage>
   fileExist(exist: BaseUploadDto): Promise<IResponseMessage>
 }

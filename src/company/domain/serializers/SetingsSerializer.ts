@@ -1,4 +1,4 @@
-import { ICompany, ISetting } from '@common/domain/entities'
+import type { ICompany, ISetting } from '@common/domain/entities'
 
 export class CompanySettingSerializer {
   readonly id: number

@@ -7,7 +7,11 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import {
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import type {
   IBaseS3,
@@ -84,7 +88,7 @@ export class S3Service implements IS3Service {
     }
   }
 
-  async getPresignedViewUrl({ key }: IBaseS3): Promise<any> {
+  async getPresignedViewUrl({ key }: IBaseS3): Promise<string> {
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
@@ -109,7 +113,7 @@ export class S3Service implements IS3Service {
       })
 
       await this.client.send(command)
-      return { status: 200, message: 'File deleted successfully' }
+      return { status: HttpStatus.OK, message: 'File deleted successfully' }
     } catch (error) {
       throw new InternalServerErrorException('Error deleting file')
     }
@@ -122,10 +126,13 @@ export class S3Service implements IS3Service {
         Key: key,
       })
       await this.client.send(headCommand)
-      return { status: 200, message: 'File exists' }
+      return { status: HttpStatus.OK, message: 'File exists' }
     } catch (error) {
       if (error.name === 'NotFound') {
-        return { status: 404, message: `File with key ${key} not found` }
+        return {
+          status: HttpStatus.NOT_FOUND,
+          message: `File with key ${key} not found`,
+        }
       }
       throw new InternalServerErrorException(
         `Error checking file with key ${key}`,

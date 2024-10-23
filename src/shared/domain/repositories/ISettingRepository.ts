@@ -1,6 +1,6 @@
-import { ISetting } from '@common/domain/entities'
-import { CreateSettingsDto } from 'src/company/domain/dto/CreateSettingsDto'
-import { UpdateSettingsDto } from 'src/company/domain/dto/UpdateSettingsDto'
+import type { ISetting } from '@common/domain/entities'
+import type { CreateSettingsDto } from 'src/company/domain/dto/CreateSettingsDto'
+import type { UpdateSettingsDto } from 'src/company/domain/dto/UpdateSettingsDto'
 
 export const SETTING_REPOSITORY = Symbol('ISettingRepository')
 

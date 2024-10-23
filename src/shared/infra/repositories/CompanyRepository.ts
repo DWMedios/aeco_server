@@ -4,7 +4,7 @@ import { Company } from '@common/infra/entities'
 import type { ICompany } from '@common/domain/entities'
 import type { ICompanyRepository } from '@shared/domain/repositories'
 import type { CreateCompanyDto } from '../../../company/domain/dto/CompanyDto'
-import type { UpdateCompanyDto } from 'src/company/domain/dto/UpdateCompanyDto'
+import type { UpdateCompanyDto } from '../../../company/domain/dto/UpdateCompanyDto'
 
 export class CompanyRepository implements ICompanyRepository {
   constructor(
@@ -23,7 +23,7 @@ export class CompanyRepository implements ICompanyRepository {
     return this.repository.exists({ where: whereClause })
   }
 
-  async find(id: number): Promise<ICompany> {
+  async find(id: number): Promise<ICompany | null> {
     return this.repository.findOne({
       where: { id: id },
       relations: ['settings'],
@@ -40,7 +40,7 @@ export class CompanyRepository implements ICompanyRepository {
     return qb.raw[0]
   }
 
-  async createWithSettings(company: any): Promise<ICompany> {
+  async createWithSettings(company: CreateCompanyDto): Promise<ICompany> {
     const newCompany = this.repository.create(company as ICompany)
     return this.repository.save(newCompany)
   }

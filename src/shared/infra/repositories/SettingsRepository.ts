@@ -1,10 +1,10 @@
-import { ISetting } from '@common/domain/entities'
-import { Setting } from '@common/infra/entities'
-import { InjectRepository } from '@nestjs/typeorm'
-import { ISettingRepository } from '@shared/domain/repositories'
-import { CreateSettingsDto } from 'src/company/domain/dto/CreateSettingsDto'
-import { UpdateSettingsDto } from 'src/company/domain/dto/UpdateSettingsDto'
 import { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import type { ISetting } from '@common/domain/entities'
+import { Setting } from '@common/infra/entities'
+import type { ISettingRepository } from '@shared/domain/repositories'
+import type { CreateSettingsDto } from '../../../company/domain/dto/CreateSettingsDto'
+import type { UpdateSettingsDto } from '../../../company/domain/dto/UpdateSettingsDto'
 
 export class SettingsRepository implements ISettingRepository {
   constructor(

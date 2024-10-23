@@ -1,4 +1,4 @@
-import {
+import type {
   IAeco,
   ICompany,
   IPromotion,
@@ -30,16 +30,15 @@ export class CompanySerializer {
 
   static fromCompanyWithSettings(
     company: ICompany,
-    aditional: any = null,
+    fileUrl: string = null,
   ): CompanySerializer {
     return new CompanySerializer({
       id: company.id,
       name: company.name,
       rfc: company.rfc,
-      settings: CompanySettingSerializer.fromCompanySetting(
-        company.settings,
-        aditional,
-      ),
+      settings: company.settings
+        ? CompanySettingSerializer.fromCompanySetting(company.settings, fileUrl)
+        : null,
     })
   }
 }

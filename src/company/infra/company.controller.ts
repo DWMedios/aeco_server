@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common'
@@ -23,7 +24,7 @@ export class CompanyController {
   ) {}
 
   @Get(':id')
-  async find(@Param('id') id: number) {
+  async find(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.find(id)
   }
 
@@ -33,17 +34,15 @@ export class CompanyController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() company: UpdateCompanyDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() company: UpdateCompanyDto,
+  ) {
     return await this.companyService.updateWithSettings(company, id)
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.delete(id)
-  }
-
-  @Get('settings/:id')
-  async setting(@Param('id') id: number) {
-    return await this.companyService.settings(id)
   }
 }
