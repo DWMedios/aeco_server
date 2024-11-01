@@ -6,11 +6,7 @@ import { Page } from './Page.entity'
 import { Ticket } from './Ticket.entity'
 import { RewardCategory } from './RewardCategory.entity'
 import type { IAeco } from '../../domain/entities/IAeco'
-
-export enum AecoStatus {
-  ENABLED = 'enabled',
-  DISABLED = 'disabled',
-}
+import { AecoStatus } from '../../../aecos/domain/enums/AecoStatus.enum'
 
 @Entity({ name: 'aecos' })
 export class Aeco extends Base implements IAeco {
@@ -59,4 +55,7 @@ export class Aeco extends Base implements IAeco {
 
   @OneToMany(() => RewardCategory, (category) => category.aeco)
   rewardCategories: RewardCategory[]
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata: Record<string, any>[]
 }

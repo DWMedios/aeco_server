@@ -1,41 +1,62 @@
-// import { Type } from 'class-transformer'
-// import {
-//   IsNotEmpty,
-//   IsOptional,
-//   IsString,
-//   ValidateNested,
-// } from 'class-validator'
-import { AecoStatus } from '@common/infra/entities'
 import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator'
+import type {
   IAddress,
-  ICompany,
   IPage,
   IRewardCategory,
   ITicket,
 } from '@common/domain/entities'
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import { AecoStatus } from '../enums/AecoStatus.enum'
+import { Type } from 'class-transformer'
+import { CreateSettingsDto } from '../../../company/domain/dto/CreateSettingsDto'
 
 export class CreateAecoDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string
+
+  @IsEnum(AecoStatus, {
+    message: 'status must be either enabled, disabled',
+  })
+  @IsNotEmpty()
   readonly status: AecoStatus
-  readonly isOnline: boolean
-  readonly initialSetup: boolean
-  readonly needsUpdate: boolean
+
+  @IsBoolean()
+  readonly isOnline: boolean = false
+
+  @IsBoolean()
+  readonly initialSetup: boolean = false
+
+  @IsBoolean()
+  readonly needsUpdate: boolean = false
 
   @IsString()
   @IsNotEmpty()
   readonly serialNumber: string
+
+  @IsOptional()
   readonly currentCoords?: Record<string, any> | null
+
+  @IsOptional()
   readonly companyId?: number
-  readonly addressId?: number
-  readonly company?: ICompany | null
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateSettingsDto)
   readonly address?: IAddress | null
+
+  @IsOptional()
   readonly tickets?: ITicket[] | null
 
-  @IsString()
   @IsOptional()
   readonly pages?: IPage[] | null
+
+  @IsOptional()
   readonly rewardCategories?: IRewardCategory[] | null
 }
