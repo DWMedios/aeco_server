@@ -1,10 +1,11 @@
 import type { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import type { IAecoRepository } from '@shared/domain/repositories'
-import { Aeco, AecoStatus } from '@common/infra/entities'
+import { Aeco } from '@common/infra/entities'
 import type { IAeco } from '@common/domain/entities'
 import type { CreateAecoDto } from '../../../aecos/domain/dto/AecoDto'
 import type { UpdateAecoDto } from '../../../aecos/domain/dto/UpdateAecoDto'
+import { AecoStatus } from '../../../aecos/domain/enums/AecoStatus.enum'
 
 export class AecoRepository implements IAecoRepository {
   constructor(
@@ -32,26 +33,14 @@ export class AecoRepository implements IAecoRepository {
     })
   }
 
-  async create(aeco: CreateAecoDto): Promise<Partial<IAeco>> {
-    const qb = await this.repository
-      .createQueryBuilder('aeco')
-      .insert()
-      .values(aeco as IAeco)
-      .returning('*')
-      .execute()
-    return qb.raw[0]
+  async create(aeco: CreateAecoDto): Promise<IAeco> {
+    const newAeco = this.repository.create(aeco as IAeco)
+    return this.repository.save(newAeco)
   }
 
-  async update(aeco: UpdateAecoDto, id: number): Promise<Partial<IAeco>> {
-    const qb = await this.repository
-      .createQueryBuilder('aeco')
-      .update()
-      .set(aeco as IAeco)
-      .where('id = :id', { id: id })
-      .returning('*')
-      .execute()
-
-    return qb.raw[0]
+  async update(exists: IAeco, aeco: UpdateAecoDto): Promise<Partial<IAeco>> {
+    const updatedAeco = this.repository.merge(exists, aeco as IAeco)
+    return this.repository.save(updatedAeco)
   }
 
   async initialSetup(serialNumber: string): Promise<IAeco | null> {

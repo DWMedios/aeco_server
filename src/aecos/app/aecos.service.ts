@@ -36,13 +36,11 @@ export class AecosService implements IAecoService {
     return await this.aecoRepository.create(newAeco)
   }
 
-  async update(aeco: UpdateAecoDto, aecoId: number): Promise<Partial<IAeco>> {
-    const exists = await this.aecoRepository.exists({
-      id: aecoId,
-    })
+  async update(aeco: UpdateAecoDto, aecoId: number): Promise<IAeco> {
+    const exists = await this.aecoRepository.find(aecoId)
     if (!exists) throw new BadRequestException('Aeco not found')
 
-    return await this.aecoRepository.update(aeco, aecoId)
+    return await this.aecoRepository.update(exists, aeco)
   }
 
   async getInitialSetup(serialNumber: string) {

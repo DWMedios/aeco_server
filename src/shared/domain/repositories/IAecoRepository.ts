@@ -10,9 +10,9 @@ export interface IAecoRepository {
     serialNumber?: string
     name?: string
   }): Promise<boolean>
-  find(id: number): Promise<Partial<IAeco>>
-  create(company: CreateAecoDto): Promise<Partial<IAeco>>
-  update(company: UpdateAecoDto, id: number): Promise<Partial<IAeco>>
+  find(id: number): Promise<IAeco>
+  create(company: CreateAecoDto): Promise<IAeco>
+  update(exists: IAeco, company: UpdateAecoDto): Promise<IAeco>
   initialSetup(serialNumber: string): Promise<IAeco | null>
   delete(id: number): Promise<boolean>
 }
