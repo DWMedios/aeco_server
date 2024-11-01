@@ -19,7 +19,7 @@ export const configOptions: PostgresConnectionOptions & DataSourceOptions = {
   entities: [__dirname + '/../src/common/infra/entities/*.entity{.ts,.js}'],
   migrations: [
     __dirname + '/migrations/*{.ts,.js}',
-    __dirname + '/seeders/*{.ts,.js}',
+    // __dirname + '/seeders/*{.ts,.js}',
   ],
   migrationsTableName: 'migrations_typeorm',
 }
