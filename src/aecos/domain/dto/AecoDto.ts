@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -43,13 +44,11 @@ export class CreateAecoDto {
   @IsOptional()
   readonly currentCoords?: Record<string, any> | null
 
-  @IsOptional()
-  readonly companyId?: number
+  @IsNumber()
+  readonly companyId: number
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateSettingsDto)
-  readonly address?: IAddress | null
+  @IsNumber()
+  readonly addressId?: number
 
   @IsOptional()
   readonly tickets?: ITicket[] | null

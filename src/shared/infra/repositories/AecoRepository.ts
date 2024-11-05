@@ -27,7 +27,7 @@ export class AecoRepository implements IAecoRepository {
     return this.repository.exists({ where: whereClause })
   }
 
-  async find(id: number): Promise<Partial<IAeco>> {
+  async find(id: number): Promise<IAeco> {
     return this.repository.findOne({
       where: { id: id },
     })
@@ -38,7 +38,7 @@ export class AecoRepository implements IAecoRepository {
     return this.repository.save(newAeco)
   }
 
-  async update(exists: IAeco, aeco: UpdateAecoDto): Promise<Partial<IAeco>> {
+  async update(exists: IAeco, aeco: UpdateAecoDto): Promise<IAeco> {
     const updatedAeco = this.repository.merge(exists, aeco as IAeco)
     return this.repository.save(updatedAeco)
   }

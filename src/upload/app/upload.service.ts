@@ -1,8 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common'
-import type {
-  IResponseMessage,
-  IResponseUploadUrl,
-} from '@shared/domain/S3Type'
 import {
   type IS3Service,
   S3_SERVICES,
@@ -18,12 +14,12 @@ export class UploadService implements IUploadService {
     private readonly s3Service: IS3Service,
   ) {}
 
-  uploadUrl(uploadUrl: UploadUrlDto): Promise<IResponseUploadUrl> {
+  uploadUrl(uploadUrl: UploadUrlDto): Promise<string> {
     return this.s3Service.generatePresignedUploadUrl(uploadUrl)
   }
 
-  async delete(data: BaseUploadDto): Promise<IResponseMessage> {
-    await this.s3Service.fileExist(data)
-    return this.s3Service.deleteFile(data)
+  async delete(data: BaseUploadDto): Promise<boolean> {
+    await this.s3Service.fileExist(data.key)
+    return this.s3Service.deleteFile(data.key)
   }
 }

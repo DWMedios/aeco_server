@@ -8,44 +8,38 @@ import {
 import { AecoStatus } from '../enums/AecoStatus.enum'
 
 export class UpdateAecoDto {
-  @IsString()
   @IsOptional()
+  @IsString()
   readonly name?: string
 
+  @IsOptional()
   @IsEnum(AecoStatus, {
     message: 'status must be either enabled, disabled',
   })
-  @IsOptional()
   readonly status?: AecoStatus
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   readonly isOnline?: boolean
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   readonly initialSetup?: boolean
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   readonly needsUpdate?: boolean
 
-  @IsString()
   @IsOptional()
+  @IsString()
   readonly serialNumber?: string
 
   @IsOptional()
   readonly currentCoords?: Record<string, any> | null
 
+  @IsOptional()
   @IsNumber()
-  @IsOptional()
-  readonly companyId?: number
-
-  @IsOptional()
-  readonly address?: null
-
-  @IsOptional()
-  readonly tickets?: null
+  readonly addressId?: number
 
   @IsOptional()
   readonly pages?: null
