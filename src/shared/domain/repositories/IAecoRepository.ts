@@ -14,5 +14,6 @@ export interface IAecoRepository {
   create(company: CreateAecoDto): Promise<IAeco>
   update(exists: IAeco, company: UpdateAecoDto): Promise<IAeco>
   initialSetup(serialNumber: string): Promise<IAeco | null>
+  getUpdates(serialNumber: string): Promise<IAeco | null>
   delete(id: number): Promise<boolean>
 }

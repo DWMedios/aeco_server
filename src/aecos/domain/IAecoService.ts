@@ -9,5 +9,6 @@ export interface IAecoService {
   create(aeco: CreateAecoDto): Promise<IAeco>
   update(aeco: UpdateAecoDto, id: number): Promise<IAeco>
   getInitialSetup(serialNumber: string): Promise<IAeco | null>
+  getUpdates(serialNumber: string): Promise<IAeco | null>
   delete(id: number): Promise<boolean>
 }

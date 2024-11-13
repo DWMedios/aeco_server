@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import {
   AECO_REPOSITORY,
   type IAecoRepository,
@@ -40,13 +45,27 @@ export class AecosService implements IAecoService {
     const exists = await this.aecoRepository.find(aecoId)
     if (!exists) throw new BadRequestException('Aeco not found')
 
-    return await this.aecoRepository.update(exists, aeco)
+    return await this.aecoRepository.update(exists, {
+      ...aeco,
+      metadata: { ...aeco },
+    })
   }
 
   async getInitialSetup(serialNumber: string) {
     const aeco = await this.aecoRepository.initialSetup(serialNumber)
 
     if (!aeco) throw new Error('Aeco not found')
+
+    return aeco
+  }
+
+  async getUpdates(serialNumber: string) {
+    const aeco = await this.aecoRepository.getUpdates(serialNumber)
+
+    if (!aeco) throw new Error('Aeco not found')
+
+    if (!aeco.needsUpdate && !aeco.metadata)
+      throw new NotFoundException('No pending updates found')
 
     return aeco
   }

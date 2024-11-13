@@ -72,6 +72,12 @@ export class AecoRepository implements IAecoRepository {
       .getOne()
   }
 
+  async getUpdates(serialNumber: string): Promise<IAeco> {
+    return this.repository.findOne({
+      where: { serialNumber },
+    })
+  }
+
   async delete(id: number): Promise<boolean> {
     const result = await this.repository
       .createQueryBuilder('aeco')

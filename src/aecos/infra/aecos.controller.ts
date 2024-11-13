@@ -46,6 +46,11 @@ export class AecosController {
     return await this.aecoService.getInitialSetup(serialNumber)
   }
 
+  @Get('needs-update/:serialNumber')
+  async getUpdates(@Param('serialNumber') serialNumber: string) {
+    return await this.aecoService.getUpdates(serialNumber)
+  }
+
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.aecoService.delete(id)
