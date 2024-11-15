@@ -8,10 +8,8 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common'
 import { AECO_SERVICE, type IAecoService } from '../domain/IAecoService'
-import { GetAecoBySerialNumberDto } from '../domain/dto/GetAecoBySerialNumberDto'
 import { UpdateAecoDto } from '../domain/dto/UpdateAecoDto'
 import { CreateAecoDto } from '../domain/dto/AecoDto'
 
@@ -40,9 +38,8 @@ export class AecosController {
     return await this.aecoService.update(aeco, id)
   }
 
-  @Get('initial-setup')
-  async getInitialSetup(@Query() query: GetAecoBySerialNumberDto) {
-    const { serialNumber } = query
+  @Get('initial-setup/:serialNumber')
+  async getInitialSetup(@Param('serialNumber') serialNumber: string) {
     return await this.aecoService.getInitialSetup(serialNumber)
   }
 

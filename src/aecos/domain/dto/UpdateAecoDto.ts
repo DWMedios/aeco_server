@@ -46,7 +46,4 @@ export class UpdateAecoDto {
 
   @IsOptional()
   readonly rewardCategories?: null
-
-  @IsOptional()
-  readonly metadata?: Record<string, any>
 }

@@ -21,5 +21,4 @@ export interface IAeco extends IBase {
   tickets?: ITicket[] | null
   pages?: IPage[] | null
   rewardCategories?: IRewardCategory[] | null
-  metadata?: Record<string, any>[]
 }

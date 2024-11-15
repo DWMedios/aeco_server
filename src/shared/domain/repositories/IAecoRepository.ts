@@ -1,6 +1,6 @@
 import type { IAeco } from '@common/domain/entities'
-import type { CreateAecoDto } from 'src/aecos/domain/dto/AecoDto'
-import type { UpdateAecoDto } from 'src/aecos/domain/dto/UpdateAecoDto'
+import type { CreateAecoDto } from '../../../aecos/domain/dto/AecoDto'
+import type { UpdateAecoDto } from '../../../aecos/domain/dto/UpdateAecoDto'
 
 export const AECO_REPOSITORY = Symbol('IAecoRepository')
 

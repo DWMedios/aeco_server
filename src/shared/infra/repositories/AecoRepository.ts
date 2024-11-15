@@ -56,7 +56,7 @@ export class AecoRepository implements IAecoRepository {
         'company.id',
         'company.name',
         'settings.id',
-        'settings.logoUrl',
+        // 'settings.logoUrl',
         'settings.metadata',
         'pages.id',
         'pages.name',

@@ -45,10 +45,7 @@ export class AecosService implements IAecoService {
     const exists = await this.aecoRepository.find(aecoId)
     if (!exists) throw new BadRequestException('Aeco not found')
 
-    return await this.aecoRepository.update(exists, {
-      ...aeco,
-      metadata: { ...aeco },
-    })
+    return await this.aecoRepository.update(exists, aeco)
   }
 
   async getInitialSetup(serialNumber: string) {
@@ -62,9 +59,9 @@ export class AecosService implements IAecoService {
   async getUpdates(serialNumber: string) {
     const aeco = await this.aecoRepository.getUpdates(serialNumber)
 
-    if (!aeco) throw new Error('Aeco not found')
+    if (!aeco) throw new NotFoundException('Aeco not found')
 
-    if (!aeco.needsUpdate && !aeco.metadata)
+    if (!aeco.needsUpdate)
       throw new NotFoundException('No pending updates found')
 
     return aeco

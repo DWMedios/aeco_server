@@ -59,7 +59,4 @@ export class Aeco extends Base implements IAeco {
 
   @OneToMany(() => RewardCategory, (category) => category.aeco)
   rewardCategories: RewardCategory[]
-
-  @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>[]
 }
