@@ -12,6 +12,7 @@ import {
 import { AECO_SERVICE, type IAecoService } from '../domain/IAecoService'
 import { UpdateAecoDto } from '../domain/dto/UpdateAecoDto'
 import { CreateAecoDto } from '../domain/dto/AecoDto'
+import { FinishSetupDto } from '../domain/dto/FinishSetupDto'
 
 @Controller('aecos')
 export class AecosController {
@@ -46,6 +47,12 @@ export class AecosController {
   @Get('needs-update/:serialNumber')
   async getUpdates(@Param('serialNumber') serialNumber: string) {
     return await this.aecoService.getUpdates(serialNumber)
+  }
+
+  @Patch('finish-setup/:type/:serialNumber')
+  async finishSetup(@Param() params: FinishSetupDto) {
+    console.log('🚀 ~ AecosController ~ finishSetup ~ params:', params)
+    await this.aecoService.finishSetup(params)
   }
 
   @Delete(':id')

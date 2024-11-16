@@ -11,6 +11,7 @@ export interface IAecoRepository {
     name?: string
   }): Promise<boolean>
   find(id: number): Promise<IAeco>
+  findBySerialNumber(serialNumber: string): Promise<IAeco>
   create(company: CreateAecoDto): Promise<IAeco>
   update(exists: IAeco, company: UpdateAecoDto): Promise<IAeco>
   initialSetup(serialNumber: string): Promise<IAeco | null>

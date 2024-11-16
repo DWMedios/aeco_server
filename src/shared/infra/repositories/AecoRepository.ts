@@ -19,10 +19,12 @@ export class AecoRepository implements IAecoRepository {
   }): Promise<boolean> {
     if (!filter) return false
 
-    const whereClause: { id?: number; name?: string } = {}
+    const whereClause: { id?: number; name?: string; serialNumber?: string } =
+      {}
 
     if (filter.id) whereClause.id = filter.id
     if (filter.name) whereClause.name = filter.name
+    if (filter.serialNumber) whereClause.serialNumber = filter.serialNumber
 
     return this.repository.exists({ where: whereClause })
   }
@@ -30,6 +32,12 @@ export class AecoRepository implements IAecoRepository {
   async find(id: number): Promise<IAeco> {
     return this.repository.findOne({
       where: { id: id },
+    })
+  }
+
+  async findBySerialNumber(serialNumber: string): Promise<IAeco> {
+    return this.repository.findOne({
+      where: { serialNumber: serialNumber },
     })
   }
 

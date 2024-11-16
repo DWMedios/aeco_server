@@ -12,6 +12,8 @@ import type { IAecoService } from '../domain/IAecoService'
 import type { IAeco } from '@common/domain/entities'
 import type { CreateAecoDto } from '../domain/dto/AecoDto'
 import type { UpdateAecoDto } from '../domain/dto/UpdateAecoDto'
+import type { FinishSetupDto } from '../domain/dto/FinishSetupDto'
+import { FinishSetupType } from '../domain/enums/FinishSetupType.enum'
 
 @Injectable()
 export class AecosService implements IAecoService {
@@ -43,7 +45,7 @@ export class AecosService implements IAecoService {
 
   async update(aeco: UpdateAecoDto, aecoId: number): Promise<IAeco> {
     const exists = await this.aecoRepository.find(aecoId)
-    if (!exists) throw new BadRequestException('Aeco not found')
+    if (!exists) throw new NotFoundException('Aeco not found')
 
     return await this.aecoRepository.update(exists, aeco)
   }
@@ -51,7 +53,7 @@ export class AecosService implements IAecoService {
   async getInitialSetup(serialNumber: string) {
     const aeco = await this.aecoRepository.initialSetup(serialNumber)
 
-    if (!aeco) throw new Error('Aeco not found')
+    if (!aeco) throw new NotFoundException('Aeco not found')
 
     return aeco
   }
@@ -65,6 +67,19 @@ export class AecosService implements IAecoService {
       throw new NotFoundException('No pending updates found')
 
     return aeco
+  }
+
+  async finishSetup(data: FinishSetupDto) {
+    const exists = await this.aecoRepository.findBySerialNumber(
+      data.serialNumber,
+    )
+
+    if (!exists) throw new NotFoundException('Aeco not found')
+    const update: { initialSetup?: boolean; needsUpdate?: boolean } = {}
+    if (data.type == FinishSetupType.INIT) update.initialSetup = false
+    else update.needsUpdate = false
+
+    return await this.aecoRepository.update(exists, update)
   }
 
   async delete(aecoId: number): Promise<boolean> {
