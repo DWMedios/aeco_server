@@ -79,7 +79,7 @@ export class AecoRepository implements IAecoRepository {
       ])
       .where('aeco.serialNumber = :serialNumber', { serialNumber })
       .andWhere('aeco.status = :aecoStatus', { aecoStatus: AecoStatus.ENABLED })
-      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: false })
+      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: true })
       .getOne()
   }
 

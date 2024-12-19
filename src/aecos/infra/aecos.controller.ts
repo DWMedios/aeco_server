@@ -51,8 +51,7 @@ export class AecosController {
 
   @Patch('finish-setup/:type/:serialNumber')
   async finishSetup(@Param() params: FinishSetupDto) {
-    console.log('🚀 ~ AecosController ~ finishSetup ~ params:', params)
-    await this.aecoService.finishSetup(params)
+    return await this.aecoService.finishSetup(params)
   }
 
   @Delete(':id')

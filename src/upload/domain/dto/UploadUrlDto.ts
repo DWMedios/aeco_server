@@ -9,7 +9,7 @@ import { FileTypeEnum } from '../enums/FileType.enum'
 
 export class UploadUrlDto {
   @IsEnum(FileTypeEnum, {
-    message: 'fileType must be either mp4, jpeg, or png',
+    message: 'fileType must be either video/mp4, image/jpeg, or image/png',
   })
   @IsNotEmpty()
   fileType: FileTypeEnum

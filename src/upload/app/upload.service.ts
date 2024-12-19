@@ -3,9 +3,10 @@ import {
   type IS3Service,
   S3_SERVICES,
 } from '@shared/domain/services/IS3Service'
+
 import type { IUploadService } from '../domain/IUploadService'
 import type { UploadUrlDto } from '../domain/dto/UploadUrlDto'
-import { BaseUploadDto } from '../domain/dto/BaseUploadDto'
+import type { BaseUploadDto } from '../domain/dto/BaseUploadDto'
 
 @Injectable()
 export class UploadService implements IUploadService {
@@ -14,8 +15,18 @@ export class UploadService implements IUploadService {
     private readonly s3Service: IS3Service,
   ) {}
 
-  uploadUrl(uploadUrl: UploadUrlDto): Promise<string> {
-    return this.s3Service.generatePresignedUploadUrl(uploadUrl)
+  async uploadUrl({
+    fileName,
+    fileType,
+    companyId,
+  }: UploadUrlDto): Promise<string> {
+    //const company = await this.companyRepository.find(companyId)
+    //if (!company) throw new BadRequestException('Company not found')
+    return this.s3Service.generatePresignedUploadUrl({
+      fileType,
+      fileName,
+      pathFile: `dw/${fileName}`,
+    })
   }
 
   async delete(data: BaseUploadDto): Promise<boolean> {
