@@ -52,6 +52,10 @@ export class AecoRepository implements IAecoRepository {
   }
 
   async initialSetup(serialNumber: string): Promise<IAeco | null> {
+    console.log(
+      '🚀 ~ AecoRepository ~ initialSetup ~ serialNumber:',
+      serialNumber,
+    )
     return this.repository
       .createQueryBuilder('aeco')
       .leftJoinAndSelect('aeco.company', 'company')
@@ -64,7 +68,6 @@ export class AecoRepository implements IAecoRepository {
         'company.id',
         'company.name',
         'settings.id',
-        // 'settings.logoUrl',
         'settings.metadata',
         'pages.id',
         'pages.name',
@@ -76,7 +79,7 @@ export class AecoRepository implements IAecoRepository {
       ])
       .where('aeco.serialNumber = :serialNumber', { serialNumber })
       .andWhere('aeco.status = :aecoStatus', { aecoStatus: AecoStatus.ENABLED })
-      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: true })
+      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: false })
       .getOne()
   }
 
