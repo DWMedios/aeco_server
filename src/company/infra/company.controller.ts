@@ -45,4 +45,9 @@ export class CompanyController {
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.delete(id)
   }
+
+  @Get('image/:id')
+  async getImage(@Param('id') id: number) {
+    return await this.companyService.getImage(id)
+  }
 }
