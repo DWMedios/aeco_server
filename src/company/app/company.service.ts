@@ -124,7 +124,6 @@ export class CompanyService implements ICompanyService {
     const fileUrl = await this.s3Service.getFileUrlIfExists(
       company.settings?.key,
     )
-    console.log('🚀 ~ CompanyService ~ getImage ~ fileUrl:', fileUrl)
     return fileUrl
   }
 }

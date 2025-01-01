@@ -8,18 +8,25 @@ import {
   AECO_REPOSITORY,
   type IAecoRepository,
 } from '@shared/domain/repositories'
+import {
+  S3_SERVICES,
+  type IS3Service,
+} from '@shared/domain/services/IS3Service'
 import type { IAecoService } from '../domain/IAecoService'
 import type { IAeco } from '@common/domain/entities'
 import type { CreateAecoDto } from '../domain/dto/AecoDto'
 import type { UpdateAecoDto } from '../domain/dto/UpdateAecoDto'
 import type { FinishSetupDto } from '../domain/dto/FinishSetupDto'
 import { FinishSetupType } from '../domain/enums/FinishSetupType.enum'
+import { processImagesInJson } from '@shared/domain/utils/imageHelper'
 
 @Injectable()
 export class AecosService implements IAecoService {
   constructor(
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
+    @Inject(S3_SERVICES)
+    private readonly s3Service: IS3Service,
   ) {}
 
   async find(aecoId: number): Promise<Partial<IAeco>> {
@@ -54,7 +61,14 @@ export class AecosService implements IAecoService {
     const aeco = await this.aecoRepository.initialSetup(serialNumber)
 
     if (!aeco) throw new NotFoundException('Aeco not found')
-
+    await Promise.all(
+      aeco.pages.map(async (page) => {
+        page.metadata = await processImagesInJson(
+          page.metadata,
+          (key: string) => this.s3Service.getFileUrlIfExists(key),
+        )
+      }),
+    )
     return aeco
   }
 
@@ -66,6 +80,14 @@ export class AecosService implements IAecoService {
     if (!aeco.needsUpdate)
       throw new NotFoundException('No pending updates found')
 
+    await Promise.all(
+      aeco.pages.map(async (page) => {
+        page.metadata = await processImagesInJson(
+          page.metadata,
+          (key: string) => this.s3Service.getFileUrlIfExists(key),
+        )
+      }),
+    )
     return aeco
   }
 

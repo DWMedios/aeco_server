@@ -52,10 +52,6 @@ export class AecoRepository implements IAecoRepository {
   }
 
   async initialSetup(serialNumber: string): Promise<IAeco | null> {
-    console.log(
-      '🚀 ~ AecoRepository ~ initialSetup ~ serialNumber:',
-      serialNumber,
-    )
     return this.repository
       .createQueryBuilder('aeco')
       .leftJoinAndSelect('aeco.company', 'company')
@@ -84,9 +80,33 @@ export class AecoRepository implements IAecoRepository {
   }
 
   async getUpdates(serialNumber: string): Promise<IAeco> {
-    return this.repository.findOne({
-      where: { serialNumber },
-    })
+    return this.repository
+      .createQueryBuilder('aeco')
+      .leftJoinAndSelect('aeco.company', 'company')
+      .leftJoinAndSelect('company.settings', 'settings')
+      .leftJoinAndSelect('aeco.pages', 'pages')
+      .leftJoinAndSelect('aeco.rewardCategories', 'rewardCategories')
+      .select([
+        'aeco.id',
+        'aeco.name',
+        'company.id',
+        'company.name',
+        'settings.id',
+        'settings.metadata',
+        'pages.id',
+        'pages.name',
+        'pages.metadata',
+        'rewardCategories.id',
+        'rewardCategories.name',
+        'rewardCategories.order',
+        'rewardCategories.status',
+      ])
+      .where('aeco.serialNumber = :serialNumber', { serialNumber })
+      .andWhere('aeco.status = :aecoStatus', {
+        aecoStatus: AecoStatus.ENABLED,
+      })
+      .andWhere('aeco.needsUpdates = :needsUpdates', { needsUpdates: true })
+      .getOne()
   }
 
   async delete(id: number): Promise<boolean> {
