@@ -4,7 +4,7 @@ import type { IAddress } from './IAddress'
 import type { ICompany } from './ICompany'
 import type { IRewardCategory } from './IRewardCategory'
 import type { ITicket } from './ITicket'
-import { AecoStatus } from '../../infra/entities/Aeco.entity'
+import { AecoStatus } from '../../../aecos/domain/enums/AecoStatus.enum'
 
 export interface IAeco extends IBase {
   name: string

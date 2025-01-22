@@ -14,4 +14,5 @@ export interface ICompanyService {
     id: number,
   ): Promise<Partial<ICompany>>
   delete(id: number): Promise<boolean>
+  getImage(id: number): Promise<string>
 }

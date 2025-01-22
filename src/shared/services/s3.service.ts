@@ -64,6 +64,7 @@ export class S3Service implements IS3Service {
       })
       return url
     } catch (error) {
+      console.log(error)
       throw new InternalServerErrorException(
         'Error generating presigned upload URL',
       )

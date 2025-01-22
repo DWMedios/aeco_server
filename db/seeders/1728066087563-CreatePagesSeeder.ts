@@ -8,21 +8,21 @@ const pages = [
     id: 1,
     name: 'Home',
     metadata: {
-      background: 'home_background.png',
+      imgBg: 'home_imageBg.png',
       logoLang: {
-        path: '/images/language_icon.png',
+        imgLang: '/images/language_icon.png',
         alt: 'Language icon',
       },
       logoHelp: {
-        path: '/images/Help_icon.png',
+        imgHelp: '/images/Help_icon.png',
         alt: 'Help icon',
       },
       logoUp: {
-        path: '/images/aeco.png',
+        imgUp: '/images/aeco.png',
         alt: 'AECO Logo up',
       },
       logoDown: {
-        path: '/images/reciclaygana.png',
+        imgDown: '/images/reciclaygana.png',
         alt: 'Recicla y Gana Logo down',
       },
       button: {
@@ -39,9 +39,9 @@ const pages = [
     id: 2,
     name: 'Language',
     metadata: {
-      background: 'language_background.png',
+      imgBg: 'language_imageBg.png',
       button: {
-        background: 'language_background.png',
+        imgBg: 'language_imageBg.png',
         button: {
           labelEs: 'ACEPTAR',
           labelEn: 'AGREE',
@@ -58,7 +58,7 @@ const pages = [
     id: 3,
     name: 'Help',
     metadata: {
-      background: 'help_background.png',
+      imgBg: 'help_imageBg.png',
       textCenter: {
         title: 'Soporte',
         description: 'Cualquier duda o aclaración estamos para escucharte.',
@@ -74,7 +74,7 @@ const pages = [
     id: 4,
     name: 'Conditions',
     metadata: {
-      background: 'shrubbery.png',
+      imgBg: 'shrubbery.png',
       title: 'Recompensas Disponibles',
       description:
         'Tus envases deben estar en las siguientes condiciones para poder ser reciclados:',
@@ -108,9 +108,9 @@ const pages = [
     id: 5,
     name: 'Example',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       description: 'Inserta tu envase con el código de barras hacia arriba',
-      centerImage: '/images/example.png',
+      imgCenter: '/images/example.png',
       button: {
         label: '¡Estoy listo!',
         bgColor: 'white',
@@ -125,29 +125,29 @@ const pages = [
     id: 6,
     name: 'Insert',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       title: 'INSERTAR ENVASE',
       description: 'EL RECICLAJE COMIENZA AQUÍ',
-      centerImage: '/images/containers.png',
+      imgCenter: '/images/containers.png',
     },
   },
   {
     id: 7,
     name: 'Scanning',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       title: 'LEYENDO',
       description: 'ESTAMOS TRABAJANDO PARA TI',
-      centerImage: '/images/containers.png',
+      imgCenter: '/images/containers.png',
     },
   },
   {
     id: 8,
     name: 'Accepted',
     metadata: {
-      background: 'backgroundAccepted.png',
+      imgBg: 'imageBgAccepted.png',
       title: 'ENVASE ACEPTADO',
-      centerImage: '/images/bottleAccepted.png',
+      imgCenter: '/images/bottleAccepted.png',
       buttonUp: {
         label: 'INGRESAR OTRO ENVASE',
         bgColor: 'green',
@@ -170,9 +170,9 @@ const pages = [
     id: 9,
     name: 'Rejected',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       title: 'ENVASE RECHAZADO',
-      centerImage: '/images/rejected.png',
+      imgCenter: '/images/rejected.png',
       buttonUp: {
         label: 'INTENTAR CON OTRO ENVASE',
         bgColor: 'green',
@@ -200,7 +200,7 @@ const pages = [
     id: 10,
     name: 'Unidentified',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       title: 'ENVASE NO IDENTIFICADO',
       buttonUp: {
         label: '¡INTENTAR DE NUEVO!',
@@ -224,7 +224,7 @@ const pages = [
     id: 11,
     name: 'AddBarcode',
     metadata: {
-      background: 'leafBackground.png',
+      imgBg: 'leafimageBg.png',
       textCenter: {
         title: 'AÑADIR CÓDIGO DE BARRAS',
         description:

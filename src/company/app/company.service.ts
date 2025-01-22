@@ -115,4 +115,15 @@ export class CompanyService implements ICompanyService {
 
     return await this.companyRepository.delete(companyId)
   }
+
+  async getImage(companyId: number): Promise<string> {
+    const company = await this.companyRepository.find(companyId)
+
+    if (!company) throw new BadRequestException('Company not found')
+
+    const fileUrl = await this.s3Service.getFileUrlIfExists(
+      company.settings?.key,
+    )
+    return fileUrl
+  }
 }

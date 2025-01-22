@@ -1,10 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
-import { AecoStatus } from '../../src/common/infra/entities/Aeco.entity'
+// import { AecoStatus } from '../../src/common/infra/entities/Aeco.entity'
 
 const companyTable = 'companies'
 const addressTable = 'addresses'
 const aecoTable = 'aecos'
 
+enum AecoStatus {
+  ENABLED = 'enabled',
+  DISABLED = 'disabled',
+}
 export class CreateAecoSeeder1727733221625 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const getCompanyByRfc = await queryRunner.query(
