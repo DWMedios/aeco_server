@@ -6,7 +6,11 @@ export const processImagesInJson = async (
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key]
-        if (key.includes('img') || key.includes('icon')) {
+        if (
+          key.includes('img') ||
+          key.includes('icon') ||
+          key.includes('key')
+        ) {
           const newValue = await callback(value)
           if (newValue !== null) {
             obj[key] = newValue
