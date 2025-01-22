@@ -13,7 +13,7 @@ import {
   type IS3Service,
 } from '@shared/domain/services/IS3Service'
 import type { IAecoService } from '../domain/IAecoService'
-import type { IAeco } from '@common/domain/entities'
+import type { IAeco, ISetting } from '@common/domain/entities'
 import type { CreateAecoDto } from '../domain/dto/AecoDto'
 import type { UpdateAecoDto } from '../domain/dto/UpdateAecoDto'
 import type { FinishSetupDto } from '../domain/dto/FinishSetupDto'
@@ -61,6 +61,14 @@ export class AecosService implements IAecoService {
     const aeco = await this.aecoRepository.initialSetup(serialNumber)
 
     if (!aeco) throw new NotFoundException('Aeco not found')
+
+    if (aeco?.company?.settings && aeco.company.settings.key) {
+      aeco.company.settings = (await processImagesInJson(
+        aeco.company.settings,
+        (key: string) => this.s3Service.getFileUrlIfExists(key),
+      )) as ISetting
+    }
+
     await Promise.all(
       aeco.pages.map(async (page) => {
         page.metadata = await processImagesInJson(
@@ -79,6 +87,13 @@ export class AecosService implements IAecoService {
 
     if (!aeco.needsUpdate)
       throw new NotFoundException('No pending updates found')
+
+    if (aeco?.company?.settings && aeco.company.settings.key) {
+      aeco.company.settings = (await processImagesInJson(
+        aeco.company.settings,
+        (key: string) => this.s3Service.getFileUrlIfExists(key),
+      )) as ISetting
+    }
 
     await Promise.all(
       aeco.pages.map(async (page) => {
