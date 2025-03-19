@@ -1,19 +1,31 @@
 import { Module } from '@nestjs/common'
-import { JwtModule } from '@nestjs/jwt'
-import { PassportModule } from '@nestjs/passport'
-import { JwtStrategy } from './jwt.strategy'
+import { SharedModule } from '@shared/shared.module'
+import { JWT_SERVICE } from './domain/services/IJwtService'
+import { JwtService } from './app/jwt/jwt.service'
+import { AUTH_SERVICE } from './domain/services/IAuthService'
+import { AuthService } from './app/auth/auth.service'
+import { LoginController } from './infra/controllers/auth-login.controller'
+import { RESET_PASSWORD_SERVICE } from './domain/services/IResetPasswordService'
+import { ResetPasswordService } from './app/reset-password/reset-password.service'
+import { ResetPasswordController } from './infra/controllers/reset-password.controller'
 
 @Module({
-  imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
-    }),
+  imports: [SharedModule],
+  providers: [
+    {
+      provide: JWT_SERVICE,
+      useClass: JwtService,
+    },
+    {
+      provide: AUTH_SERVICE,
+      useClass: AuthService,
+    },
+    {
+      provide: RESET_PASSWORD_SERVICE,
+      useClass: ResetPasswordService,
+    },
   ],
-
-  providers: [JwtStrategy],
-
-  exports: [JwtModule, PassportModule],
+  controllers: [LoginController, ResetPasswordController],
+  exports: [JWT_SERVICE, AUTH_SERVICE],
 })
 export class AuthModule {}

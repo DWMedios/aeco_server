@@ -1,40 +1,51 @@
-import { TypeOrmModule } from '@nestjs/typeorm'
 import { Module } from '@nestjs/common'
-import { Company, Setting } from '@common/infra/entities'
-import { S3_SERVICES } from '@shared/domain/services/IS3Service'
-import { S3Service } from '@shared/services/s3.service'
-import {
-  COMPANY_REPOSITORY,
-  SETTING_REPOSITORY,
-} from '@shared/domain/repositories'
-import {
-  CompanyRepository,
-  SettingsRepository,
-} from '@shared/infra/repositories'
-import { COMPANY_SERVICE } from './domain/ICompanyService'
-import { CompanyController } from './infra/company.controller'
-import { CompanyService } from './app/company.service'
+import { SharedModule } from '@shared/shared.module'
+import { CREATE_COMPANY_SERVICE } from './domain/services/ICreateCompanyService'
+import { CreateCompanyService } from './app/create-company.service'
+import { UPDATE_COMPANY_SERVICE } from './domain/services/IUpdateCompanyService'
+import { UpdateCompanyService } from './app/update-company.service'
+import { DELETE_COMPANY_SERVICE } from './domain/services/IDeleteCompanyService'
+import { DeleteCompanyService } from './app/delete-company.service'
+import { PostCompanyController } from './infra/controllers/post-company.controller'
+import { PutCompanyController } from './infra/controllers/put-company.controller'
+import { DeleteCompanyController } from './infra/controllers/delete-company.controller'
+import { FIND_COMPANY_SERVICE } from './domain/services/IFindCompanyService'
+import { FindCompanyService } from './app/find-company.service'
+import { GetCompanyController } from './infra/controllers/get-company.controller'
+import { GetAllCompanyController } from './infra/controllers/get-all-company.controller'
+import { FIND_ALL_COMPANY_SERVICE } from './domain/services/IFindAllCompanyService'
+import { FindAllCompanyService } from './app/find-all-company.service'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Company, Setting])],
-  controllers: [CompanyController],
+  imports: [SharedModule],
   providers: [
     {
-      provide: COMPANY_SERVICE,
-      useClass: CompanyService,
+      provide: CREATE_COMPANY_SERVICE,
+      useClass: CreateCompanyService,
     },
     {
-      provide: COMPANY_REPOSITORY,
-      useClass: CompanyRepository,
+      provide: UPDATE_COMPANY_SERVICE,
+      useClass: UpdateCompanyService,
     },
     {
-      provide: SETTING_REPOSITORY,
-      useClass: SettingsRepository,
+      provide: DELETE_COMPANY_SERVICE,
+      useClass: DeleteCompanyService,
     },
     {
-      provide: S3_SERVICES,
-      useClass: S3Service,
+      provide: FIND_COMPANY_SERVICE,
+      useClass: FindCompanyService,
     },
+    {
+      provide: FIND_ALL_COMPANY_SERVICE,
+      useClass: FindAllCompanyService,
+    },
+  ],
+  controllers: [
+    PostCompanyController,
+    PutCompanyController,
+    DeleteCompanyController,
+    GetCompanyController,
+    GetAllCompanyController,
   ],
 })
 export class CompanyModule {}

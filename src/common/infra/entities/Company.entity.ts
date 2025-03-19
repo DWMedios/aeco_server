@@ -1,18 +1,13 @@
-import {
-  Entity,
-  Column,
-  ManyToMany,
-  JoinTable,
-  OneToOne,
-  OneToMany,
-} from 'typeorm'
+import { Entity, Column, OneToOne, OneToMany } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
 import { Promotion } from './Promotion.entity'
 import { Setting } from './CompanySettings.entity'
-import { UserCompanyPermissions } from './Permission.entity'
-import type { ICompany } from '../../domain/entities/ICompany'
+import type {
+  ICompany,
+  ILegalRepresentative,
+} from '../../domain/entities/ICompany'
 
 @Entity({ name: 'companies' })
 export class Company extends Base implements ICompany {
@@ -22,22 +17,33 @@ export class Company extends Base implements ICompany {
   @Column({ length: 13, unique: true })
   rfc: string
 
-  @ManyToMany(() => User, (user) => user.companies)
-  @JoinTable({ name: 'companies_users' })
-  users: User[]
+  @Column({ nullable: true, length: 100 })
+  state?: string
+
+  @Column({ nullable: true, length: 100 })
+  city?: string
+
+  @Column({ type: 'text', nullable: true })
+  address?: string
+
+  @Column({ nullable: true, length: 10 })
+  postalCode?: string
+
+  @Column({ nullable: true, length: 20 })
+  phone?: string
+
+  @Column({ type: 'jsonb', nullable: true })
+  legalRepresentative?: ILegalRepresentative
+
+  @OneToMany(() => User, (user) => user.company)
+  users?: User[]
 
   @OneToOne(() => Setting, (setting) => setting.company, { cascade: true })
-  settings: Setting
-
-  @OneToMany(
-    () => UserCompanyPermissions,
-    (userCompanyPermissions) => userCompanyPermissions.company,
-  )
-  userCompanyPermissions: UserCompanyPermissions[]
+  settings?: Setting
 
   @OneToMany(() => Aeco, (aeco) => aeco.company)
-  aecos: Aeco[]
+  aecos?: Aeco[]
 
   @OneToMany(() => Promotion, (promotion) => promotion.company)
-  promotions: Promotion[]
+  promotions?: Promotion[]
 }

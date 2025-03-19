@@ -1,30 +1,59 @@
-import { TypeOrmModule } from '@nestjs/typeorm'
 import { Module } from '@nestjs/common'
-import { AECO_REPOSITORY } from '@shared/domain/repositories'
-import { AecoRepository } from '@shared/infra/repositories'
-import { Aeco } from '@common/infra/entities'
-import { AECO_SERVICE } from './domain/IAecoService'
-import { AecosController } from './infra/aecos.controller'
-import { AecosService } from './app/aecos.service'
-import { S3_SERVICES } from '@shared/domain/services/IS3Service'
-import { S3Service } from '@shared/services/s3.service'
+import { SharedModule } from '@shared/shared.module'
+import { AecosController } from './infra/controllers/aecos.controller'
+import { CREATE_AECO_SERVICE } from './domain/services/ICreateAecoService'
+import { CreateAecoService } from './app/create-aeco.service'
+import { UPDATE_AECO_SERVICE } from './domain/services/IUpdateAecoService'
+import { UpdateAecoService } from './app/update-aeco.service'
+import { DELETE_AECO_SERVICE } from './domain/services/IDeleteAecoService'
+import { DeleteAecoService } from './app/delete-aeco.service'
+import { AECO_SERVICE } from './domain/services/IAecoService'
+import { AecoService } from './app/aeco.service'
+import { FIND_AECO_SERVICE } from './domain/services/IFindAecoService'
+import { FindAecoService } from './app/find-aeco.service'
+import { FIND_ALL_AECO_SERVICE } from './domain/services/IFindAllAecoService'
+import { FindAllAecoService } from './app/find-all-aeco.service'
+import { GetAecoController } from './infra/controllers/get-aeco.controller'
+import { GetAllAecoController } from './infra/controllers/get-all-aeco.controller'
+import { PostAecoController } from './infra/controllers/post-aeco.controller'
+import { PutAecoController } from './infra/controllers/put-aeco.controller'
+import { DeleteAecoController } from './infra/controllers/delete-aeco.controller'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Aeco])],
-  controllers: [AecosController],
+  imports: [SharedModule],
   providers: [
     {
       provide: AECO_SERVICE,
-      useClass: AecosService,
+      useClass: AecoService,
     },
     {
-      provide: AECO_REPOSITORY,
-      useClass: AecoRepository,
+      provide: FIND_AECO_SERVICE,
+      useClass: FindAecoService,
     },
     {
-      provide: S3_SERVICES,
-      useClass: S3Service,
+      provide: FIND_ALL_AECO_SERVICE,
+      useClass: FindAllAecoService,
     },
+    {
+      provide: CREATE_AECO_SERVICE,
+      useClass: CreateAecoService,
+    },
+    {
+      provide: UPDATE_AECO_SERVICE,
+      useClass: UpdateAecoService,
+    },
+    {
+      provide: DELETE_AECO_SERVICE,
+      useClass: DeleteAecoService,
+    },
+  ],
+  controllers: [
+    GetAecoController,
+    GetAllAecoController,
+    PostAecoController,
+    PutAecoController,
+    DeleteAecoController,
+    AecosController,
   ],
 })
 export class AecosModule {}

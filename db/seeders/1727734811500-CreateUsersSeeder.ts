@@ -1,29 +1,52 @@
 import * as bcrypt from 'bcrypt'
 import { MigrationInterface, QueryRunner } from 'typeorm'
-import { UserRole } from '../../src/common/infra/entities/Permission.entity'
+import { v4 as uuidv4 } from 'uuid'
+import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 
 const usersTable = 'users'
-const permissionsTable = 'user_company_permissions'
+const permissionsTable = 'user_role_permissions'
 const companyTable = 'companies'
+const companyRFC = 'XAXX010101012'
 
 export class CreateUsersSeeder1727734811500 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const superAdminPassword = await bcrypt.hash('super_admin_password', 10)
     const adminPassword = await bcrypt.hash('admin_password', 10)
     const userPassword = await bcrypt.hash('user_password', 10)
 
+    const company = await queryRunner.query(
+      `SELECT * FROM ${companyTable} WHERE rfc = '${companyRFC}' LIMIT 1`,
+    )
+
+    const companyId = company[0]?.id
+
+    if (!companyId) {
+      console.error('Company not found')
+    }
+
+    // create super admin
     await queryRunner.query(
-      `INSERT INTO ${usersTable} (name, email, password, position)
-        VALUES ('Admin User', 'admin@example.com', '${adminPassword}', 'Administrator')`,
+      `INSERT INTO ${usersTable} (name, email, phone, position, password)
+        VALUES ('Super Admin', 'superadmin@example.com', '9993786949', 'Super Administrator', '${superAdminPassword}')`,
     )
 
     await queryRunner.query(
-      `INSERT INTO ${usersTable} (name, email, password, position)
-        VALUES ('Regular User', 'user@example.com', '${userPassword}', 'Employee')`,
+      `INSERT INTO ${usersTable} (name, email, phone, position, password, "companyId")
+        VALUES ('Admin User', 'admin@example.com', '9993786949', 'Administrator', '${adminPassword}', ${companyId})`,
+    )
+
+    await queryRunner.query(
+      `INSERT INTO ${usersTable} (name, email, phone, position, password, "companyId")
+        VALUES ('Regular User', 'user@example.com', '9901023344', 'Employee', '${userPassword}', ${companyId})`,
     )
 
     console.log('Users created')
 
-    // create user permissions
+    // create user roles
+
+    const superAdmin = await queryRunner.query(
+      `SELECT * FROM ${usersTable} WHERE email = 'superadmin@example.com' LIMIT 1`,
+    )
 
     const adminUser = await queryRunner.query(
       `SELECT * FROM ${usersTable} WHERE email = 'admin@example.com' LIMIT 1`,
@@ -33,32 +56,37 @@ export class CreateUsersSeeder1727734811500 implements MigrationInterface {
       `SELECT * FROM ${usersTable} WHERE email = 'user@example.com' LIMIT 1`,
     )
 
-    const company = await queryRunner.query(
-      `SELECT * FROM ${companyTable} WHERE rfc = 'ACO123456ABC' LIMIT 1`,
-    )
-
+    const superAdminId = superAdmin[0]?.id
     const adminUserId = adminUser[0]?.id
     const regularUserId = regularUser[0]?.id
-    const companyId = company[0]?.id
 
-    if (!adminUserId || !regularUserId || !companyId) {
-      console.error('Users or company not found')
+    if (!adminUserId || !regularUserId || !superAdminId) {
+      console.error('Users not found')
     }
 
     await queryRunner.query(
-      `INSERT INTO ${permissionsTable} (permissions, role, "userId", "companyId")
-        VALUES ('{"create_user": true, "edit_user": true, "delete_user": false, "view_reports": true}', '${UserRole.ADMIN}', ${adminUserId}, ${companyId})`,
+      `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
+        VALUES ('${UserRoleEntiyEnum.SUPER_ADMIN}', ${superAdminId}, '${uuidv4()}')`,
     )
 
     await queryRunner.query(
-      `INSERT INTO ${permissionsTable} (permissions, role, "userId", "companyId")
-        VALUES ('{"create_user": false, "edit_user": false, "delete_user": false, "view_reports": true}', '${UserRole.USER}', ${regularUserId}, ${companyId})`,
+      `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
+        VALUES ('${UserRoleEntiyEnum.ADMIN}', ${adminUserId}, '${uuidv4()}')`,
+    )
+
+    await queryRunner.query(
+      `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
+        VALUES ('${UserRoleEntiyEnum.OPERATOR}', ${regularUserId}, '${uuidv4()}')`,
     )
 
     console.log('Permissions created')
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    const superAdmin = await queryRunner.query(
+      `SELECT * FROM ${usersTable} WHERE email = 'superadmin@example.com' LIMIT 1`,
+    )
+
     const adminUser = await queryRunner.query(
       `SELECT * FROM ${usersTable} WHERE email = 'admin@example.com' LIMIT 1`,
     )
@@ -67,10 +95,11 @@ export class CreateUsersSeeder1727734811500 implements MigrationInterface {
       `SELECT * FROM ${usersTable} WHERE email = 'user@example.com' LIMIT 1`,
     )
 
+    const superAdminId = superAdmin[0]?.id
     const adminUserId = adminUser[0]?.id
     const regularUserId = regularUser[0]?.id
 
-    if (!adminUserId || !regularUserId) {
+    if (!adminUserId || !regularUserId || !superAdminId) {
       console.error('Users not found')
     }
 

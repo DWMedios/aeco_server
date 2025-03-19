@@ -1,62 +1,56 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
-import { Address } from './Address.entity'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { Base } from './Base'
-import { Company } from './Company.entity'
 import { Page } from './Page.entity'
+import { Company } from './Company.entity'
 import { Ticket } from './Ticket.entity'
 import { RewardCategory } from './RewardCategory.entity'
-import type { IAeco } from '../../domain/entities/IAeco'
-// import { AecoStatus } from '../../../aecos/domain/enums/AecoStatus.enum'
+import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import type { IAeco } from '@common/domain/entities/IAeco'
+import type { IAecoCoords } from '@common/domain/Types'
 
-enum AecoStatus {
-  ENABLED = 'enabled',
-  DISABLED = 'disabled',
-}
 @Entity({ name: 'aecos' })
 export class Aeco extends Base implements IAeco {
-  @Column()
+  @Column({ length: 100 })
+  folio: string
+
+  @Column({ length: 100 })
   name: string
 
   @Column('enum', {
-    enum: AecoStatus,
-    default: AecoStatus.DISABLED,
+    enum: AecoStatusEnum,
+    default: AecoStatusEnum.DISABLED,
     nullable: false,
   })
-  status: AecoStatus
+  status: AecoStatusEnum
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   isOnline: boolean
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   initialSetup: boolean
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   needsUpdate: boolean
 
-  @Column({ unique: true })
+  @Column({ type: 'text', unique: true })
   serialNumber: string
 
   @Column({ type: 'jsonb', nullable: true })
-  currentCoords: Record<string, any>
+  currentCoords?: IAecoCoords
 
-  @Column()
-  companyId: number
-
-  @Column()
-  addressId: number
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
 
   @ManyToOne(() => Company, (company) => company.aecos)
-  company: Company
-
-  @ManyToOne(() => Address, (address) => address.aecos)
-  address: Address
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
+  company?: Company
 
   @OneToMany(() => Ticket, (ticket) => ticket.aeco)
-  tickets: Ticket[]
+  tickets?: Ticket[]
 
   @OneToMany(() => Page, (page) => page.aeco)
-  pages: Page[]
+  pages?: Page[]
 
   @OneToMany(() => RewardCategory, (category) => category.aeco)
-  rewardCategories: RewardCategory[]
+  rewardCategories?: RewardCategory[]
 }

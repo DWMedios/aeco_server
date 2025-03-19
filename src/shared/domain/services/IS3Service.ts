@@ -1,4 +1,4 @@
-import type { IUploadUrl } from '../S3Type'
+import type { IUploadUrl } from '../Types'
 
 export const S3_SERVICES = Symbol('IS3Service')
 

@@ -1,31 +1,29 @@
-import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common'
+import { AuthMiddleware } from '@shared/app/middlewares/auth.middleware'
+import { AuthModule } from '@auth/auth.module'
+import { UsersModule } from '@users/users.module'
+import { CommonModule } from '@common/common.module'
+import { SharedModule } from '@shared/shared.module'
+import { RewardsModule } from '@rewards/rewards.module'
+import { UploadModule } from '@upload/upload.module'
 import { AecosModule } from './aecos/aecos.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { AppConfig, DatabaseConfig, S3Config } from './common/infra/config'
 import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { RewardCategoryModule } from './reward-category/reward-category.module'
-import { RewardsModule } from './rewards/rewards.module'
-import { UserModule } from './user/user.module'
-import { UploadModule } from './upload/upload.module'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [AppConfig, DatabaseConfig, S3Config],
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        ...configService.get('database'),
-      }),
-      inject: [ConfigService],
-    }),
-    UserModule,
+    AuthModule,
+    CommonModule,
+    SharedModule,
+    UsersModule,
     CompanyModule,
     PagesModule,
     RewardsModule,
@@ -36,4 +34,28 @@ import { UploadModule } from './upload/upload.module'
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({
+        path: 'auth/login',
+        method: RequestMethod.POST,
+      })
+      .exclude(
+        {
+          path: 'aecos/initial-setup/:serialNumber',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'aecos/needs-update/:serialNumber',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'aecos/finish-setup/:type/:serialNumber',
+          method: RequestMethod.PATCH,
+        },
+      )
+      .forRoutes('*')
+  }
+}

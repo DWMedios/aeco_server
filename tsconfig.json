@@ -17,9 +17,17 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
     "paths": {
       "@common/*": ["src/common/*"],
       "@shared/*": ["src/shared/*"],
+      "@users/*": ["src/users/*"],
+      "@auth/*": ["src/auth/*"],
+      "@rewards/*": ["src/rewards/*"],
+      "@upload/*": ["src/upload/*"],
+      "@company/*": ["src/company/*"],
+      "@aecos/*": ["src/aecos/*"],
     }
-  }
+  },
+  "include": ["src/**/*.ts", "src/shared/validators/blacklist.json"],
 }

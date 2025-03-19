@@ -2,8 +2,8 @@ import type { IBase } from './IBase'
 import type { ICompany } from './ICompany'
 
 export interface ISetting extends IBase {
-  key?: string
+  readonly key?: string
   metadata?: Record<string, any>[]
-  companyId: number
+  readonly companyId?: number
   company?: ICompany
 }

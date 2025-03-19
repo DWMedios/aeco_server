@@ -1,20 +1,35 @@
+import type { EntityManager } from 'typeorm'
 import type { IAeco } from '@common/domain/entities'
-import type { CreateAecoDto } from '../../../aecos/domain/dto/AecoDto'
-import type { UpdateAecoDto } from '../../../aecos/domain/dto/UpdateAecoDto'
+import type { IAecoFilterOptions } from '@aecos/domain/Types'
+import type { AecoFiltersDto } from '../dto/Filters.dto'
 
 export const AECO_REPOSITORY = Symbol('IAecoRepository')
 
 export interface IAecoRepository {
-  exists(filter: {
-    id?: number
-    serialNumber?: string
-    name?: string
-  }): Promise<boolean>
-  find(id: number): Promise<IAeco>
-  findBySerialNumber(serialNumber: string): Promise<IAeco>
-  create(company: CreateAecoDto): Promise<IAeco>
-  update(exists: IAeco, company: UpdateAecoDto): Promise<IAeco>
-  initialSetup(serialNumber: string): Promise<IAeco | null>
-  getUpdates(serialNumber: string): Promise<IAeco | null>
-  delete(id: number): Promise<boolean>
+  findBy(
+    filters: IAecoFilterOptions,
+    manager?: EntityManager,
+  ): Promise<IAeco | null>
+  count(): Promise<number>
+  findAll(
+    filters: AecoFiltersDto,
+    manager?: EntityManager,
+  ): Promise<[IAeco[], number]>
+  create(company: Partial<IAeco>, manager?: EntityManager): Promise<IAeco>
+  update(
+    exists: IAeco,
+    aeco: Partial<IAeco>,
+    manager?: EntityManager,
+  ): Promise<IAeco>
+  initialSetup(
+    serialNumber: string,
+    manager?: EntityManager,
+  ): Promise<IAeco | null>
+  getUpdates(
+    serialNumber: string,
+    manager?: EntityManager,
+  ): Promise<IAeco | null>
+  delete(id: number, manager?: EntityManager): Promise<boolean>
+  softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  restore(id: number, manager?: EntityManager): Promise<boolean>
 }

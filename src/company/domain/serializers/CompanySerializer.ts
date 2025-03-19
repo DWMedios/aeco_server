@@ -3,7 +3,7 @@ import type {
   ICompany,
   IPromotion,
   IUser,
-  IUserCompanyPermissions,
+  IUserRolePermissions,
 } from '@common/domain/entities'
 import { CompanySettingSerializer } from './SetingsSerializer'
 
@@ -18,7 +18,7 @@ export class CompanySerializer {
 
   readonly users?: IUser[]
 
-  readonly userCompanyPermissions?: IUserCompanyPermissions[]
+  readonly userCompanyPermissions?: IUserRolePermissions[]
 
   readonly aecos?: IAeco[]
 
