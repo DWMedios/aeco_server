@@ -74,7 +74,7 @@ export class AecoRepository
   }
 
   count(): Promise<number> {
-    return this.repository().count()
+    return this.repository().count({ withDeleted: true })
   }
 
   findAll(
