@@ -35,8 +35,26 @@ export class UserRepository
 
   findById(id: number, manager?: EntityManager): Promise<IUser | null> {
     return this.repository(manager).findOne({
-      where: { id, isActive: true },
       relations: ['role', 'company'],
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        position: true,
+        isActive: true,
+        companyId: true,
+        createdAt: true,
+        role: {
+          id: true,
+          role: true,
+        },
+        company: {
+          id: true,
+          name: true,
+        },
+      },
+      where: { id, isActive: true },
     })
   }
 

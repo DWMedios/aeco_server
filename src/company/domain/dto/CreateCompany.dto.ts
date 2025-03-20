@@ -1,7 +1,10 @@
 import { Transform, Type } from 'class-transformer'
 import {
+  ArrayMinSize,
+  IsArray,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -131,4 +134,10 @@ export class CreateCompanyDto {
   @ValidateNested()
   @Type(() => CreateCompanyUserAdminDto)
   readonly userAdmin?: CreateCompanyUserAdminDto
+
+  @IsOptional()
+  @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
+  @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
+  @ArrayMinSize(1, { message: 'Debe haber al menos un aeco' })
+  readonly aecos?: number[]
 }

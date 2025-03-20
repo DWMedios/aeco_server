@@ -5,17 +5,19 @@ import {
   ROLE_REPOSITORY,
   SETTING_REPOSITORY,
   USER_REPOSITORY,
+  AECO_REPOSITORY,
   type IRoleRepository,
   type ICompanyRepository,
   type ISettingRepository,
   type IUserRepository,
+  type IAecoRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
 import type { CreateCompanyDto } from '@company/domain/dto/CreateCompany.dto'
-import type { ICompany, IUser } from '@common/domain/entities'
+import type { IAeco, ICompany, IUser } from '@common/domain/entities'
 import type { ICreateCompanyService } from '@company/domain/services/ICreateCompanyService'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 
@@ -32,12 +34,15 @@ export class CreateCompanyService implements ICreateCompanyService {
     private readonly companyRepository: ICompanyRepository,
     @Inject(SETTING_REPOSITORY)
     private readonly settingRepository: ISettingRepository,
+    @Inject(AECO_REPOSITORY)
+    private readonly aecoRepository: IAecoRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
   async run(request: CreateCompanyDto): Promise<ICompany> {
-    const { userAdmin, legalRepresentative, settings, ...reqCompany } = request
+    const { userAdmin, legalRepresentative, settings, aecos, ...reqCompany } =
+      request
 
     const exists = await this.companyRepository.exists({
       name: reqCompany.name,
@@ -53,6 +58,14 @@ export class CreateCompanyService implements ICreateCompanyService {
       }
     }
 
+    let aecoExists: IAeco[] = []
+    if (aecos?.length > 0) {
+      aecoExists = await this.aecoRepository.findManyByIds(aecos)
+      if (aecoExists.length !== aecos.length) {
+        throw new BadRequestException('Algunos aecos no existen')
+      }
+    }
+
     const companyTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
         let newCompany: ICompany | null = null
@@ -61,6 +74,7 @@ export class CreateCompanyService implements ICreateCompanyService {
             {
               ...reqCompany,
               ...(legalRepresentative && { legalRepresentative }),
+              ...(aecoExists.length > 0 && { aecos: aecoExists }),
             },
             manager,
           )

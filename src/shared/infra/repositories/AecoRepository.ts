@@ -139,6 +139,18 @@ export class AecoRepository
     return qb.getManyAndCount()
   }
 
+  findManyByIds(ids: number[], manager?: EntityManager): Promise<IAeco[]> {
+    return this.repository(manager)
+      .createQueryBuilder('aecos')
+      .select(['aecos.id', 'aecos.name'])
+      .where('aecos.id IN (:...ids)', { ids })
+      .andWhere('aecos.status = :status', {
+        status: AecoStatusEnum.ENABLED,
+      })
+      .andWhere('aecos.companyId IS NULL')
+      .getMany()
+  }
+
   create(aeco: Partial<IAeco>, manager?: EntityManager): Promise<IAeco> {
     const newAeco = this.repository(manager).create(aeco)
     return this.repository(manager).save(newAeco)
@@ -149,8 +161,6 @@ export class AecoRepository
     aeco: Partial<IAeco>,
     manager?: EntityManager,
   ): Promise<IAeco> {
-    console.log('aeco', aeco)
-    console.log('exists', exists)
     const updatedAeco = this.repository(manager).merge(exists, aeco)
     return this.repository(manager).save(updatedAeco)
   }

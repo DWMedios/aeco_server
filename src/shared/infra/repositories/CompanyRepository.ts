@@ -42,6 +42,7 @@ export class CompanyRepository
     const qb = this.repository(manager)
       .createQueryBuilder('companies')
       .leftJoinAndSelect('companies.settings', 'settings')
+      .loadRelationCountAndMap('companies.totalAecos', 'companies.aecos')
       .select([
         'companies.id',
         'companies.name',

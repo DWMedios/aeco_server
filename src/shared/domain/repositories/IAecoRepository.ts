@@ -15,6 +15,7 @@ export interface IAecoRepository {
     filters: AecoFiltersDto,
     manager?: EntityManager,
   ): Promise<[IAeco[], number]>
+  findManyByIds(ids: number[], manager?: EntityManager): Promise<IAeco[]>
   create(company: Partial<IAeco>, manager?: EntityManager): Promise<IAeco>
   update(
     exists: IAeco,

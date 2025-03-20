@@ -37,14 +37,22 @@ export class CreateAecoService implements ICreateAecoService {
       if (!companyExists) throw new NotFoundException('La empresa no existe')
     }
 
-    const aecoExists = await this.aecoRepository.findBy({
+    const aecoSerialExists = await this.aecoRepository.findBy({
       serialNumber: request.serialNumber,
+      status: AecoStatusEnum.ENABLED,
+    })
+
+    if (aecoSerialExists) {
+      throw new BadRequestException('Ya existe un Aeco con ese serial')
+    }
+
+    const aecoNameExists = await this.aecoRepository.findBy({
       name: request.name,
       status: AecoStatusEnum.ENABLED,
     })
 
-    if (aecoExists) {
-      throw new BadRequestException('Ya existe un Aeco con ese nombre o serial')
+    if (aecoNameExists) {
+      throw new BadRequestException('Ya existe un Aeco con ese nombre')
     }
 
     try {

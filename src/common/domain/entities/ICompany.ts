@@ -17,6 +17,7 @@ export interface ICompany extends IBase {
   settings?: ISetting
   aecos?: IAeco[]
   promotions?: IPromotion[]
+  readonly totalAecos?: number
 }
 
 export interface ILegalRepresentative {
