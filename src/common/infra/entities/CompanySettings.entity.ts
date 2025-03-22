@@ -12,9 +12,9 @@ export class Setting extends Base implements ISetting {
   metadata: Record<string, any>[]
 
   @Column()
-  companyId: number
+  companyId?: number
 
   @OneToOne(() => Company, (company) => company.settings)
   @JoinColumn({ name: 'companyId' })
-  company: Company
+  company?: Company
 }

@@ -1,16 +1,15 @@
 import type { IBase } from './IBase'
 import type { ICompany } from './ICompany'
-import type { IUserCompanyPermissions } from './IPermission'
+import type { IUserRolePermissions } from './IUserRolePermissions'
 
 export interface IUser extends IBase {
-  name: string
-  email: string
-  phone?: string | null
-  position?: string | null
-  photoUrl?: string | null
-  gender?: string | null
-  password?: string | null
-  companyId?: number | null
-  companies: ICompany[]
-  userCompanyPermissions: IUserCompanyPermissions[]
+  readonly name: string
+  readonly email: string
+  readonly phone?: string
+  readonly position?: string
+  readonly password?: string
+  readonly isActive: boolean
+  readonly companyId?: number
+  company?: ICompany
+  role?: IUserRolePermissions
 }

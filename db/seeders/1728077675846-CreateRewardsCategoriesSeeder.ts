@@ -2,13 +2,14 @@ import { MigrationInterface, QueryRunner } from 'typeorm'
 
 const aecoTable = 'aecos'
 const rewardsCategoriesTable = 'reward_categories'
+const aecoFolio = '00001'
 
 export class CreateRewardsCategoriesSeeder1728077675846
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const getAeco = await queryRunner.query(
-      `SELECT * FROM ${aecoTable} WHERE name = 'AECO Main' LIMIT 1`,
+      `SELECT * FROM ${aecoTable} WHERE folio = '${aecoFolio}' LIMIT 1`,
     )
 
     const aecoId = getAeco[0]?.id
@@ -27,7 +28,7 @@ export class CreateRewardsCategoriesSeeder1728077675846
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const getAeco = await queryRunner.query(
-      `SELECT * FROM ${aecoTable} WHERE name = 'AECO Main' LIMIT 1`,
+      `SELECT * FROM ${aecoTable} WHERE folio = '${aecoFolio}' LIMIT 1`,
     )
 
     const aecoId = getAeco[0]?.id

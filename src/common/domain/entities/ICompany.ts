@@ -1,16 +1,28 @@
 import type { IAeco } from './IAeco'
 import type { IBase } from './IBase'
 import type { ISetting } from './ICompanySetting'
-import type { IUserCompanyPermissions } from './IPermission'
 import type { IPromotion } from './IPromotion'
 import type { IUser } from './IUser'
 
 export interface ICompany extends IBase {
-  name: string
-  rfc: string
+  readonly name: string
+  readonly rfc: string
+  readonly state?: string
+  readonly city?: string
+  readonly address?: string
+  readonly postalCode?: string
+  readonly phone?: string
+  legalRepresentative?: ILegalRepresentative
   users?: IUser[]
   settings?: ISetting
-  userCompanyPermissions?: IUserCompanyPermissions[]
   aecos?: IAeco[]
   promotions?: IPromotion[]
+  readonly totalAecos?: number
+}
+
+export interface ILegalRepresentative {
+  readonly name: string
+  readonly email: string
+  readonly phone: string
+  readonly position: string
 }

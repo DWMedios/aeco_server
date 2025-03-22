@@ -1,0 +1,103 @@
+import { Transform, Type } from 'class-transformer'
+import {
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  ValidateNested,
+} from 'class-validator'
+import { IsNotInBlacklist } from '@shared/validators/email-blacklist.validator'
+import { IsRFCValid } from '@shared/validators/is-rfc-valid.decorator'
+
+export class UpdateLegalRepresentativeDto {
+  @IsOptional()
+  @IsString({
+    message: 'El nombre del representante legal debe ser una cadena de texto',
+  })
+  readonly name?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'El email del representante legal debe ser una cadena de texto',
+  })
+  @IsNotInBlacklist()
+  @Transform(({ value }) => value.trim().toLowerCase())
+  readonly email?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'El teléfono de la empresa debe ser una cadena de texto',
+  })
+  @Length(10, 10, { message: 'El teléfono debe tener 10 dígitos' })
+  @Matches(/^\d+$/, {
+    message: 'El teléfono debe contener solo números',
+  })
+  readonly phone?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'El puesto del representante legal debe ser una cadena de texto',
+  })
+  readonly position?: string
+}
+
+export class UpdateSettingsDto {
+  @IsOptional()
+  @IsString({ message: 'La clave de la empresa debe ser una cadena de texto' })
+  readonly key?: string
+
+  @IsOptional()
+  readonly metadata?: Record<string, any>
+}
+
+export class UpdateCompanyDto {
+  @IsOptional()
+  @IsString({ message: 'El nombre de la empresa debe ser una cadena de texto' })
+  readonly name?: string
+
+  @IsOptional()
+  @IsString({ message: 'El RFC de la empresa debe ser una cadena de texto' })
+  @IsRFCValid()
+  @Transform(({ value }) => value?.toUpperCase().trim())
+  readonly rfc?: string
+
+  @IsOptional()
+  @IsString({ message: 'El estado de la empresa debe ser una cadena de texto' })
+  readonly state?: string
+
+  @IsOptional()
+  @IsString({ message: 'La ciudad de la empresa debe ser una cadena de texto' })
+  readonly city?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'La dirección de la empresa debe ser una cadena de texto',
+  })
+  readonly address?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'El código postal de la empresa debe ser una cadena de texto',
+  })
+  readonly postalCode?: string
+
+  @IsOptional()
+  @IsString({
+    message: 'El teléfono de la empresa debe ser una cadena de texto',
+  })
+  @Length(10, 10, { message: 'El teléfono debe tener 10 dígitos' })
+  @Matches(/^\d+$/, {
+    message: 'El teléfono debe contener solo números',
+  })
+  readonly phone?: string
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateLegalRepresentativeDto)
+  readonly legalRepresentative?: UpdateLegalRepresentativeDto
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateSettingsDto)
+  readonly settings?: UpdateSettingsDto
+}

@@ -1,49 +1,45 @@
 import {
-  IsBoolean,
   IsEnum,
+  IsLatitude,
+  IsLongitude,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator'
-import { AecoStatus } from '../enums/AecoStatus.enum'
+import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import { Type } from 'class-transformer'
+
+export class UpdateLocationDto {
+  @IsOptional()
+  @IsString({ message: 'latitude debe ser una cadena de texto' })
+  @IsLatitude({ message: 'latitude no es válido' })
+  readonly latitude?: string
+
+  @IsOptional()
+  @IsString({ message: 'longitude debe ser una cadena de texto' })
+  @IsLongitude({ message: 'longitude no es válido' })
+  readonly longitude?: string
+}
 
 export class UpdateAecoDto {
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'El nombre debe ser una cadena de texto' })
   readonly name?: string
 
   @IsOptional()
-  @IsEnum(AecoStatus, {
-    message: 'status must be either enabled, disabled',
+  @IsEnum(AecoStatusEnum, {
+    message: 'El status no es válido',
   })
-  readonly status?: AecoStatus
+  readonly status?: AecoStatusEnum
 
   @IsOptional()
-  @IsBoolean()
-  readonly isOnline?: boolean
-
-  @IsOptional()
-  @IsBoolean()
-  readonly initialSetup?: boolean
-
-  @IsOptional()
-  @IsBoolean()
-  readonly needsUpdate?: boolean
-
-  @IsOptional()
-  @IsString()
+  @IsString({ message: 'El número de serie debe ser una cadena de texto' })
   readonly serialNumber?: string
 
   @IsOptional()
-  readonly currentCoords?: Record<string, any> | null
+  @Type(() => UpdateLocationDto)
+  readonly currentCoords?: UpdateLocationDto
 
-  @IsOptional()
-  @IsNumber()
-  readonly addressId?: number
-
-  @IsOptional()
-  readonly pages?: null
-
-  @IsOptional()
-  readonly rewardCategories?: null
+  @IsNumber({}, { message: 'El id de la compañía debe ser un número' })
+  readonly companyId?: number
 }

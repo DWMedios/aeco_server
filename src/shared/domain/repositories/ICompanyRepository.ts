@@ -1,18 +1,26 @@
+import type { EntityManager } from 'typeorm'
 import type { ICompany } from '@common/domain/entities'
-import type { CreateCompanyDto } from '../../../company/domain/dto/CompanyDto'
-import type { UpdateCompanyDto } from '../../../company/domain/dto/UpdateCompanyDto'
+import type { CompanyFiltersDto } from '../dto/Filters.dto'
 
 export const COMPANY_REPOSITORY = Symbol('ICompanyRepository')
 
 export interface ICompanyRepository {
-  exists(filter: { id?: number; name?: string }): Promise<boolean>
-  find(id: number): Promise<ICompany>
-  create(company: CreateCompanyDto): Promise<ICompany>
-  createWithSettings(createCompany: CreateCompanyDto): Promise<ICompany>
-  update(company: UpdateCompanyDto, id: number): Promise<ICompany>
-  updateWithSettings(
+  exists(
+    filter: { id?: number; name?: string },
+    manager?: EntityManager,
+  ): Promise<boolean>
+  findById(id: number, manager?: EntityManager): Promise<ICompany | null>
+  findAll(
+    filters: CompanyFiltersDto,
+    manager?: EntityManager,
+  ): Promise<[ICompany[], number]>
+  create(company: Partial<ICompany>, manager?: EntityManager): Promise<ICompany>
+  update(
     exists: ICompany,
-    company: UpdateCompanyDto,
+    company: Partial<ICompany>,
+    manager?: EntityManager,
   ): Promise<ICompany>
-  delete(id: number): Promise<boolean>
+  delete(id: number, manager?: EntityManager): Promise<boolean>
+  softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  restore(id: number, manager?: EntityManager): Promise<boolean>
 }

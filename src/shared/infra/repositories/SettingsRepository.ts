@@ -1,37 +1,56 @@
-import { Repository } from 'typeorm'
+import type { EntityManager, Repository } from 'typeorm'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import type { ISetting } from '@common/domain/entities'
-import { Setting } from '@common/infra/entities'
 import type { ISettingRepository } from '@shared/domain/repositories'
-import type { CreateSettingsDto } from '../../../company/domain/dto/CreateSettingsDto'
-import type { UpdateSettingsDto } from '../../../company/domain/dto/UpdateSettingsDto'
+import { Setting } from '@common/infra/entities'
+import { TransactionalRepository } from '../base/transactional.repository'
 
-export class SettingsRepository implements ISettingRepository {
+@Injectable()
+export class SettingsRepository
+  extends TransactionalRepository<ISetting>
+  implements ISettingRepository
+{
   constructor(
     @InjectRepository(Setting)
-    private readonly repository: Repository<ISetting>,
-  ) {}
-
-  async exists(companyId: number): Promise<boolean> {
-    return this.repository.exists({ where: { companyId } })
+    readonly entityRepository: Repository<ISetting>,
+  ) {
+    super(entityRepository)
   }
 
-  async find(companyId: number): Promise<ISetting | null> {
-    return this.repository.findOne({ where: { companyId } })
+  async existsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    return this.repository(manager).exists({ where: { companyId } })
   }
 
-  async create(settings: CreateSettingsDto): Promise<ISetting> {
-    const qb = await this.repository
+  async findByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<ISetting | null> {
+    return this.repository(manager).findOne({ where: { companyId } })
+  }
+
+  async create(
+    settings: Partial<ISetting>,
+    manager?: EntityManager,
+  ): Promise<ISetting> {
+    const qb = await this.repository(manager)
       .createQueryBuilder('company_setting')
       .insert()
-      .values(settings as ISetting)
+      .values(settings)
       .returning('*')
       .execute()
     return qb.raw[0]
   }
 
-  async update(data: UpdateSettingsDto, id: number): Promise<ISetting> {
-    const qb = await this.repository
+  async update(
+    id: number,
+    data: Partial<ISetting>,
+    manager?: EntityManager,
+  ): Promise<ISetting> {
+    const qb = await this.repository(manager)
       .createQueryBuilder('company_settig')
       .update()
       .set(data)

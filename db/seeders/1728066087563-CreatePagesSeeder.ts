@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm'
 
 const aecoTable = 'aecos'
 const pageTable = 'pages'
+const aecoFolio = '00001'
 
 const pages = [
   {
@@ -241,7 +242,7 @@ const pages = [
 export class CreatePagesSeeder1728066087563 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const getAeco = await queryRunner.query(
-      `SELECT * FROM ${aecoTable} WHERE name = 'AECO Main' LIMIT 1`,
+      `SELECT * FROM ${aecoTable} WHERE folio = '${aecoFolio}' LIMIT 1`,
     )
 
     const aecoId = getAeco[0]?.id
@@ -261,7 +262,7 @@ export class CreatePagesSeeder1728066087563 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const getAeco = await queryRunner.query(
-      `SELECT * FROM ${aecoTable} WHERE name = 'AECO Main' LIMIT 1`,
+      `SELECT * FROM ${aecoTable} WHERE folio = '${aecoFolio}' LIMIT 1`,
     )
 
     const aecoId = getAeco[0]?.id

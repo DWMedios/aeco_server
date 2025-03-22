@@ -5,6 +5,9 @@ import { AppModule } from './app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  const configService = app.get(ConfigService)
+  const port = configService.get('config.port')
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -13,8 +16,7 @@ async function bootstrap() {
     }),
   )
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
-  const configService = app.get(ConfigService)
-  const port = configService.get('config.port')
+  app.enableCors()
   console.log(`Server running on port ${port}`)
   await app.listen(port)
 }

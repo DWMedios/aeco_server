@@ -1,8 +1,16 @@
 import * as bcrypt from 'bcrypt'
-import { Entity, Column, ManyToMany, OneToMany, BeforeInsert } from 'typeorm'
+import {
+  Entity,
+  Column,
+  BeforeInsert,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
+  BeforeUpdate,
+} from 'typeorm'
 import { Base } from './Base'
 import { Company } from './Company.entity'
-import { UserCompanyPermissions } from './Permission.entity'
+import { UserRolePermissions } from './UserRolePermissions.entity'
 import type { IUser } from '../../domain/entities/IUser'
 
 @Entity({ name: 'users' })
@@ -19,25 +27,24 @@ export class User extends Base implements IUser {
   @Column({ nullable: true, length: 50 })
   position?: string
 
-  @Column({ nullable: true })
-  photoUrl?: string
+  @Column({ type: 'text', nullable: true, select: false })
+  password?: string
 
-  @Column({ nullable: true, length: 20 })
-  gender?: string
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean
 
-  @Column()
-  password: string
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
 
-  @ManyToMany(() => Company, (company) => company.users)
-  companies: Company[]
+  @ManyToOne(() => Company, (company) => company.users)
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
+  company?: Company
 
-  @OneToMany(
-    () => UserCompanyPermissions,
-    (userCompanyPermissions) => userCompanyPermissions.user,
-  )
-  userCompanyPermissions: UserCompanyPermissions[]
+  @OneToOne(() => UserRolePermissions, (role) => role.user, { cascade: true })
+  role?: UserRolePermissions
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPasword() {
     if (this.password) {
       this.password = await bcrypt.hash(this.password, 10)
