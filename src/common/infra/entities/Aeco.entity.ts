@@ -1,9 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
 import { Base } from './Base'
 import { Page } from './Page.entity'
 import { Company } from './Company.entity'
 import { Ticket } from './Ticket.entity'
-import { RewardCategory } from './RewardCategory.entity'
+import { Reward } from './Reward.entity'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import type { IAeco } from '@common/domain/entities/IAeco'
 import type { IAecoCoords } from '@common/domain/Types'
@@ -51,6 +58,6 @@ export class Aeco extends Base implements IAeco {
   @OneToMany(() => Page, (page) => page.aeco)
   pages?: Page[]
 
-  @OneToMany(() => RewardCategory, (category) => category.aeco)
-  rewardCategories?: RewardCategory[]
+  @ManyToMany(() => Reward, (reward) => reward.aecos)
+  rewards?: Reward[]
 }

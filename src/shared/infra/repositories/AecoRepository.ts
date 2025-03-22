@@ -1,12 +1,12 @@
 import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import type { IAecoRepository } from '@shared/domain/repositories'
 import { Aeco } from '@common/infra/entities'
 import type { IAeco } from '@common/domain/entities'
-import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
-import { TransactionalRepository } from '../base/transactional.repository'
 import type { IAecoFilterOptions } from '@aecos/domain/Types'
 import type { AecoFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { IAecoRepository } from '@shared/domain/repositories'
+import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import { TransactionalRepository } from '../base/transactional.repository'
 
 export class AecoRepository
   extends TransactionalRepository<IAeco>
@@ -139,16 +139,24 @@ export class AecoRepository
     return qb.getManyAndCount()
   }
 
-  findManyByIds(ids: number[], manager?: EntityManager): Promise<IAeco[]> {
-    return this.repository(manager)
+  findManyByIds(
+    ids: number[],
+    comanyNull = true,
+    manager?: EntityManager,
+  ): Promise<IAeco[]> {
+    const qb = this.repository(manager)
       .createQueryBuilder('aecos')
       .select(['aecos.id', 'aecos.name'])
       .where('aecos.id IN (:...ids)', { ids })
       .andWhere('aecos.status = :status', {
         status: AecoStatusEnum.ENABLED,
       })
-      .andWhere('aecos.companyId IS NULL')
-      .getMany()
+
+    if (comanyNull) {
+      qb.andWhere('aecos.companyId IS NULL')
+    }
+
+    return qb.getMany()
   }
 
   create(aeco: Partial<IAeco>, manager?: EntityManager): Promise<IAeco> {
@@ -226,32 +234,32 @@ export class AecoRepository
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('aeco')
       .delete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('aeco')
       .softDelete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('aeco')
       .restore()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 }

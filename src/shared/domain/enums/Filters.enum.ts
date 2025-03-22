@@ -11,3 +11,10 @@ export type OrderByFieldCompanyType =
   | BaseFiltersType
 
 export type OrderByFieldAecoType = 'name' | 'folio' | 'status' | BaseFiltersType
+export type OrderByFieldRewardType =
+  | 'name'
+  | 'order'
+  | 'status'
+  | 'establishment'
+  | 'description'
+  | BaseFiltersType

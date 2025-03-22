@@ -1,5 +1,12 @@
 import { Transform } from 'class-transformer'
-import { IsEnum, IsIn, IsNumber, IsOptional, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsEnum,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
 import {
@@ -7,9 +14,11 @@ import {
   OrderByFieldUserType,
   OrderByFieldCompanyType,
   OrderByFieldAecoType,
+  OrderByFieldRewardType,
 } from '../enums/Filters.enum'
 import { PageOptionsDto } from '../pagination/dto/page-options.dto'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
 
 export class BaseFiltersDto extends PageOptionsDto {
   @IsOptional()
@@ -18,6 +27,52 @@ export class BaseFiltersDto extends PageOptionsDto {
   })
   @Transform(({ value }) => (value ? value.toUpperCase() : value))
   readonly orderByDirection?: OrderByDirectionType
+}
+
+export class RewardFiltersDto extends BaseFiltersDto {
+  @IsOptional()
+  @IsString({ message: 'name debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly name?: string
+
+  @IsOptional()
+  @IsString({ message: 'establishment debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly establishment?: string
+
+  @IsOptional()
+  @IsString({ message: 'description debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly description?: string
+
+  @IsOptional()
+  @IsString({ message: 'note debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly note?: string
+
+  @IsOptional()
+  @IsBoolean({ message: 'status debe ser un booleano' })
+  readonly status?: boolean
+
+  @IsOptional()
+  @IsEnum(RewardTypeEnum, {
+    message: 'type debe ser un tipo de recompensa válido',
+  })
+  readonly type?: RewardTypeEnum
+
+  @IsOptional()
+  @IsIn(['createdAt', 'name', 'order', 'status', 'establishment', 'id'], {
+    message: 'orderByField debe ser createdAt, name, order, status o id',
+  })
+  readonly orderByField?: OrderByFieldRewardType
 }
 
 export class UserFiltersDto extends BaseFiltersDto {
@@ -104,7 +159,6 @@ export class CompanyFiltersDto extends BaseFiltersDto {
   )
   readonly orderByField?: OrderByFieldCompanyType
 }
-
 export class AecoFiltersDto extends BaseFiltersDto {
   @IsOptional()
   @IsString({ message: 'folio debe ser una cadena de texto' })

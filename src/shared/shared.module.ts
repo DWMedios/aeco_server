@@ -6,7 +6,6 @@ import {
   Page,
   Promotion,
   Reward,
-  RewardCategory,
   Setting,
   Ticket,
   User,
@@ -16,7 +15,6 @@ import {
   AECO_REPOSITORY,
   COMPANY_REPOSITORY,
   PAGE_REPOSITORY,
-  REWARD_CATEGORY_REPOSITORY,
   REWARD_REPOSITORY,
   ROLE_REPOSITORY,
   SETTING_REPOSITORY,
@@ -26,7 +24,6 @@ import {
   AecoRepository,
   CompanyRepository,
   PageRepository,
-  RewardCategoryRepository,
   RewardRepository,
   RoleRepository,
   SettingsRepository,
@@ -46,7 +43,6 @@ import { S3Service } from './app/files/s3.service'
       Page,
       Promotion,
       Reward,
-      RewardCategory,
       Ticket,
       User,
       UserRolePermissions,
@@ -56,10 +52,6 @@ import { S3Service } from './app/files/s3.service'
     {
       provide: AECO_REPOSITORY,
       useClass: AecoRepository,
-    },
-    {
-      provide: REWARD_CATEGORY_REPOSITORY,
-      useClass: RewardCategoryRepository,
     },
     {
       provide: REWARD_REPOSITORY,
@@ -96,7 +88,6 @@ import { S3Service } from './app/files/s3.service'
   ],
   exports: [
     AECO_REPOSITORY,
-    REWARD_CATEGORY_REPOSITORY,
     REWARD_REPOSITORY,
     SETTING_REPOSITORY,
     PAGE_REPOSITORY,

@@ -1,9 +1,22 @@
+import type { EntityManager } from 'typeorm'
 import type { IReward } from '@common/domain/entities'
-import type { CreateRewardDto } from '../../../rewards/domain/dto/RewardDto'
+import type { RewardFiltersDto } from '../dto/Filters.dto'
 
 export const REWARD_REPOSITORY = Symbol('IRewardRepository')
 
 export interface IRewardRepository {
-  exists(filter: { id?: number; name?: string }): Promise<boolean>
-  create(createReward: CreateRewardDto): Promise<IReward>
+  findById(id: number, manager?: EntityManager): Promise<IReward | null>
+  findAll(
+    filters: RewardFiltersDto,
+    manager?: EntityManager,
+  ): Promise<[IReward[], number]>
+  create(reward: Partial<IReward>, manager?: EntityManager): Promise<IReward>
+  update(
+    id: number,
+    reward: Partial<IReward>,
+    manager?: EntityManager,
+  ): Promise<IReward>
+  delete(id: number, manager?: EntityManager): Promise<boolean>
+  softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  restore(id: number, manager?: EntityManager): Promise<boolean>
 }

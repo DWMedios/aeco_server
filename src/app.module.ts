@@ -11,24 +11,22 @@ import { CommonModule } from '@common/common.module'
 import { SharedModule } from '@shared/shared.module'
 import { RewardsModule } from '@rewards/rewards.module'
 import { UploadModule } from '@upload/upload.module'
-import { AecosModule } from './aecos/aecos.module'
+import { AecosModule } from '@aecos/aecos.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
-import { RewardCategoryModule } from './reward-category/reward-category.module'
 
 @Module({
   imports: [
-    AuthModule,
-    CommonModule,
     SharedModule,
+    CommonModule,
     UsersModule,
+    AuthModule,
     CompanyModule,
-    PagesModule,
-    RewardsModule,
-    RewardCategoryModule,
     AecosModule,
+    RewardsModule,
+    PagesModule,
     UploadModule,
   ],
   controllers: [AppController],

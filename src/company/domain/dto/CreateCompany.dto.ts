@@ -5,6 +5,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   Length,
@@ -76,6 +77,7 @@ export class CreateSettingsDto {
   readonly key: string
 
   @IsOptional()
+  @IsObject()
   readonly metadata?: Record<string, any>[] = []
 }
 

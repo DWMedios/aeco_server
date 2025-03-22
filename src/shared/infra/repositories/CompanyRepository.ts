@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Company } from '@common/infra/entities'
 import type { ICompany } from '@common/domain/entities'
 import type { ICompanyRepository } from '@shared/domain/repositories'
-import { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
 export class CompanyRepository
   extends TransactionalRepository<ICompany>
@@ -30,8 +30,32 @@ export class CompanyRepository
 
   findById(id: number, manager?: EntityManager): Promise<ICompany | null> {
     return this.repository(manager).findOne({
+      relations: ['settings', 'aecos'],
+      select: {
+        id: true,
+        name: true,
+        rfc: true,
+        state: true,
+        city: true,
+        address: true,
+        postalCode: true,
+        phone: true,
+        legalRepresentative: {
+          name: true,
+          email: true,
+          phone: true,
+          position: true,
+        },
+        createdAt: true,
+        aecos: {
+          id: true,
+          folio: true,
+          name: true,
+          serialNumber: true,
+          status: true,
+        },
+      },
       where: { id },
-      relations: ['settings'],
     })
   }
 
@@ -132,32 +156,32 @@ export class CompanyRepository
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .delete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .softDelete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .restore()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 }

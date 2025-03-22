@@ -1,12 +1,17 @@
+import type { RewardTypeEnum } from '../enums/RewardType.enum'
+import type { IAeco } from './IAeco'
 import type { IBase } from './IBase'
-import type { IRewardCategory } from './IRewardCategory'
 
 export interface IReward extends IBase {
-  name: string
-  image: string
-  order: number
-  status: boolean
-  metadata: Record<string, any>[]
-  categoryId: number
-  category: IRewardCategory
+  readonly name: string
+  readonly establishment?: string
+  readonly description?: string
+  readonly note?: string
+  readonly image?: string
+  readonly status: boolean
+  readonly type: RewardTypeEnum
+  readonly order: number
+  metadata: Record<string, any>
+  aecos?: IAeco[]
+  totalAecos?: number
 }

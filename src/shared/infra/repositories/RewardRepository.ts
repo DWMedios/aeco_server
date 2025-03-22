@@ -1,34 +1,162 @@
-import type { Repository } from 'typeorm'
+import type { EntityManager, Repository } from 'typeorm'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Reward } from '@common/infra/entities'
 import type { IReward } from '@common/domain/entities'
 import type { IRewardRepository } from '@shared/domain/repositories'
-import type { CreateRewardDto } from '../../../rewards/domain/dto/RewardDto'
+import { RewardFiltersDto } from '@shared/domain/dto/Filters.dto'
+import { TransactionalRepository } from '../base/transactional.repository'
 
-export class RewardRepository implements IRewardRepository {
+@Injectable()
+export class RewardRepository
+  extends TransactionalRepository<IReward>
+  implements IRewardRepository
+{
   constructor(
     @InjectRepository(Reward)
-    private readonly repository: Repository<IReward>,
-  ) {}
-
-  async exists(filter: { id?: number; name?: string }): Promise<boolean> {
-    if (!filter) return false
-
-    const whereClause: { id?: number; name?: string } = {}
-
-    if (filter.id) whereClause.id = filter.id
-    if (filter.name) whereClause.name = filter.name
-
-    return this.repository.exists({ where: whereClause })
+    readonly entityRepository: Repository<IReward>,
+  ) {
+    super(entityRepository)
   }
 
-  async create(createReward: CreateRewardDto): Promise<IReward> {
-    const qb = await this.repository
+  findById(id: number, manager?: EntityManager): Promise<IReward | null> {
+    return this.repository(manager)
       .createQueryBuilder('reward')
-      .insert()
-      .values(createReward)
+      .leftJoinAndSelect('reward.aecos', 'aecos')
+      .select([
+        'reward.id',
+        'reward.name',
+        'reward.description',
+        'reward.note',
+        'reward.image',
+        'reward.status',
+        'reward.type',
+        'reward.order',
+        'reward.metadata',
+        'reward.createdAt',
+        'reward.updatedAt',
+        'aecos.id',
+        'aecos.folio',
+        'aecos.name',
+        'aecos.serialNumber',
+        'aecos.status',
+      ])
+      .where('reward.id = :id', { id })
+      .getOne()
+  }
+
+  findAll(
+    filters: RewardFiltersDto,
+    manager?: EntityManager,
+  ): Promise<[IReward[], number]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('rewards')
+      .loadRelationCountAndMap('rewards.totalAecos', 'rewards.aecos')
+      .select([
+        'rewards.id',
+        'rewards.name',
+        'rewards.description',
+        'rewards.note',
+        'rewards.image',
+        'rewards.status',
+        'rewards.type',
+        'rewards.order',
+        'rewards.metadata',
+        'rewards.createdAt',
+        'rewards.updatedAt',
+      ])
+
+    if (filters?.name) {
+      qb.andWhere('LOWER(unaccent(BTRIM(rewards.name))) ILIKE :name', {
+        name: `%${filters.name}%`,
+      })
+    }
+
+    if (filters?.description) {
+      qb.andWhere(
+        'LOWER(unaccent(BTRIM(rewards.description))) ILIKE :description',
+        { description: `%${filters.description}%` },
+      )
+    }
+
+    if (filters?.establishment) {
+      qb.andWhere(
+        'LOWER(unaccent(BTRIM(rewards.establishment))) ILIKE :establishment',
+        { establishment: `%${filters.establishment}%` },
+      )
+    }
+
+    if (filters?.note) {
+      qb.andWhere('LOWER(unaccent(BTRIM(rewards.note))) ILIKE :note', {
+        note: `%${filters.note}%`,
+      })
+    }
+
+    if (filters?.status) {
+      qb.andWhere('rewards.status = :status', { status: filters.status })
+    }
+
+    if (filters?.type) {
+      qb.andWhere('rewards.type = :type', { type: filters.type })
+    }
+
+    qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)
+
+    if (filters?.orderByDirection && filters?.orderByField) {
+      qb.orderBy(`rewards.${filters.orderByField}`, filters.orderByDirection)
+    }
+
+    return qb.getManyAndCount()
+  }
+
+  create(reward: Partial<IReward>, manager?: EntityManager): Promise<IReward> {
+    const newReward = this.repository(manager).create(reward)
+    return this.repository(manager).save(newReward)
+  }
+
+  async update(
+    id: number,
+    reward: Partial<IReward>,
+    manager?: EntityManager,
+  ): Promise<IReward> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('reward')
+      .update()
+      .set(reward)
+      .where('id = :id', { id })
       .returning('*')
       .execute()
+
     return qb.raw[0]
+  }
+
+  async delete(id: number, manager?: EntityManager): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('reward')
+      .delete()
+      .where('id = :id', { id })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('reward')
+      .softDelete()
+      .where('id = :id', { id })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async restore(id: number, manager?: EntityManager): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('reward')
+      .restore()
+      .where('id = :id', { id })
+      .execute()
+
+    return qb.affected !== 0
   }
 }

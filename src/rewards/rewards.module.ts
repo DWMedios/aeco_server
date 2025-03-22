@@ -1,17 +1,51 @@
 import { Module } from '@nestjs/common'
 import { SharedModule } from '@shared/shared.module'
-import { RewardsController } from './infra/rewards.controller'
-import { REWARD_SERVICE } from './domain/IRewardService'
-import { RewardService } from './app/rewards.service'
+import { CREATE_REWARD_SERVICE } from './domain/services/ICreateRewardService'
+import { CreateRewardService } from './app/create-reward.service'
+import { DELETE_REWARD_SERVICE } from './domain/services/IDeleteRewardService'
+import { DeleteRewardService } from './app/delete-reward.service'
+import { FIND_ALL_REWARD_SERVICE } from './domain/services/IFindAllRewardService'
+import { FindAllRewardService } from './app/find-all-reward.service'
+import { UPDATE_REWARD_SERVICE } from './domain/services/IUpdateRewardService'
+import { UpdateRewardService } from './app/update-reward.service'
+import { FIND_REWARD_SERVICE } from './domain/services/IFindRewardService'
+import { FindRewardService } from './app/find-reward.service'
+import { DeleteRewardController } from './infra/controllers/delete-reward.controller'
+import { GetAllRewardController } from './infra/controllers/get-all-reward.controller'
+import { GetRewardController } from './infra/controllers/get-reward.controller'
+import { PostRewardController } from './infra/controllers/post-reward.controller'
+import { PutRewardController } from './infra/controllers/put-reward.controller'
 
-Module({
+@Module({
   imports: [SharedModule],
-  controllers: [RewardsController],
   providers: [
     {
-      provide: REWARD_SERVICE,
-      useClass: RewardService,
+      provide: CREATE_REWARD_SERVICE,
+      useClass: CreateRewardService,
     },
+    {
+      provide: DELETE_REWARD_SERVICE,
+      useClass: DeleteRewardService,
+    },
+    {
+      provide: FIND_ALL_REWARD_SERVICE,
+      useClass: FindAllRewardService,
+    },
+    {
+      provide: FIND_REWARD_SERVICE,
+      useClass: FindRewardService,
+    },
+    {
+      provide: UPDATE_REWARD_SERVICE,
+      useClass: UpdateRewardService,
+    },
+  ],
+  controllers: [
+    DeleteRewardController,
+    GetAllRewardController,
+    GetRewardController,
+    PostRewardController,
+    PutRewardController,
   ],
 })
 export class RewardsModule {}
