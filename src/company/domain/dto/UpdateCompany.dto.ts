@@ -1,5 +1,8 @@
 import { Transform, Type } from 'class-transformer'
 import {
+  IsArray,
+  IsBoolean,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -92,6 +95,10 @@ export class UpdateCompanyDto {
   readonly phone?: string
 
   @IsOptional()
+  @IsBoolean({ message: 'El estatus de la empresa debe ser un booleano' })
+  readonly status?: boolean
+
+  @IsOptional()
   @ValidateNested()
   @Type(() => UpdateLegalRepresentativeDto)
   readonly legalRepresentative?: UpdateLegalRepresentativeDto
@@ -100,4 +107,9 @@ export class UpdateCompanyDto {
   @ValidateNested()
   @Type(() => UpdateSettingsDto)
   readonly settings?: UpdateSettingsDto
+
+  @IsOptional()
+  @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
+  @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
+  readonly aecos?: number[]
 }

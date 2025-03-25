@@ -33,16 +33,20 @@ export class UpdateRewardService implements IUpdateRewardService {
   ) {}
 
   async run(rewardId: number, request: UpdateRewardDto): Promise<IReward> {
-    const { aecos, ...rewardToUpdate } = request
+    const { aecos, ...reqReward } = request
 
-    const findReward = await this.rewardRepository.findById(rewardId)
+    const foundedReward = await this.rewardRepository.findById(rewardId)
 
-    if (!findReward) throw new NotFoundException('La recompensa no existe')
+    if (!foundedReward) throw new NotFoundException('La recompensa no existe')
 
-    let aecoExists: IAeco[] = []
+    let aecosExists: IAeco[] = []
     if (aecos?.length > 0) {
-      aecoExists = await this.aecoRepository.findManyByIds(aecos)
-      if (aecoExists.length !== aecos.length) {
+      aecosExists = await this.aecoRepository.findManyByIds({
+        ids: aecos,
+        companyNullable: false,
+      })
+
+      if (aecosExists.length !== aecos.length) {
         throw new BadRequestException('Algunos aecos no existen')
       }
     }
@@ -51,20 +55,26 @@ export class UpdateRewardService implements IUpdateRewardService {
       async (manager) => {
         let reward: IReward | null = null
         try {
-          reward = await this.rewardRepository.update(
-            rewardId,
+          if (aecos && aecos.length === 0) {
+            foundedReward.aecos = []
+          } else {
+            foundedReward.aecos = aecosExists
+          }
+
+          reward = await this.rewardRepository.updatePartial(
+            foundedReward,
             {
-              ...rewardToUpdate,
+              ...reqReward,
               metadata: {
-                ...findReward.metadata,
-                ...(rewardToUpdate?.metadata && rewardToUpdate.metadata),
+                ...foundedReward.metadata,
+                ...(reqReward?.metadata && { ...reqReward.metadata }),
               },
-              ...(aecoExists?.length > 0 && { aecos: aecoExists }),
             },
             manager,
           )
         } catch (error) {
-          throw new BadRequestException('Error al crear la recompensa')
+          this.logger.error(error)
+          throw new BadRequestException('Error al actualizar la recompensa')
         }
         return reward
       },

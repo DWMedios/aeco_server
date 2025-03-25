@@ -35,6 +35,9 @@ export class Company extends Base implements ICompany {
   @Column({ type: 'jsonb', nullable: true })
   legalRepresentative?: ILegalRepresentative
 
+  @Column({ type: 'boolean', default: true })
+  status: boolean
+
   @OneToMany(() => User, (user) => user.company)
   users?: User[]
 

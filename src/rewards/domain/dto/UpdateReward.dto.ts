@@ -1,4 +1,10 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator'
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
 import { BaseRewardDto } from './RewardBase.dto'
 
@@ -16,4 +22,9 @@ export class UpdateRewardDto extends BaseRewardDto {
   @IsOptional()
   @IsNumber({}, { message: 'El orden debe ser un número' })
   readonly order?: number
+
+  @IsOptional()
+  @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
+  @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
+  readonly aecos?: number[]
 }

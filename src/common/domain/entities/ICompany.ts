@@ -13,6 +13,7 @@ export interface ICompany extends IBase {
   readonly postalCode?: string
   readonly phone?: string
   legalRepresentative?: ILegalRepresentative
+  readonly status: boolean
   users?: IUser[]
   settings?: ISetting
   aecos?: IAeco[]

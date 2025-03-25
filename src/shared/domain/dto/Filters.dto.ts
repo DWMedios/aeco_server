@@ -150,6 +150,10 @@ export class CompanyFiltersDto extends BaseFiltersDto {
   readonly phone?: string
 
   @IsOptional()
+  @IsBoolean({ message: 'isActive debe ser un booleano' })
+  readonly status?: boolean
+
+  @IsOptional()
   @IsIn(
     ['createdAt', 'name', 'rfc', 'state', 'city', 'postalCode', 'phone', 'id'],
     {

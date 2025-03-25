@@ -2,7 +2,10 @@ import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Aeco } from '@common/infra/entities'
 import type { IAeco } from '@common/domain/entities'
-import type { IAecoFilterOptions } from '@aecos/domain/Types'
+import type {
+  IAecoFilterManyOptions,
+  IAecoFilterOptions,
+} from '@aecos/domain/Types'
 import type { AecoFiltersDto } from '@shared/domain/dto/Filters.dto'
 import type { IAecoRepository } from '@shared/domain/repositories'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
@@ -140,20 +143,25 @@ export class AecoRepository
   }
 
   findManyByIds(
-    ids: number[],
-    comanyNull = true,
+    filters: IAecoFilterManyOptions,
     manager?: EntityManager,
   ): Promise<IAeco[]> {
     const qb = this.repository(manager)
       .createQueryBuilder('aecos')
       .select(['aecos.id', 'aecos.name'])
-      .where('aecos.id IN (:...ids)', { ids })
+      .where('aecos.id IN (:...ids)', { ids: filters.ids })
       .andWhere('aecos.status = :status', {
         status: AecoStatusEnum.ENABLED,
       })
 
-    if (comanyNull) {
+    if (filters?.companyNullable === true) {
       qb.andWhere('aecos.companyId IS NULL')
+    }
+
+    if (filters?.companyId) {
+      qb.andWhere('(aecos.companyId = :companyId OR aecos.companyId IS NULL)', {
+        companyId: filters.companyId,
+      })
     }
 
     return qb.getMany()

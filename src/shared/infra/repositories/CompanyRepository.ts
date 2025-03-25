@@ -40,6 +40,7 @@ export class CompanyRepository
         address: true,
         postalCode: true,
         phone: true,
+        status: true,
         legalRepresentative: {
           name: true,
           email: true,
@@ -65,7 +66,6 @@ export class CompanyRepository
   ): Promise<[ICompany[], number]> {
     const qb = this.repository(manager)
       .createQueryBuilder('companies')
-      .leftJoinAndSelect('companies.settings', 'settings')
       .loadRelationCountAndMap('companies.totalAecos', 'companies.aecos')
       .select([
         'companies.id',
@@ -76,12 +76,8 @@ export class CompanyRepository
         'companies.address',
         'companies.postalCode',
         'companies.phone',
-        'companies.legalRepresentative',
+        'companies.status',
         'companies.createdAt',
-        'settings.id',
-        'settings.companyId',
-        'settings.key',
-        'settings.metadata',
       ])
 
     if (filters?.name) {
@@ -127,6 +123,10 @@ export class CompanyRepository
       qb.andWhere('LOWER(unaccent(BTRIM(companies.phone))) ILIKE :phone', {
         phone: `%${filters.phone}%`,
       })
+    }
+
+    if (filters?.status !== undefined) {
+      qb.andWhere('companies.status = :status', { status: filters.status })
     }
 
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)

@@ -31,9 +31,10 @@ export class CreateRewardService implements ICreateRewardService {
 
     let aecoExists: IAeco[] = []
     if (aecos?.length > 0) {
-      console.log('Aecos:', aecos)
-      aecoExists = await this.aecoRepository.findManyByIds(aecos, false)
-      console.log('Aecos Exists:', aecoExists)
+      aecoExists = await this.aecoRepository.findManyByIds({
+        ids: aecos,
+      })
+
       if (aecoExists.length !== aecos.length) {
         throw new BadRequestException('Algunos aecos no existen')
       }

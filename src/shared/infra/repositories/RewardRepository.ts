@@ -26,6 +26,7 @@ export class RewardRepository
       .select([
         'reward.id',
         'reward.name',
+        'reward.establishment',
         'reward.description',
         'reward.note',
         'reward.image',
@@ -55,13 +56,13 @@ export class RewardRepository
       .select([
         'rewards.id',
         'rewards.name',
+        'rewards.establishment',
         'rewards.description',
         'rewards.note',
         'rewards.image',
         'rewards.status',
         'rewards.type',
         'rewards.order',
-        'rewards.metadata',
         'rewards.createdAt',
         'rewards.updatedAt',
       ])
@@ -112,6 +113,15 @@ export class RewardRepository
   create(reward: Partial<IReward>, manager?: EntityManager): Promise<IReward> {
     const newReward = this.repository(manager).create(reward)
     return this.repository(manager).save(newReward)
+  }
+
+  updatePartial(
+    exists: IReward,
+    reward: Partial<IReward>,
+    manager?: EntityManager,
+  ): Promise<IReward> {
+    const updatedReward = this.repository(manager).merge(exists, reward)
+    return this.repository(manager).save(updatedReward)
   }
 
   async update(

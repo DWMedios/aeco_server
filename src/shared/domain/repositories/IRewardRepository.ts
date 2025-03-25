@@ -11,6 +11,11 @@ export interface IRewardRepository {
     manager?: EntityManager,
   ): Promise<[IReward[], number]>
   create(reward: Partial<IReward>, manager?: EntityManager): Promise<IReward>
+  updatePartial(
+    exists: IReward,
+    reward: Partial<IReward>,
+    manager?: EntityManager,
+  ): Promise<IReward>
   update(
     id: number,
     reward: Partial<IReward>,

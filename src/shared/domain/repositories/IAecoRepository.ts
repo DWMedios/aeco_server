@@ -1,6 +1,9 @@
 import type { EntityManager } from 'typeorm'
 import type { IAeco } from '@common/domain/entities'
-import type { IAecoFilterOptions } from '@aecos/domain/Types'
+import type {
+  IAecoFilterManyOptions,
+  IAecoFilterOptions,
+} from '@aecos/domain/Types'
 import type { AecoFiltersDto } from '../dto/Filters.dto'
 
 export const AECO_REPOSITORY = Symbol('IAecoRepository')
@@ -16,8 +19,7 @@ export interface IAecoRepository {
     manager?: EntityManager,
   ): Promise<[IAeco[], number]>
   findManyByIds(
-    ids: number[],
-    comanyNull?: boolean,
+    filters: IAecoFilterManyOptions,
     manager?: EntityManager,
   ): Promise<IAeco[]>
   create(company: Partial<IAeco>, manager?: EntityManager): Promise<IAeco>
