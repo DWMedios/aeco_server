@@ -23,6 +23,7 @@ export class RewardRepository
     return this.repository(manager)
       .createQueryBuilder('reward')
       .leftJoinAndSelect('reward.aecos', 'aecos')
+      .leftJoinAndSelect('reward.company', 'company')
       .select([
         'reward.id',
         'reward.name',
@@ -34,8 +35,12 @@ export class RewardRepository
         'reward.type',
         'reward.order',
         'reward.metadata',
+        'reward:companyId',
         'reward.createdAt',
         'reward.updatedAt',
+        'company.id',
+        'company.name',
+        'company.status',
         'aecos.id',
         'aecos.folio',
         'aecos.name',
@@ -46,13 +51,29 @@ export class RewardRepository
       .getOne()
   }
 
+  findByIdAndCompany(
+    id: number,
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IReward | null> {
+    return this.repository(manager)
+      .createQueryBuilder('reward')
+      .select(['reward.id', 'reward.status', 'reward.companyId'])
+      .where('reward.id = :id', { id })
+      .andWhere('reward.companyId = :companyId', { companyId })
+      .andWhere('reward.deletedAt IS NULL')
+      .getOne()
+  }
+
   findAll(
     filters: RewardFiltersDto,
+    companyId?: number,
     manager?: EntityManager,
   ): Promise<[IReward[], number]> {
     const qb = this.repository(manager)
       .createQueryBuilder('rewards')
       .loadRelationCountAndMap('rewards.totalAecos', 'rewards.aecos')
+      .leftJoinAndSelect('rewards.company', 'company')
       .select([
         'rewards.id',
         'rewards.name',
@@ -63,9 +84,17 @@ export class RewardRepository
         'rewards.status',
         'rewards.type',
         'rewards.order',
+        'rewards.companyId',
         'rewards.createdAt',
         'rewards.updatedAt',
+        'company.id',
+        'company.name',
+        'company.status',
       ])
+
+    if (companyId) {
+      qb.where('rewards.companyId = :companyId', { companyId })
+    }
 
     if (filters?.name) {
       qb.andWhere('LOWER(unaccent(BTRIM(rewards.name))) ILIKE :name', {

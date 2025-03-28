@@ -43,7 +43,7 @@ export class UpdateRewardService implements IUpdateRewardService {
     if (aecos?.length > 0) {
       aecosExists = await this.aecoRepository.findManyByIds({
         ids: aecos,
-        companyNullable: false,
+        companyId: foundedReward.companyId,
       })
 
       if (aecosExists.length !== aecos.length) {

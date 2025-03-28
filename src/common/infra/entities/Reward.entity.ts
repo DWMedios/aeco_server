@@ -1,8 +1,16 @@
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm'
+import {
+  Entity,
+  Column,
+  ManyToMany,
+  JoinTable,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
-import type { IReward } from '@common/domain/entities/IReward'
+import { Company } from './Company.entity'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
+import type { IReward } from '@common/domain/entities/IReward'
 
 @Entity({ name: 'rewards' })
 export class Reward extends Base implements IReward {
@@ -32,6 +40,13 @@ export class Reward extends Base implements IReward {
 
   @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any>
+
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
+
+  @ManyToOne(() => Company, (company) => company.rewards)
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
+  company?: Company
 
   @ManyToMany(() => Aeco, (aeco) => aeco.rewards)
   @JoinTable({

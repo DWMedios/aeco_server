@@ -2,6 +2,7 @@ import type { IAeco } from './IAeco'
 import type { IBase } from './IBase'
 import type { ISetting } from './ICompanySetting'
 import type { IPromotion } from './IPromotion'
+import type { IReward } from './IReward'
 import type { IUser } from './IUser'
 
 export interface ICompany extends IBase {
@@ -16,6 +17,7 @@ export interface ICompany extends IBase {
   readonly status: boolean
   users?: IUser[]
   settings?: ISetting
+  rewards?: IReward[]
   aecos?: IAeco[]
   promotions?: IPromotion[]
   readonly totalAecos?: number

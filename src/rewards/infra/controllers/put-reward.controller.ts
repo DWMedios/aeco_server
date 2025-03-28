@@ -8,12 +8,14 @@ import {
   Param,
   ParseIntPipe,
   Put,
+  UseGuards,
 } from '@nestjs/common'
 import {
   UPDATE_REWARD_SERVICE,
   type IUpdateRewardService,
 } from '@rewards/domain/services/IUpdateRewardService'
 import { UpdateRewardDto } from '@rewards/domain/dto/UpdateReward.dto'
+import { RewardRoleGuard } from '../guards/reward-role.guard'
 
 @Controller('rewards')
 export class PutRewardController {
@@ -25,6 +27,7 @@ export class PutRewardController {
   ) {}
 
   @Put(':id')
+  @UseGuards(RewardRoleGuard)
   @HttpCode(HttpStatus.OK)
   async updateReward(
     @Param('id', ParseIntPipe) id: number,

@@ -8,8 +8,14 @@ export interface IRewardRepository {
   findById(id: number, manager?: EntityManager): Promise<IReward | null>
   findAll(
     filters: RewardFiltersDto,
+    companyId?: number,
     manager?: EntityManager,
   ): Promise<[IReward[], number]>
+  findByIdAndCompany(
+    id: number,
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IReward | null>
   create(reward: Partial<IReward>, manager?: EntityManager): Promise<IReward>
   updatePartial(
     exists: IReward,

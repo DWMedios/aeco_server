@@ -1,8 +1,10 @@
 import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
 import {
   AECO_REPOSITORY,
+  COMPANY_REPOSITORY,
   REWARD_REPOSITORY,
   type IAecoRepository,
+  type ICompanyRepository,
   type IRewardRepository,
 } from '@shared/domain/repositories'
 import {
@@ -22,6 +24,8 @@ export class CreateRewardService implements ICreateRewardService {
     private readonly rewardRepository: IRewardRepository,
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
+    @Inject(COMPANY_REPOSITORY)
+    private readonly companyRepository: ICompanyRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
@@ -29,10 +33,19 @@ export class CreateRewardService implements ICreateRewardService {
   async run(request: CreateRewardDto): Promise<IReward> {
     const { aecos, ...newReward } = request
 
+    const companyExists = await this.companyRepository.exists({
+      id: newReward.companyId,
+    })
+
+    if (!companyExists) {
+      throw new BadRequestException('La empresa no existe')
+    }
+
     let aecoExists: IAeco[] = []
     if (aecos?.length > 0) {
       aecoExists = await this.aecoRepository.findManyByIds({
         ids: aecos,
+        companyId: newReward.companyId,
       })
 
       if (aecoExists.length !== aecos.length) {

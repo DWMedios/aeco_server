@@ -3,8 +3,10 @@ import {
   REWARD_REPOSITORY,
   type IRewardRepository,
 } from '@shared/domain/repositories'
+import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
+import type { DecodedUser } from '@shared/domain/Types'
 import type { IReward } from '@common/domain/entities'
 import type { RewardFiltersDto } from '@shared/domain/dto/Filters.dto'
 import type { IFindAllRewardService } from '@rewards/domain/services/IFindAllRewardService'
@@ -18,9 +20,22 @@ export class FindAllRewardService implements IFindAllRewardService {
     private readonly rewardRepository: IRewardRepository,
   ) {}
 
-  async run(filters: RewardFiltersDto): Promise<PageMetaDto<IReward>> {
+  async run(
+    currentUser: DecodedUser,
+    filters: RewardFiltersDto,
+  ): Promise<PageMetaDto<IReward>> {
+    let companyId: number | null = null
+    const isSuperAdmin = currentUser.roleType === UserRoleEntiyEnum.SUPER_ADMIN
+
+    if (!isSuperAdmin) {
+      companyId = currentUser.company.id
+    }
+
     try {
-      const [entities, total] = await this.rewardRepository.findAll(filters)
+      const [entities, total] = await this.rewardRepository.findAll(
+        filters,
+        companyId,
+      )
 
       return new PageMetaDto<IReward>({
         total,

@@ -1,6 +1,7 @@
 import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Company } from '@common/infra/entities'
+import type { ICompanyFilterOptions } from '@company/domain/Types'
 import type { ICompany } from '@common/domain/entities'
 import type { ICompanyRepository } from '@shared/domain/repositories'
 import type { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
@@ -17,10 +18,10 @@ export class CompanyRepository
   }
 
   exists(
-    filter: { id?: number; name?: string },
+    filter: ICompanyFilterOptions,
     manager?: EntityManager,
   ): Promise<boolean> {
-    const whereClause: { id?: number; name?: string } = {}
+    const whereClause: ICompanyFilterOptions = {}
 
     if (filter?.id) whereClause.id = filter.id
     if (filter?.name) whereClause.name = filter.name
