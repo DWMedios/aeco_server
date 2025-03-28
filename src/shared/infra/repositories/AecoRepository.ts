@@ -129,6 +129,14 @@ export class AecoRepository
       })
     }
 
+    if (filters?.withoutCompany === true) {
+      qb.andWhere('aecos.companyId IS NULL')
+    }
+
+    if (filters?.withoutCompany === false) {
+      qb.andWhere('aecos.companyId IS NOT NULL')
+    }
+
     if (filters?.status) {
       qb.andWhere('aecos.status = :status', { status: filters.status })
     }

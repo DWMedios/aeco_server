@@ -180,6 +180,7 @@ export class AecoFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
   readonly companyId?: number
 
   @IsOptional()
@@ -192,6 +193,13 @@ export class AecoFiltersDto extends BaseFiltersDto {
     value ? normalizeString(value.toLowerCase()) : value,
   )
   readonly name?: string
+
+  @IsOptional()
+  @IsBoolean({ message: 'withoutCompany debe ser un valor booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
+  readonly withoutCompany?: boolean
 
   @IsOptional()
   @IsIn(['createdAt', 'name', 'folio', 'status', 'id'], {
