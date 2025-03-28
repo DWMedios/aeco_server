@@ -58,10 +58,13 @@ export class CreateCompanyService implements ICreateCompanyService {
       }
     }
 
-    let aecoExists: IAeco[] = []
+    let aecosExists: IAeco[] = []
     if (aecos?.length > 0) {
-      aecoExists = await this.aecoRepository.findManyByIds(aecos)
-      if (aecoExists.length !== aecos.length) {
+      aecosExists = await this.aecoRepository.findManyByIds({
+        ids: aecos,
+        companyNullable: true,
+      })
+      if (aecosExists.length !== aecos.length) {
         throw new BadRequestException('Algunos aecos no existen')
       }
     }
@@ -74,7 +77,7 @@ export class CreateCompanyService implements ICreateCompanyService {
             {
               ...reqCompany,
               ...(legalRepresentative && { legalRepresentative }),
-              ...(aecoExists.length > 0 && { aecos: aecoExists }),
+              ...(aecosExists.length > 0 && { aecos: aecosExists }),
             },
             manager,
           )

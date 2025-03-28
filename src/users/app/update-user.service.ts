@@ -55,7 +55,7 @@ export class UpdateUserService implements IUpdateUserService {
       if (exists) throw new BadRequestException('El email ya existe')
     }
 
-    const userUpdated = await this.transactionService.executeTransaction(
+    const userTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
         let user: IUser | null = null
         try {
@@ -86,6 +86,6 @@ export class UpdateUserService implements IUpdateUserService {
       },
     )
 
-    return await this.userRepository.findById(userUpdated.id)
+    return await this.userRepository.findById(userTransaction.id)
   }
 }

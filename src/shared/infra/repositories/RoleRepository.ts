@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { UserRolePermissions } from '@common/infra/entities'
 import type { IUserRolePermissions } from '@common/domain/entities'
 import type { IRoleRepository } from '@shared/domain/repositories/IRoleRepository'
-import { TransactionalRepository } from '../base/transactional.repository'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()
 export class RoleRepository
@@ -84,32 +84,32 @@ export class RoleRepository
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('role')
       .delete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('role')
       .softDelete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('role')
       .restore()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 }

@@ -4,6 +4,7 @@ import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
 import { Promotion } from './Promotion.entity'
 import { Setting } from './CompanySettings.entity'
+import { Reward } from './Reward.entity'
 import type {
   ICompany,
   ILegalRepresentative,
@@ -35,11 +36,17 @@ export class Company extends Base implements ICompany {
   @Column({ type: 'jsonb', nullable: true })
   legalRepresentative?: ILegalRepresentative
 
+  @Column({ type: 'boolean', default: true })
+  status: boolean
+
   @OneToMany(() => User, (user) => user.company)
   users?: User[]
 
   @OneToOne(() => Setting, (setting) => setting.company, { cascade: true })
   settings?: Setting
+
+  @OneToMany(() => Reward, (reward) => reward.company)
+  rewards?: Reward[]
 
   @OneToMany(() => Aeco, (aeco) => aeco.company)
   aecos?: Aeco[]

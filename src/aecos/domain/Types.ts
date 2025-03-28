@@ -8,3 +8,9 @@ export interface IAecoFilterOptions {
   name?: string
   status?: AecoStatusEnum
 }
+
+export interface IAecoFilterManyOptions {
+  ids: number[]
+  companyNullable?: boolean
+  companyId?: number
+}

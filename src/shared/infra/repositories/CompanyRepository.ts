@@ -1,9 +1,10 @@
 import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Company } from '@common/infra/entities'
+import type { ICompanyFilterOptions } from '@company/domain/Types'
 import type { ICompany } from '@common/domain/entities'
 import type { ICompanyRepository } from '@shared/domain/repositories'
-import { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
 export class CompanyRepository
   extends TransactionalRepository<ICompany>
@@ -17,10 +18,10 @@ export class CompanyRepository
   }
 
   exists(
-    filter: { id?: number; name?: string },
+    filter: ICompanyFilterOptions,
     manager?: EntityManager,
   ): Promise<boolean> {
-    const whereClause: { id?: number; name?: string } = {}
+    const whereClause: ICompanyFilterOptions = {}
 
     if (filter?.id) whereClause.id = filter.id
     if (filter?.name) whereClause.name = filter.name
@@ -30,8 +31,33 @@ export class CompanyRepository
 
   findById(id: number, manager?: EntityManager): Promise<ICompany | null> {
     return this.repository(manager).findOne({
+      relations: ['settings', 'aecos'],
+      select: {
+        id: true,
+        name: true,
+        rfc: true,
+        state: true,
+        city: true,
+        address: true,
+        postalCode: true,
+        phone: true,
+        status: true,
+        legalRepresentative: {
+          name: true,
+          email: true,
+          phone: true,
+          position: true,
+        },
+        createdAt: true,
+        aecos: {
+          id: true,
+          folio: true,
+          name: true,
+          serialNumber: true,
+          status: true,
+        },
+      },
       where: { id },
-      relations: ['settings'],
     })
   }
 
@@ -41,7 +67,6 @@ export class CompanyRepository
   ): Promise<[ICompany[], number]> {
     const qb = this.repository(manager)
       .createQueryBuilder('companies')
-      .leftJoinAndSelect('companies.settings', 'settings')
       .loadRelationCountAndMap('companies.totalAecos', 'companies.aecos')
       .select([
         'companies.id',
@@ -52,12 +77,8 @@ export class CompanyRepository
         'companies.address',
         'companies.postalCode',
         'companies.phone',
-        'companies.legalRepresentative',
+        'companies.status',
         'companies.createdAt',
-        'settings.id',
-        'settings.companyId',
-        'settings.key',
-        'settings.metadata',
       ])
 
     if (filters?.name) {
@@ -105,6 +126,10 @@ export class CompanyRepository
       })
     }
 
+    if (filters?.status !== undefined) {
+      qb.andWhere('companies.status = :status', { status: filters.status })
+    }
+
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)
 
     if (filters?.orderByDirection && filters?.orderByField) {
@@ -132,32 +157,32 @@ export class CompanyRepository
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .delete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .softDelete()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
-    const result = await this.repository(manager)
+    const qb = await this.repository(manager)
       .createQueryBuilder('company')
       .restore()
       .where('id = :id', { id })
       .execute()
 
-    return result.affected !== 0
+    return qb.affected !== 0
   }
 }

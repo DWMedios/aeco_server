@@ -29,7 +29,7 @@ export class GetAllUsersController {
   @Get()
   @UseGuards(UsersRoleGuard)
   @HttpCode(HttpStatus.OK)
-  async getOneUser(
+  async getAllUsers(
     @CurrentUser('user') user: DecodedUser,
     @Query() filters: UserFiltersDto,
   ) {

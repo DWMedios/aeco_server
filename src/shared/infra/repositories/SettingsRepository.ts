@@ -1,9 +1,9 @@
 import type { EntityManager, Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Setting } from '@common/infra/entities'
 import type { ISetting } from '@common/domain/entities'
 import type { ISettingRepository } from '@shared/domain/repositories'
-import { Setting } from '@common/infra/entities'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()
@@ -54,7 +54,7 @@ export class SettingsRepository
       .createQueryBuilder('company_settig')
       .update()
       .set(data)
-      .where('id = :id', { id: id })
+      .where('id = :id', { id })
       .returning('*')
       .execute()
 
