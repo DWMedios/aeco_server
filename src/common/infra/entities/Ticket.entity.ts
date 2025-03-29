@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
-import type { ITicket } from '../../domain/entities/ITicket'
+import type { ITicket } from '@common/domain/entities'
 
 @Entity({ name: 'tickets' })
 export class Ticket extends Base implements ITicket {

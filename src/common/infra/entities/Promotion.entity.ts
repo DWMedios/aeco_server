@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
 import { Company } from './Company.entity'
-import type { IPromotion } from '../../domain/entities/IPromotion'
+import type { IPromotion } from '@common/domain/entities'
 
 @Entity({ name: 'promotions' })
 export class Promotion extends Base implements IPromotion {

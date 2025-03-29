@@ -1,7 +1,7 @@
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm'
 import { Base } from './Base'
 import { Company } from './Company.entity'
-import type { ISetting } from '../../domain/entities/ICompanySetting'
+import type { ISetting } from '@common/domain/entities'
 
 @Entity({ name: 'company_settings' })
 export class Setting extends Base implements ISetting {
