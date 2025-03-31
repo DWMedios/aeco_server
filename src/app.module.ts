@@ -16,6 +16,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
+import { ProductsModule } from './products/products.module'
 
 @Module({
   imports: [
@@ -28,9 +29,10 @@ import { PagesModule } from './pages/pages.module'
     RewardsModule,
     PagesModule,
     UploadModule,
+    ProductsModule,
   ],
-  controllers: [AppController],
   providers: [AppService],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

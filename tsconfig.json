@@ -27,6 +27,7 @@
       "@upload/*": ["src/upload/*"],
       "@company/*": ["src/company/*"],
       "@aecos/*": ["src/aecos/*"],
+      "@products/*": ["src/products/*"],
     }
   },
   "include": ["src/**/*.ts", "src/shared/validators/blacklist.json"],

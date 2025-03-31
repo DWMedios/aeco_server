@@ -7,4 +7,5 @@ export interface IProductCapacity extends IBase {
   readonly factor: number
   readonly description?: string
   products: IProduct[]
+  totalProducts?: number
 }
