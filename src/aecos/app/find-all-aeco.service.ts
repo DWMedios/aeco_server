@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   AECO_REPOSITORY,
   type IAecoRepository,
@@ -29,7 +34,7 @@ export class FindAllAecoService implements IFindAllAecoService {
       })
     } catch (error) {
       this.logger.error(error)
-      throw new NotFoundException('No se pudo obtener los aecos')
+      throw new InternalServerErrorException('No se pudo obtener los aecos')
     }
   }
 }

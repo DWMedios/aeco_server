@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
@@ -41,6 +42,9 @@ export class ProductFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsString({ message: 'code debe ser una cadena de texto' })
+  @Matches(/^[0-9]+$/, {
+    message: 'El código debe contener solo números',
+  })
   @Transform(({ value }) =>
     value ? normalizeString(value.toLowerCase()) : value,
   )
@@ -143,6 +147,9 @@ export class RewardFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsBoolean({ message: 'status debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
   readonly status?: boolean
 
   @IsOptional()
@@ -234,6 +241,9 @@ export class CompanyFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsBoolean({ message: 'isActive debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
   readonly status?: boolean
 
   @IsOptional()

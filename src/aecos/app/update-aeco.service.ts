@@ -12,8 +12,8 @@ import {
   type IAecoRepository,
   type ICompanyRepository,
 } from '@shared/domain/repositories'
-import type { UpdateAecoDto } from '@aecos/domain/dto/UpdateAecoDto'
 import type { IAeco } from '@common/domain/entities'
+import type { UpdateAecoDto } from '@aecos/domain/dto/UpdateAecoDto'
 import type { IAecoFilterOptions } from '@aecos/domain/Types'
 import type { IUpdateAecoService } from '@aecos/domain/services/IUpdateAecoService'
 

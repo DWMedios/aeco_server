@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   COMPANY_REPOSITORY,
   type ICompanyRepository,
@@ -29,7 +34,7 @@ export class FindAllCompanyService implements IFindAllCompanyService {
       })
     } catch (error) {
       this.logger.error(error)
-      throw new NotFoundException('No se pudo obtener las empresas')
+      throw new InternalServerErrorException('No se pudo obtener las empresas')
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm'
 import { Base } from './Base'
 import { ProductCapacity } from './ProductCapacity.entity'
-import { IProduct } from '@common/domain/entities/IProduct'
+import type { IProduct } from '@common/domain/entities/IProduct'
 
 @Entity({ name: 'products' })
 export class Product extends Base implements IProduct {
@@ -15,7 +15,7 @@ export class Product extends Base implements IProduct {
   name: string
 
   @Column({ type: 'int', nullable: false })
-  capacityId: string
+  capacityId: number
 
   @ManyToOne(() => ProductCapacity, (capacity) => capacity.products)
   capacity: ProductCapacity

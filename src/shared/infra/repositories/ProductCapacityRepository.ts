@@ -4,7 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { ProductCapacity } from '@common/infra/entities'
 import type { IProductCapacity } from '@common/domain/entities'
 import type { IProductCapacityRepository } from '@shared/domain/repositories'
-import { ProductCapacityFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ProductCapacityFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ProductCapacityFilterByOptions } from '@products/domain/Types'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()
@@ -17,6 +18,33 @@ export class ProductCapacityRepository
     readonly entityRepository: Repository<IProductCapacity>,
   ) {
     super(entityRepository)
+  }
+
+  existsBy(
+    filters: ProductCapacityFilterByOptions,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const whereClause: any = {}
+
+    if (filters?.packaging) {
+      whereClause.packaging = filters.packaging
+    }
+
+    if (filters?.weight) {
+      whereClause.weight = filters.weight
+    }
+
+    if (filters?.factor) {
+      whereClause.factor = filters.factor
+    }
+
+    if (filters?.description) {
+      whereClause.description = filters.description
+    }
+
+    return this.repository(manager).exists({
+      where: whereClause,
+    })
   }
 
   findById(

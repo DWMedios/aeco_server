@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   USER_REPOSITORY,
   type IUserRepository,
@@ -44,7 +49,7 @@ export class FindAllUserService implements IFindAllUserService {
       })
     } catch (error) {
       this.logger.error(error)
-      throw new NotFoundException('No se pudo obtener los usuarios')
+      throw new InternalServerErrorException('No se pudo obtener los usuarios')
     }
   }
 }

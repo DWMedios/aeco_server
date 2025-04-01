@@ -10,7 +10,7 @@ import {
 import {
   FIND_ALL_PRODUCTS_SERVICE,
   type IFindAllProductsService,
-} from '@products/domain/services/products/IProductService'
+} from '@products/domain/services/products/IFindAllProductService'
 import { ProductFiltersDto } from '@shared/domain/dto/Filters.dto'
 
 @Controller('products')

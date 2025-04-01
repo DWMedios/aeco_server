@@ -1,10 +1,15 @@
 import type { EntityManager } from 'typeorm'
 import type { IProduct } from '@common/domain/entities'
 import type { ProductFiltersDto } from '../dto/Filters.dto'
+import type { ProductFilterByOptions } from '@products/domain/Types'
 
 export const PRODUCT_REPOSITORY = Symbol('IProductRepository')
 
 export interface IProductRepository {
+  existsBy(
+    filters: ProductFilterByOptions,
+    manager?: EntityManager,
+  ): Promise<boolean>
   findById(
     id: number,
     withCapacity?: boolean,

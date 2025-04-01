@@ -5,6 +5,6 @@ export interface IProduct extends IBase {
   readonly code: string
   readonly family: string
   readonly name: string
-  readonly capacityId: string
+  readonly capacityId: number
   capacity: IProductCapacity
 }

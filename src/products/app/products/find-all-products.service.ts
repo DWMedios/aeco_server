@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   PRODUCT_REPOSITORY,
   type IProductRepository,
@@ -7,7 +12,7 @@ import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { IProduct } from '@common/domain/entities'
 import type { ProductFiltersDto } from '@shared/domain/dto/Filters.dto'
-import type { IFindAllProductsService } from '@products/domain/services/products/IProductService'
+import type { IFindAllProductsService } from '@products/domain/services/products/IFindAllProductService'
 
 @Injectable()
 export class FindAllProductsService implements IFindAllProductsService {
@@ -29,7 +34,7 @@ export class FindAllProductsService implements IFindAllProductsService {
       })
     } catch (error) {
       this.logger.error(error)
-      throw new NotFoundException('No se pudo obtener los productos')
+      throw new InternalServerErrorException('No se pudo obtener los productos')
     }
   }
 }
