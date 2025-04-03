@@ -1,5 +1,7 @@
 import type { IBase } from './IBase'
 import type { IProductCapacity } from './IProductCapacity'
+import type { IProductStats } from './IProductStats'
+import type { ITicketItem } from './ITicketItem'
 
 export interface IProduct extends IBase {
   readonly code: string
@@ -7,4 +9,6 @@ export interface IProduct extends IBase {
   readonly name: string
   readonly capacityId: number
   capacity: IProductCapacity
+  ticketItems: ITicketItem[]
+  stats: IProductStats[]
 }

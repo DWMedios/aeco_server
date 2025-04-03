@@ -1,28 +1,32 @@
-import { Entity, Column, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
+import { TicketItem } from './TicketItems.entity'
 import type { ITicket } from '@common/domain/entities'
 
 @Entity({ name: 'tickets' })
 export class Ticket extends Base implements ITicket {
-  @Column({ length: 100 })
+  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
   folio: string
 
-  @Column({ length: 100 })
+  @Column({ type: 'varchar', length: 20, nullable: false })
   method: string
 
   @Column({ type: 'jsonb', nullable: true })
   summary: Record<string, any>
 
-  @Column({ default: 0 })
+  @Column({ type: 'int', default: 0 })
   totalCans: number
 
-  @Column({ default: 0 })
+  @Column({ type: 'int', default: 0 })
   totalBottles: number
 
-  @Column({ nullable: true })
-  aecoId: number
+  @Column({ type: 'int', nullable: true })
+  aecoId?: number
 
   @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
-  aeco: Aeco
+  aeco?: Aeco
+
+  @OneToMany(() => TicketItem, (item) => item.ticket)
+  items: TicketItem[]
 }
