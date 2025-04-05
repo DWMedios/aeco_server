@@ -17,6 +17,7 @@ import { AppService } from './app.service'
 import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { ProductsModule } from './products/products.module'
+import { DashboardModule } from './dashboard/dashboard.module'
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ProductsModule } from './products/products.module'
     PagesModule,
     UploadModule,
     ProductsModule,
+    DashboardModule,
   ],
   providers: [AppService],
   controllers: [AppController],

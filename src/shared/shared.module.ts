@@ -3,9 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import {
   Aeco,
   Company,
+  DailyStats,
+  PackagingStats,
   Page,
   Product,
   ProductCapacity,
+  ProductStats,
   Promotion,
   Reward,
   Setting,
@@ -16,6 +19,7 @@ import {
 import {
   AECO_REPOSITORY,
   COMPANY_REPOSITORY,
+  DASHBOARD_REPOSITORY,
   PAGE_REPOSITORY,
   PRODUCT_CAPACITY_REPOSITORY,
   PRODUCT_REPOSITORY,
@@ -27,6 +31,7 @@ import {
 import {
   AecoRepository,
   CompanyRepository,
+  DashboardRepository,
   PageRepository,
   ProductCapacityRepository,
   ProductRepository,
@@ -54,6 +59,9 @@ import { S3Service } from './app/files/s3.service'
       UserRolePermissions,
       Product,
       ProductCapacity,
+      DailyStats,
+      ProductStats,
+      PackagingStats,
     ]),
   ],
   providers: [
@@ -98,6 +106,10 @@ import { S3Service } from './app/files/s3.service'
       useClass: ProductCapacityRepository,
     },
     {
+      provide: DASHBOARD_REPOSITORY,
+      useClass: DashboardRepository,
+    },
+    {
       provide: S3_SERVICES,
       useClass: S3Service,
     },
@@ -112,6 +124,7 @@ import { S3Service } from './app/files/s3.service'
     COMPANY_REPOSITORY,
     PRODUCT_REPOSITORY,
     PRODUCT_CAPACITY_REPOSITORY,
+    DASHBOARD_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICES,
   ],

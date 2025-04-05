@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, ManyToOne } from 'typeorm'
 import { Base } from './Base'
+import { Company } from './Company.entity'
 import type { IDailyStats } from '@common/domain/entities'
 
 @Entity({ name: 'daily_stats' })
@@ -12,4 +13,10 @@ export class DailyStats extends Base implements IDailyStats {
 
   @Column({ type: 'int', default: 0 })
   totalCans: number
+
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
+
+  @ManyToOne(() => Company, (company) => company.dailyStats)
+  company?: Company
 }
