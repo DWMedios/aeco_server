@@ -15,6 +15,7 @@
       "@company/*": ["src/company/*"],
       "@aecos/*": ["src/aecos/*"],
       "@products/*": ["src/products/*"],
+      "@dashboard/*": ["src/dashboard/*"],
     }
   },
   "include": ["src/**/*.ts", "src/shared/validators/blacklist.json"],

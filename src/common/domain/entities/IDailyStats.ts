@@ -5,5 +5,6 @@ export interface IDailyStats {
   readonly totalBottles: number
   readonly totalCans: number
   readonly companyId?: number
+  readonly createdAt?: Date
   company?: ICompany
 }

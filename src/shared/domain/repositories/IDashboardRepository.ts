@@ -4,27 +4,30 @@ import type {
   IPackagingStats,
   IProductStats,
 } from '@common/domain/entities'
+import type {
+  DailyStatsFiltersDto,
+  PackgingStatsFiltersDto,
+  PackingsPerDayDto,
+  TopStatsFiltersDto,
+} from '@dashboard/domain/dto/DasboardFilters.dto'
 
 export const DASHBOARD_REPOSITORY = Symbol('IDashboardRepository')
 
 export interface IDashboardRepository {
-  dailyStats(companyId?: number, manager?: EntityManager): Promise<IDailyStats>
+  dailyStats(
+    filters: DailyStatsFiltersDto,
+    manager?: EntityManager,
+  ): Promise<IDailyStats>
   topProducts(
-    limit: number,
-    orderBy: 'ASC' | 'DESC',
-    companyId?: number,
+    filters: TopStatsFiltersDto,
     manager?: EntityManager,
   ): Promise<IProductStats[]>
   topPackagings(
-    limit: number,
-    orderBy: 'ASC' | 'DESC',
-    companyId?: number,
+    filters: PackgingStatsFiltersDto,
     manager?: EntityManager,
   ): Promise<IPackagingStats[]>
   totalPackingsPerDay(
-    startDate: Date,
-    endDate: Date,
-    companyId?: number,
+    filters: PackingsPerDayDto,
     manager?: EntityManager,
   ): Promise<IDailyStats[]>
 }

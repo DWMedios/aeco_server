@@ -11,6 +11,12 @@ import {
   PackagingStats,
   ProductStats,
 } from '@common/infra/entities'
+import type {
+  DailyStatsFiltersDto,
+  PackgingStatsFiltersDto,
+  PackingsPerDayDto,
+  TopStatsFiltersDto,
+} from '@dashboard/domain/dto/DasboardFilters.dto'
 import type { IDashboardRepository } from '@shared/domain/repositories'
 import { TransactionalMultipleRepository } from '../base/transactionalMultiple.repository'
 
@@ -39,28 +45,38 @@ export class DashboardRepository
   }
 
   dailyStats(
-    companyId?: number,
+    filters: DailyStatsFiltersDto,
     manager?: EntityManager,
   ): Promise<IDailyStats> {
     const qb = this.repository('daily', manager)
       .createQueryBuilder('dailyStats')
       .select([
-        'SUM(dailyStats.totalTickets) AS totalTickets',
-        'SUM(dailyStats.totalBottles) AS totalBottles',
-        'SUM(dailyStats.totalCans) AS totalCans',
+        'SUM(dailyStats.totalTickets)::int AS "totalTickets"',
+        'SUM(dailyStats.totalBottles)::int AS "totalBottles"',
+        'SUM(dailyStats.totalCans)::int AS "totalCans"',
       ])
 
-    if (companyId) {
-      qb.where('dailyStats.companyId = :companyId', { companyId })
+    if (filters?.companyId) {
+      qb.where('dailyStats.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
     }
 
-    return qb.groupBy('dailyStats.id').getRawOne()
+    if (filters?.startDate && filters?.endDate) {
+      qb.andWhere(
+        `dailyStats.createdAt >= date_trunc('day', CAST(:start_date AS TIMESTAMP WITH TIME ZONE))`,
+        { start_date: filters.startDate },
+      ).andWhere(
+        `dailyStats.createdAt < date_trunc('day', CAST(:end_date AS TIMESTAMP WITH TIME ZONE)) + INTERVAL '1 day'`,
+        { end_date: filters.endDate },
+      )
+    }
+
+    return qb.getRawOne()
   }
 
   topProducts(
-    limit: number,
-    orderBy: 'ASC' | 'DESC' = 'DESC',
-    companyId?: number,
+    filters: TopStatsFiltersDto,
     manager?: EntityManager,
   ): Promise<IProductStats[]> {
     const qb = this.repository('product', manager)
@@ -73,57 +89,75 @@ export class DashboardRepository
         'product.name',
       ])
 
-    if (companyId) {
-      qb.where('productStats.companyId = :companyId', { companyId })
+    if (filters?.companyId) {
+      qb.where('productStats.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
     }
 
-    return qb.orderBy('product.totalCount', orderBy).limit(limit).getMany()
+    return qb
+      .orderBy('productStats.totalCount', filters.orderByDirection)
+      .limit(filters.limit)
+      .getMany()
   }
 
   topPackagings(
-    limit: number,
-    orderBy: 'ASC' | 'DESC' = 'DESC',
-    companyId?: number,
+    filters: PackgingStatsFiltersDto,
     manager?: EntityManager,
   ): Promise<IPackagingStats[]> {
     const qb = this.repository('packaging', manager)
       .createQueryBuilder('packagingStats')
       .select([
-        'packagingStats.id',
-        'packagingStats.packagingType',
-        'packagingStats.totalCount',
+        'packagingStats.packagingType AS "packagingType"',
+        'SUM(packagingStats.totalCount)::int AS "totalCount"',
       ])
 
-    if (companyId) {
-      qb.where('packagingStats.companyId = :companyId', { companyId })
+    if (filters?.companyId) {
+      qb.where('packagingStats.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
     }
 
-    return qb.orderBy('packaging.totalCount', orderBy).limit(limit).getMany()
+    if (filters?.startDate && filters?.endDate) {
+      qb.andWhere(
+        `packagingStats.createdAt >= date_trunc('day', CAST(:start_date AS TIMESTAMP WITH TIME ZONE))`,
+        { start_date: filters.startDate },
+      ).andWhere(
+        `packagingStats.createdAt < date_trunc('day', CAST(:end_date AS TIMESTAMP WITH TIME ZONE)) + INTERVAL '1 day'`,
+        { end_date: filters.endDate },
+      )
+    }
+
+    return qb.groupBy('packagingStats.packagingType').getRawMany()
   }
 
   totalPackingsPerDay(
-    startDate: Date,
-    endDate: Date,
-    companyId?: number,
+    filters: PackingsPerDayDto,
     manager?: EntityManager,
   ): Promise<IDailyStats[]> {
     const qb = this.repository('daily', manager)
       .createQueryBuilder('dailyStats')
+      .select([
+        'dailyStats.createdAt AS "createdAt"',
+        'SUM(dailyStats.totalTickets)::int AS "totalTickets"',
+        'SUM(dailyStats.totalBottles)::int AS "totalBottles"',
+        'SUM(dailyStats.totalCans)::int AS "totalCans"',
+      ])
       .where(
         `dailyStats.createdAt >= date_trunc('day', CAST(:start_date AS TIMESTAMP WITH TIME ZONE))`,
-        { start_date: startDate },
+        { start_date: filters.startDate },
       )
       .andWhere(
         `dailyStats.createdAt < date_trunc('day', CAST(:end_date AS TIMESTAMP WITH TIME ZONE)) + INTERVAL '1 day'`,
-        { end_date: endDate },
+        { end_date: filters.endDate },
       )
 
-    if (companyId) {
+    if (filters?.companyId) {
       qb.andWhere('dailyStats.companyId = :companyId', {
-        companyId,
+        companyId: filters.companyId,
       })
     }
 
-    return qb.getMany()
+    return qb.groupBy('dailyStats.createdAt').getRawMany()
   }
 }

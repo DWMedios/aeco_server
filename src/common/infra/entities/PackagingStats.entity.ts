@@ -13,7 +13,7 @@ export class PackagingStats extends Base implements IPackagingStats {
   totalCount: number
 
   @Column({ type: 'int', nullable: true })
-  coompanyId?: number
+  companyId?: number
 
   @ManyToOne(() => Company, (company) => company.packagingStats)
   company?: Company

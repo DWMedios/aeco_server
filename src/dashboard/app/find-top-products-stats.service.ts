@@ -4,9 +4,11 @@ import {
   type IDashboardRepository,
 } from '@shared/domain/repositories'
 import type { IProductStats } from '@common/domain/entities'
+import type { TopStatsFiltersDto } from '@dashboard/domain/dto/DasboardFilters.dto'
+import type { IFindTopProductsService } from '@dashboard/domain/services/IFindTopProductsService'
 
 @Injectable()
-export class FindTopProductsStatsService {
+export class FindTopProductsStatsService implements IFindTopProductsService {
   logger = new Logger(FindTopProductsStatsService.name)
 
   constructor(
@@ -14,16 +16,8 @@ export class FindTopProductsStatsService {
     private readonly dashboardRepository: IDashboardRepository,
   ) {}
 
-  async run(
-    limit: number,
-    orderBy: 'ASC' | 'DESC',
-    companyId?: number,
-  ): Promise<IProductStats[]> {
-    const topProductsStats = await this.dashboardRepository.topProducts(
-      limit,
-      orderBy,
-      companyId,
-    )
+  async run(filters: TopStatsFiltersDto): Promise<IProductStats[]> {
+    const topProductsStats = await this.dashboardRepository.topProducts(filters)
 
     if (!topProductsStats) {
       this.logger.error('Top products stats not found')
