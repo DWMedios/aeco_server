@@ -1,4 +1,9 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   REWARD_REPOSITORY,
   type IRewardRepository,
@@ -44,7 +49,9 @@ export class FindAllRewardService implements IFindAllRewardService {
       })
     } catch (error) {
       this.logger.error(error)
-      throw new NotFoundException('No se pudo obtener las recompensas')
+      throw new InternalServerErrorException(
+        'No se pudo obtener las recompensas',
+      )
     }
   }
 }

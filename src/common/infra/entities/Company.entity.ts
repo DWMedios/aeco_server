@@ -5,10 +5,10 @@ import { Aeco } from './Aeco.entity'
 import { Promotion } from './Promotion.entity'
 import { Setting } from './CompanySettings.entity'
 import { Reward } from './Reward.entity'
-import type {
-  ICompany,
-  ILegalRepresentative,
-} from '../../domain/entities/ICompany'
+import { DailyStats } from './DailyStats.entity'
+import { ProductStats } from './ProductStats.entity'
+import { PackagingStats } from './PackagingStats.entity'
+import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
 
 @Entity({ name: 'companies' })
 export class Company extends Base implements ICompany {
@@ -53,4 +53,13 @@ export class Company extends Base implements ICompany {
 
   @OneToMany(() => Promotion, (promotion) => promotion.company)
   promotions?: Promotion[]
+
+  @OneToMany(() => DailyStats, (dailyStats) => dailyStats.company)
+  dailyStats?: DailyStats[]
+
+  @OneToMany(() => ProductStats, (productStats) => productStats.company)
+  productStats?: ProductStats[]
+
+  @OneToMany(() => PackagingStats, (packagingStats) => packagingStats.company)
+  packagingStats?: PackagingStats[]
 }

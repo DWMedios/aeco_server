@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
-import type { IUserRolePermissions } from '../../domain/entities/IUserRolePermissions'
+import type { IUserRolePermissions } from '@common/domain/entities'
 
 @Entity({ name: 'user_role_permissions' })
 export class UserRolePermissions extends Base implements IUserRolePermissions {

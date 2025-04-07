@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRolePermissions } from '@common/infra/entities'
 import type { IUserRolePermissions } from '@common/domain/entities'
-import type { IRoleRepository } from '@shared/domain/repositories/IRoleRepository'
+import type { IRoleRepository } from '@shared/domain/repositories'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 import { TransactionalRepository } from '../base/transactional.repository'
 

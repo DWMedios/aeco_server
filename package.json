@@ -19,12 +19,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli",
-    "migrations:run": "npm run typeorm migration:run -- -d ./db/typeorm.config.ts",
-    "migrations:generate": "npm run typeorm -- -d ./db/typeorm.config.ts migration:generate ./db/migrations/$npm_config_name",
+    "migrations:run": "npm run typeorm migration:run -- -d ./db/migrations.config.ts",
+    "migrations:generate": "npm run typeorm -- -d ./db/migrations.config.ts migration:generate ./db/migrations/$npm_config_name",
     "migrations:create": "npm run typeorm -- migration:create ./db/migrations/$npm_config_name",
-    "seeder:create": "npm run typeorm -- migration:create ./db/seeders/$npm_config_name",
-    "migrations:revert": "npm run typeorm -- -d ./db/typeorm.config.ts migration:revert",
-    "migrations:show": "npm run typeorm -- migration:show -d ./db/typeorm.config.ts"
+    "migrations:revert": "npm run typeorm -- -d ./db/migrations.config.ts migration:revert",
+    "migrations:show": "npm run typeorm -- migration:show -d ./db/migrations.config.ts",
+    "seeders:run": "npm run typeorm migration:run -- -d ./db/seeders.config.ts",
+    "seeders:create": "npm run typeorm -- migration:create ./db/seeders/$npm_config_name",
+    "seeders:revert": "npm run typeorm -- -d ./db/seeders.config.ts migration:revert"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.658.1",

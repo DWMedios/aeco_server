@@ -11,7 +11,7 @@ import {
 import { Base } from './Base'
 import { Company } from './Company.entity'
 import { UserRolePermissions } from './UserRolePermissions.entity'
-import type { IUser } from '../../domain/entities/IUser'
+import type { IUser } from '@common/domain/entities'
 
 @Entity({ name: 'users' })
 export class User extends Base implements IUser {

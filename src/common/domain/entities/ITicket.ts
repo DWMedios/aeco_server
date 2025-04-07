@@ -1,12 +1,14 @@
 import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
+import type { ITicketItem } from './ITicketItem'
 
 export interface ITicket extends IBase {
-  folio: string
-  method: string
+  readonly folio: string
+  readonly method: string
   summary: Record<string, any>
-  totalCans: number
-  totalBottles: number
-  aecoId?: number | null
+  readonly totalCans: number
+  readonly totalBottles: number
+  aecoId?: number
   aeco?: IAeco
+  items: ITicketItem[]
 }

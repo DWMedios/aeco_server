@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config'
 import { config } from 'dotenv'
-import { DataSource, DataSourceOptions } from 'typeorm'
+import { DataSourceOptions } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 
 config()
@@ -17,11 +17,5 @@ export const configOptions: PostgresConnectionOptions & DataSourceOptions = {
   synchronize: false,
   logging: configService.get('NODE_ENV') === 'development',
   entities: [__dirname + '/../src/common/infra/entities/*.entity{.ts,.js}'],
-  migrations: [
-    __dirname + '/migrations/*{.ts,.js}',
-    __dirname + '/seeders/*{.ts,.js}',
-  ],
   migrationsTableName: 'migrations_typeorm',
 }
-
-export default new DataSource(configOptions)

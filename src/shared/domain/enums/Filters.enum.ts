@@ -18,3 +18,17 @@ export type OrderByFieldRewardType =
   | 'establishment'
   | 'description'
   | BaseFiltersType
+
+export type OrderByFieldProductCapacityType =
+  | 'packaging'
+  | 'weight'
+  | 'factor'
+  | 'description'
+  | BaseFiltersType
+
+export type OrderByFieldProductType =
+  | 'code'
+  | 'name'
+  | 'family'
+  | 'capacityId'
+  | BaseFiltersType

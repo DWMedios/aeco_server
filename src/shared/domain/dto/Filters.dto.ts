@@ -6,15 +6,18 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
-import {
+import type {
   OrderByDirectionType,
   OrderByFieldUserType,
   OrderByFieldCompanyType,
   OrderByFieldAecoType,
   OrderByFieldRewardType,
+  OrderByFieldProductType,
+  OrderByFieldProductCapacityType,
 } from '../enums/Filters.enum'
 import { PageOptionsDto } from '../pagination/dto/page-options.dto'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
@@ -27,6 +30,90 @@ export class BaseFiltersDto extends PageOptionsDto {
   })
   @Transform(({ value }) => (value ? value.toUpperCase() : value))
   readonly orderByDirection?: OrderByDirectionType
+}
+
+export class ProductFiltersDto extends BaseFiltersDto {
+  @IsOptional()
+  @IsBoolean({ message: 'withCapacity debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
+  readonly withCapacity?: boolean
+
+  @IsOptional()
+  @IsString({ message: 'code debe ser una cadena de texto' })
+  @Matches(/^[0-9]+$/, {
+    message: 'El código debe contener solo números',
+  })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly code?: string
+
+  @IsOptional()
+  @IsString({ message: 'name debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly name?: string
+
+  @IsOptional()
+  @IsString({ message: 'family debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly family?: string
+
+  @IsOptional()
+  @IsString({ message: 'description debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly description?: string
+
+  @IsOptional()
+  @IsNumber({}, { message: 'capacityId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly capacityId?: number
+
+  @IsOptional()
+  @IsIn(['createdAt', 'code', 'name', 'family', 'id'], {
+    message: 'orderByField debe ser createdAt, code, name o family',
+  })
+  readonly orderByField?: OrderByFieldProductType
+}
+
+export class ProductCapacityFiltersDto extends BaseFiltersDto {
+  @IsOptional()
+  @IsString({ message: 'packaging debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly packaging?: string
+
+  @IsOptional()
+  @IsNumber({}, { message: 'weight debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly weight?: number
+
+  @IsOptional()
+  @IsNumber({}, { message: 'factor debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly factor?: number
+
+  @IsOptional()
+  @IsString({ message: 'description debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly description?: string
+
+  @IsOptional()
+  @IsIn(['createdAt', 'name', 'packaging', 'weight', 'factor', 'id'], {
+    message:
+      'orderByField debe ser createdAt, name, packaging, weight o factor',
+  })
+  readonly orderByField?: OrderByFieldProductCapacityType
 }
 
 export class RewardFiltersDto extends BaseFiltersDto {
@@ -60,6 +147,9 @@ export class RewardFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsBoolean({ message: 'status debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
   readonly status?: boolean
 
   @IsOptional()
@@ -151,6 +241,9 @@ export class CompanyFiltersDto extends BaseFiltersDto {
 
   @IsOptional()
   @IsBoolean({ message: 'isActive debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
   readonly status?: boolean
 
   @IsOptional()
