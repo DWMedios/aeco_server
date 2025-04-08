@@ -10,7 +10,11 @@ export interface IUserRepository {
     id: number,
     manager?: EntityManager,
   ): Promise<IUser | null>
-  findById(id: number, manager?: EntityManager): Promise<IUser | null>
+  findById(
+    id: number,
+    isActive?: boolean,
+    manager?: EntityManager,
+  ): Promise<IUser | null>
   findByEmail(email: string, manager?: EntityManager): Promise<IUser | null>
   findOneByCompany(
     userId: number,
