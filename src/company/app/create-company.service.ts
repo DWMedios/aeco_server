@@ -44,11 +44,17 @@ export class CreateCompanyService implements ICreateCompanyService {
     const { userAdmin, legalRepresentative, settings, aecos, ...reqCompany } =
       request
 
-    const exists = await this.companyRepository.exists({
+    const existsByName = await this.companyRepository.exists({
       name: reqCompany.name,
     })
 
-    if (exists) throw new BadRequestException('La empresa ya existe')
+    if (existsByName) throw new BadRequestException('La empresa ya existe')
+
+    const existsByRfc = await this.companyRepository.exists({
+      rfc: reqCompany.rfc,
+    })
+
+    if (existsByRfc) throw new BadRequestException('El RFC ya existe')
 
     if (userAdmin?.email) {
       const userEmailExists = await this.userRepository.exists(userAdmin.email)

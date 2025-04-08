@@ -1,12 +1,13 @@
 import type { EntityManager } from 'typeorm'
 import type { ICompany } from '@common/domain/entities'
 import type { CompanyFiltersDto } from '../dto/Filters.dto'
+import type { ICompanyFilterOptions } from '@company/domain/Types'
 
 export const COMPANY_REPOSITORY = Symbol('ICompanyRepository')
 
 export interface ICompanyRepository {
   exists(
-    filter: { id?: number; name?: string },
+    filter: ICompanyFilterOptions,
     manager?: EntityManager,
   ): Promise<boolean>
   findById(id: number, manager?: EntityManager): Promise<ICompany | null>

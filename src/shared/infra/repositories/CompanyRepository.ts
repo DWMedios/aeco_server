@@ -25,6 +25,7 @@ export class CompanyRepository
 
     if (filter?.id) whereClause.id = filter.id
     if (filter?.name) whereClause.name = filter.name
+    if (filter?.rfc) whereClause.rfc = filter.rfc
 
     return this.repository(manager).exists({ where: whereClause })
   }

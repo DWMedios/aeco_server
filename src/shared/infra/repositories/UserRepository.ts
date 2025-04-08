@@ -33,7 +33,11 @@ export class UserRepository
     })
   }
 
-  findById(id: number, manager?: EntityManager): Promise<IUser | null> {
+  findById(
+    id: number,
+    isActive = true,
+    manager?: EntityManager,
+  ): Promise<IUser | null> {
     return this.repository(manager).findOne({
       relations: ['role', 'company'],
       select: {
@@ -54,7 +58,7 @@ export class UserRepository
           name: true,
         },
       },
-      where: { id, isActive: true },
+      where: { id, isActive },
     })
   }
 
