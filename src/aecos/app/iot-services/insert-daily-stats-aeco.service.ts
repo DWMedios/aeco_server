@@ -2,8 +2,8 @@ import {
   Injectable,
   Inject,
   Logger,
-  NotFoundException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common'
 import {
   DASHBOARD_REPOSITORY,
@@ -39,7 +39,7 @@ export class InsertDailyStatsAecoService
     const createdAt = setDateToMidDay(request.createdAt)
 
     if (!createdAt) {
-      throw new NotFoundException('Error al establecer la fecha')
+      throw new BadRequestException('Error al establecer la fecha')
     }
 
     const stats: Partial<IDailyStats> = {
