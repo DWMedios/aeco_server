@@ -19,6 +19,7 @@ export interface IProductRepository {
     filters: ProductFiltersDto,
     manager?: EntityManager,
   ): Promise<[IProduct[], number]>
+  findManyByIds(ids: number[], manager?: EntityManager): Promise<IProduct[]>
   create(product: Partial<IProduct>, manager?: EntityManager): Promise<IProduct>
   update(
     id: number,

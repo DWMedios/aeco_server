@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common'
 import {
   DASHBOARD_REPOSITORY,
+  PRODUCT_REPOSITORY,
+  type IProductRepository,
   type IDashboardRepository,
 } from '@shared/domain/repositories'
 import {
@@ -28,6 +30,8 @@ export class InsertProductStatsAecoService
   constructor(
     @Inject(DASHBOARD_REPOSITORY)
     private readonly dashboardRepository: IDashboardRepository,
+    @Inject(PRODUCT_REPOSITORY)
+    private readonly productRepository: IProductRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
@@ -46,6 +50,14 @@ export class InsertProductStatsAecoService
 
     if (mapCreatedAt.some((date) => date === null)) {
       throw new BadRequestException('Error al establecer alguna fecha')
+    }
+
+    const mapProductIds = stats.map((stat) => stat.productId)
+
+    const products = await this.productRepository.findManyByIds(mapProductIds)
+
+    if (products.length !== mapProductIds.length) {
+      throw new BadRequestException('No se encontraron todos los productos')
     }
 
     const mapStats = stats.map((stat) => ({
