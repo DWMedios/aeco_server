@@ -2,8 +2,8 @@ import {
   Injectable,
   Inject,
   Logger,
-  NotFoundException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common'
 import {
   DASHBOARD_REPOSITORY,
@@ -39,13 +39,13 @@ export class InsertPackagingStatsAecoService
     const { stats } = request
 
     if (!stats || stats.length === 0) {
-      throw new NotFoundException('No hay estadísticas para insertar')
+      throw new BadRequestException('No hay estadísticas para insertar')
     }
 
     const mapCreatedAt = stats.map((stat) => setDateToMidDay(stat.createdAt))
 
     if (mapCreatedAt.some((date) => date === null)) {
-      throw new NotFoundException('Error al establecer alguna fecha')
+      throw new BadRequestException('Error al establecer alguna fecha')
     }
 
     const mapStats = stats.map((stat) => ({
