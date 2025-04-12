@@ -11,6 +11,9 @@ import { Page } from './Page.entity'
 import { Company } from './Company.entity'
 import { Ticket } from './Ticket.entity'
 import { Reward } from './Reward.entity'
+import { DailyStats } from './DailyStats.entity'
+import { ProductStats } from './ProductStats.entity'
+import { PackagingStats } from './PackagingStats.entity'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import type { IAeco } from '@common/domain/entities/IAeco'
 import type { IAecoCoords } from '@common/domain/Types'
@@ -60,4 +63,13 @@ export class Aeco extends Base implements IAeco {
 
   @ManyToMany(() => Reward, (reward) => reward.aecos)
   rewards?: Reward[]
+
+  @OneToMany(() => DailyStats, (dailyStats) => dailyStats.aeco)
+  dailyStats?: DailyStats[]
+
+  @OneToMany(() => ProductStats, (productStats) => productStats.aeco)
+  productStats?: ProductStats[]
+
+  @OneToMany(() => PackagingStats, (packagingStats) => packagingStats.aeco)
+  packagingStats?: PackagingStats[]
 }

@@ -47,3 +47,21 @@ export type DecodedUser = BaseDecoded & {
     name: string
   }
 }
+
+export type DecodedAeco = {
+  aecoId: number
+  aecoName: string
+  aecoSerialNumber: string
+  company?: {
+    id: number
+    name: string
+  }
+}
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends object
+      ? DeepPartial<T[P]>
+      : T[P]
+}

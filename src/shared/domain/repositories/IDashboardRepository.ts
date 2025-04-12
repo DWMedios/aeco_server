@@ -30,4 +30,16 @@ export interface IDashboardRepository {
     filters: PackingsPerDayDto,
     manager?: EntityManager,
   ): Promise<IDailyStats[]>
+  insertDailyStats(
+    stats: Partial<IDailyStats>,
+    manager?: EntityManager,
+  ): Promise<IDailyStats>
+  insertPackagingStats(
+    stats: Partial<IPackagingStats>[],
+    manager?: EntityManager,
+  ): Promise<IPackagingStats[]>
+  insertProductStats(
+    stats: Partial<IProductStats>[],
+    manager?: EntityManager,
+  ): Promise<IProductStats[]>
 }

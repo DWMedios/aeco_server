@@ -44,6 +44,8 @@ import { TRANSACTION_SERVICE } from './domain/services/transaction-service.inter
 import { TransactionService } from './app/transaction/transaction.service'
 import { S3_SERVICES } from './domain/services/IS3Service'
 import { S3Service } from './app/files/s3.service'
+import { TICKET_REPOSITORY } from './domain/repositories/ITicketRepository'
+import { TicketRepository } from './infra/repositories/TicketRepository'
 
 @Module({
   imports: [
@@ -106,6 +108,10 @@ import { S3Service } from './app/files/s3.service'
       useClass: ProductCapacityRepository,
     },
     {
+      provide: TICKET_REPOSITORY,
+      useClass: TicketRepository,
+    },
+    {
       provide: DASHBOARD_REPOSITORY,
       useClass: DashboardRepository,
     },
@@ -125,6 +131,7 @@ import { S3Service } from './app/files/s3.service'
     PRODUCT_REPOSITORY,
     PRODUCT_CAPACITY_REPOSITORY,
     DASHBOARD_REPOSITORY,
+    TICKET_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICES,
   ],
