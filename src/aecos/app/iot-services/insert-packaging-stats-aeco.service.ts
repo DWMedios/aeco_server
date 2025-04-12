@@ -1,4 +1,10 @@
-import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  Logger,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   DASHBOARD_REPOSITORY,
   type IDashboardRepository,
@@ -59,7 +65,10 @@ export class InsertPackagingStatsAecoService
               manager,
             )
         } catch (error) {
-          throw new NotFoundException('Error al crear las estadísticas', error)
+          throw new InternalServerErrorException(
+            'Error al crear las estadísticas',
+            error,
+          )
         }
         return newPackagingStats
       })
