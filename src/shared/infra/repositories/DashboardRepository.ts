@@ -160,4 +160,28 @@ export class DashboardRepository
 
     return qb.groupBy('dailyStats.createdAt').getRawMany()
   }
+
+  insertDailyStats(
+    stats: Partial<IDailyStats>,
+    manager?: EntityManager,
+  ): Promise<IDailyStats> {
+    const newStats = this.repository('daily', manager).create(stats)
+    return this.repository('daily', manager).save(newStats)
+  }
+
+  insertPackagingStats(
+    stats: Partial<IPackagingStats>[],
+    manager?: EntityManager,
+  ): Promise<IPackagingStats[]> {
+    const newStats = this.repository('packaging', manager).create(stats)
+    return this.repository('packaging', manager).save(newStats)
+  }
+
+  insertProductStats(
+    stats: Partial<IProductStats>[],
+    manager?: EntityManager,
+  ): Promise<IProductStats[]> {
+    const newStats = this.repository('product', manager).create(stats)
+    return this.repository('product', manager).save(newStats)
+  }
 }

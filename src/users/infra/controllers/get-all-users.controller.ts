@@ -14,7 +14,7 @@ import {
 } from '@users/domain/services/IFindAllUserService'
 import { UserFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { DecodedUser } from '@shared/domain/Types'
-import { CurrentUser } from '@shared/app/decorators/current-user.decorator'
+import { CurrentUser } from '@shared/app/decorators/current-logged.decorator'
 import { UsersRoleGuard } from '../guards/users-role.guard'
 
 @Controller('users')
@@ -30,7 +30,7 @@ export class GetAllUsersController {
   @UseGuards(UsersRoleGuard)
   @HttpCode(HttpStatus.OK)
   async getAllUsers(
-    @CurrentUser('user') user: DecodedUser,
+    @CurrentUser() user: DecodedUser,
     @Query() filters: UserFiltersDto,
   ) {
     return await this.service.run(user, filters)

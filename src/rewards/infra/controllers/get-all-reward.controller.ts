@@ -14,7 +14,7 @@ import {
 } from '@rewards/domain/services/IFindAllRewardService'
 import { DecodedUser } from '@shared/domain/Types'
 import { RewardFiltersDto } from '@shared/domain/dto/Filters.dto'
-import { CurrentUser } from '@shared/app/decorators/current-user.decorator'
+import { CurrentUser } from '@shared/app/decorators/current-logged.decorator'
 import { RewardRoleGuard } from '../guards/reward-role.guard'
 
 @Controller('rewards')
@@ -30,7 +30,7 @@ export class GetAllRewardController {
   @UseGuards(RewardRoleGuard)
   @HttpCode(HttpStatus.OK)
   async getAllRewards(
-    @CurrentUser('user') user: DecodedUser,
+    @CurrentUser() user: DecodedUser,
     @Query() filters: RewardFiltersDto,
   ) {
     return await this.service.run(user, filters)

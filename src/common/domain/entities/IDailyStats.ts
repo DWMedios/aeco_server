@@ -1,3 +1,4 @@
+import type { IAeco } from './IAeco'
 import type { ICompany } from './ICompany'
 
 export interface IDailyStats {
@@ -5,6 +6,8 @@ export interface IDailyStats {
   readonly totalBottles: number
   readonly totalCans: number
   readonly companyId?: number
+  readonly aecoId?: number
   readonly createdAt?: Date
   company?: ICompany
+  aeco?: IAeco
 }

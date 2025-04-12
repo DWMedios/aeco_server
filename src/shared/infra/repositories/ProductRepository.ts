@@ -130,6 +130,14 @@ export class ProductRepository
     return qb.getManyAndCount()
   }
 
+  findManyByIds(ids: number[], manager?: EntityManager): Promise<IProduct[]> {
+    return this.repository(manager)
+      .createQueryBuilder('product')
+      .select(['product.id'])
+      .where('product.id IN (:...ids)', { ids })
+      .getMany()
+  }
+
   create(
     product: Partial<IProduct>,
     manager?: EntityManager,

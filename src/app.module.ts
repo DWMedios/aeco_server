@@ -57,6 +57,22 @@ export class AppModule implements NestModule {
           path: 'aecos/finish-setup/:type/:serialNumber',
           method: RequestMethod.PATCH,
         },
+        {
+          path: 'aecos/upload-tickets',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'aecos/upload-daily-stats',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'aecos/upload-product-stats',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'aecos/upload-packaging-stats',
+          method: RequestMethod.POST,
+        },
       )
       .forRoutes('*')
   }
