@@ -50,10 +50,6 @@ export class AppModule implements NestModule {
           method: RequestMethod.GET,
         },
         {
-          path: 'aecos/needs-update/:serialNumber',
-          method: RequestMethod.GET,
-        },
-        {
           path: 'aecos/finish-setup/:type/:serialNumber',
           method: RequestMethod.PATCH,
         },
@@ -72,6 +68,18 @@ export class AppModule implements NestModule {
         {
           path: 'aecos/upload-packaging-stats',
           method: RequestMethod.POST,
+        },
+        {
+          path: 'aecos/rewards',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'products/capacities/after-last',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'products/after-last',
+          method: RequestMethod.GET,
         },
       )
       .forRoutes('*')

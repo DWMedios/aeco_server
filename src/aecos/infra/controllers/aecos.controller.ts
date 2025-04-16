@@ -19,11 +19,6 @@ export class AecosController {
     return await this.aecoService.getInitialSetup(serialNumber)
   }
 
-  @Get('needs-update/:serialNumber')
-  async getUpdates(@Param('serialNumber') serialNumber: string) {
-    return await this.aecoService.getUpdates(serialNumber)
-  }
-
   @Patch('finish-setup/:type/:serialNumber')
   async finishSetup(@Param() params: FinishSetupDto) {
     return await this.aecoService.finishSetup(params)

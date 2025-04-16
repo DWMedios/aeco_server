@@ -133,6 +133,30 @@ export class ProductCapacityRepository
     return qb.getManyAndCount()
   }
 
+  findAllAfterLast(
+    lastId: number,
+    limit?: number,
+    manager?: EntityManager,
+  ): Promise<IProductCapacity[]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('productCapacity')
+      .select([
+        'productCapacity.id',
+        'productCapacity.packaging',
+        'productCapacity.weight',
+        'productCapacity.factor',
+        'productCapacity.description',
+      ])
+      .where('productCapacity.id > :lastId', { lastId })
+      .orderBy('productCapacity.id', 'ASC')
+
+    if (limit && limit > 0) {
+      qb.take(limit || 10)
+    }
+
+    return qb.getMany()
+  }
+
   create(
     productCapacity: Partial<IProductCapacity>,
     manager?: EntityManager,

@@ -30,6 +30,12 @@ import { DELETE_PRODUCT_SERVICE } from './domain/services/products/IDeleteProduc
 import { DeleteProductService } from './app/products/delete-product.service'
 import { DeleteProductCapacityController } from './infra/controllers/product-capacity/delete-product-capacity.controller'
 import { DeleteProductController } from './infra/controllers/products/delete-product.controller'
+import { FIND_ALL_CAPACITIES_AFTER_LAST_SERVICE } from './domain/services/iot-services/IFindAllCapacitiesAfterLastService'
+import { FindAllCapacitiesAfterLastService } from './app/iot-services/find-all-capacities-after-last.service'
+import { GetAllProductCapacityAfterLastController } from './infra/controllers/iot-controllers/get-all-capacities-after-last.controller'
+import { FIND_ALL_PRODUCTS_AFTER_LAST_SERVICE } from './domain/services/iot-services/IFindAllProductsAfterLastService'
+import { FindAllProductsAfterLastService } from './app/iot-services/find-all-products-after-last.service'
+import { GetAllProductsAfterLastController } from './infra/controllers/iot-controllers/get-all-products-after-last.controller'
 
 @Module({
   imports: [SharedModule],
@@ -74,10 +80,20 @@ import { DeleteProductController } from './infra/controllers/products/delete-pro
       provide: DELETE_PRODUCT_SERVICE,
       useClass: DeleteProductService,
     },
+    {
+      provide: FIND_ALL_CAPACITIES_AFTER_LAST_SERVICE,
+      useClass: FindAllCapacitiesAfterLastService,
+    },
+    {
+      provide: FIND_ALL_PRODUCTS_AFTER_LAST_SERVICE,
+      useClass: FindAllProductsAfterLastService,
+    },
   ],
   controllers: [
     GetAllProductsController,
     GetAllProductCapacityController,
+    GetAllProductsAfterLastController,
+    GetAllProductCapacityAfterLastController,
     GetProductController,
     GetProductCapacityController,
     PostProductCapacityController,

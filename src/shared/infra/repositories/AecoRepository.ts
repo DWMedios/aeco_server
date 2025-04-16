@@ -175,6 +175,27 @@ export class AecoRepository
     return qb.getMany()
   }
 
+  getRewardsByAeco(id: number, manager?: EntityManager): Promise<IAeco | null> {
+    return this.repository(manager)
+      .createQueryBuilder('aeco')
+      .leftJoinAndSelect('aeco.rewards', 'rewards')
+      .select([
+        'aeco.id',
+        'rewards.id',
+        'rewards.name',
+        'rewards.establishment',
+        'rewards.description',
+        'rewards.note',
+        'rewards.image',
+        'rewards.status',
+        'rewards.type',
+        'rewards.order',
+        'rewards.metadata',
+      ])
+      .where('aeco.id = :id', { id })
+      .getOne()
+  }
+
   create(aeco: Partial<IAeco>, manager?: EntityManager): Promise<IAeco> {
     const newAeco = this.repository(manager).create(aeco)
     return this.repository(manager).save(newAeco)
@@ -218,37 +239,6 @@ export class AecoRepository
       .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: true })
       .getOne()
   }
-
-  getUpdates(
-    serialNumber: string,
-    manager?: EntityManager,
-  ): Promise<IAeco | null> {
-    return this.repository(manager)
-      .createQueryBuilder('aeco')
-      .leftJoinAndSelect('aeco.company', 'company')
-      .leftJoinAndSelect('aeco.pages', 'pages')
-      .leftJoinAndSelect('aeco.rewardCategories', 'rewardCategories')
-      .select([
-        'aeco.id',
-        'aeco.name',
-        'company.id',
-        'company.name',
-        'pages.id',
-        'pages.name',
-        'pages.metadata',
-        'rewardCategories.id',
-        'rewardCategories.name',
-        'rewardCategories.order',
-        'rewardCategories.status',
-      ])
-      .where('aeco.serialNumber = :serialNumber', { serialNumber })
-      .andWhere('aeco.status = :aecoStatus', {
-        aecoStatus: AecoStatusEnum.ENABLED,
-      })
-      .andWhere('aeco.needsUpdates = :needsUpdates', { needsUpdates: true })
-      .getOne()
-  }
-
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('aeco')

@@ -22,6 +22,7 @@ export interface IAecoRepository {
     filters: IAecoFilterManyOptions,
     manager?: EntityManager,
   ): Promise<IAeco[]>
+  getRewardsByAeco(id: number, manager?: EntityManager): Promise<IAeco | null>
   create(company: Partial<IAeco>, manager?: EntityManager): Promise<IAeco>
   update(
     exists: IAeco,
@@ -29,10 +30,6 @@ export interface IAecoRepository {
     manager?: EntityManager,
   ): Promise<IAeco>
   initialSetup(
-    serialNumber: string,
-    manager?: EntityManager,
-  ): Promise<IAeco | null>
-  getUpdates(
     serialNumber: string,
     manager?: EntityManager,
   ): Promise<IAeco | null>

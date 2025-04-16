@@ -19,6 +19,11 @@ export interface IProductCapacityRepository {
     filters: ProductCapacityFiltersDto,
     manager?: EntityManager,
   ): Promise<[IProductCapacity[], number]>
+  findAllAfterLast(
+    lastId: number,
+    limit?: number,
+    manager?: EntityManager,
+  ): Promise<IProductCapacity[]>
   create(
     productCapacity: Partial<IProductCapacity>,
     manager?: EntityManager,

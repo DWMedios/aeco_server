@@ -130,6 +130,30 @@ export class ProductRepository
     return qb.getManyAndCount()
   }
 
+  findAllAfterLast(
+    lastId: number,
+    limit?: number,
+    manager?: EntityManager,
+  ): Promise<IProduct[]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('product')
+      .select([
+        'product.id',
+        'product.code',
+        'product.family',
+        'product.name',
+        'product.capacityId',
+      ])
+      .where('product.id > :lastId', { lastId })
+      .orderBy('product.id', 'ASC')
+
+    if (limit && limit > 0) {
+      qb.take(limit || 10)
+    }
+
+    return qb.getMany()
+  }
+
   findManyByIds(ids: number[], manager?: EntityManager): Promise<IProduct[]> {
     return this.repository(manager)
       .createQueryBuilder('product')

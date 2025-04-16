@@ -53,32 +53,6 @@ export class AecoService implements IAecoService {
     return aeco
   }
 
-  async getUpdates(serialNumber: string): Promise<IAeco> {
-    const aeco = await this.aecoRepository.getUpdates(serialNumber)
-
-    if (!aeco) throw new NotFoundException('Aeco not found')
-
-    if (!aeco.needsUpdate)
-      throw new NotFoundException('No pending updates found')
-
-    if (aeco?.company?.settings && aeco.company.settings.key) {
-      aeco.company.settings = (await processImagesInJson(
-        aeco.company.settings,
-        (key: string) => this.s3Service.getFileUrlIfExists(key),
-      )) as ISetting
-    }
-
-    await Promise.all(
-      aeco.pages.map(async (page) => {
-        page.metadata = await processImagesInJson(
-          page.metadata,
-          (key: string) => this.s3Service.getFileUrlIfExists(key),
-        )
-      }),
-    )
-    return aeco
-  }
-
   async finishSetup(data: FinishSetupDto): Promise<IAeco> {
     const exists = await this.aecoRepository.findBy({
       serialNumber: data.serialNumber,
