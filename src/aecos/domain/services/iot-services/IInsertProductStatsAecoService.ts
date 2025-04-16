@@ -1,5 +1,5 @@
 import type { DecodedAeco } from '@shared/domain/Types'
-import type { RequestProductStatsDto } from '../dto/CreateAecoStats.dto'
+import type { RequestProductStatsDto } from '../../dto/CreateAecoStats.dto'
 
 export const INSERT_PRODUCT_STATS_AECO_SERVICE = Symbol(
   'IInsertProductStatsAecoService',

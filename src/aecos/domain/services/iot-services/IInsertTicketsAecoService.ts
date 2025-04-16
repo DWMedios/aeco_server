@@ -1,5 +1,5 @@
 import type { DecodedAeco } from '@shared/domain/Types'
-import type { RequestCreateTicketsDto } from '../dto/CreateAecoTickets.dto'
+import type { RequestCreateTicketsDto } from '../../dto/CreateAecoTickets.dto'
 
 export const INSERT_TICKETS_AECO_SERVICE = Symbol('IInsertTicketsAecoService')
 

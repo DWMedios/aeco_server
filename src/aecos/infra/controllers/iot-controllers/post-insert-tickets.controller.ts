@@ -11,7 +11,7 @@ import {
 import {
   INSERT_TICKETS_AECO_SERVICE,
   type IInsertTicketsAecoService,
-} from '@aecos/domain/services/IInsertTicketsAecoService'
+} from '@aecos/domain/services/iot-services/IInsertTicketsAecoService'
 import { AecosGuard } from '@shared/app/guards/aecos.guard'
 import { DecodedAeco } from '@shared/domain/Types'
 import { CurrentAeco } from '@shared/app/decorators/current-logged.decorator'

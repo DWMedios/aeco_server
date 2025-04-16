@@ -16,7 +16,7 @@ import {
 import type { ITicket } from '@common/domain/entities'
 import type { DecodedAeco } from '@shared/domain/Types'
 import type { RequestCreateTicketsDto } from '@aecos/domain/dto/CreateAecoTickets.dto'
-import type { IInsertTicketsAecoService } from '@aecos/domain/services/IInsertTicketsAecoService'
+import type { IInsertTicketsAecoService } from '@aecos/domain/services/iot-services/IInsertTicketsAecoService'
 
 @Injectable()
 export class InsertTicketsAecoService implements IInsertTicketsAecoService {

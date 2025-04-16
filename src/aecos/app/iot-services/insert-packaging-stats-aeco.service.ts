@@ -17,7 +17,7 @@ import { setDateToMidDay } from '@shared/utils/functions'
 import type { DecodedAeco } from '@shared/domain/Types'
 import type { IPackagingStats } from '@common/domain/entities'
 import type { RequestPackagingStatsDto } from '@aecos/domain/dto/CreateAecoStats.dto'
-import type { IInsertPackagingStatsAecoService } from '@aecos/domain/services/IInsertPackagingStatsAecoService'
+import type { IInsertPackagingStatsAecoService } from '@aecos/domain/services/iot-services/IInsertPackagingStatsAecoService'
 
 @Injectable()
 export class InsertPackagingStatsAecoService

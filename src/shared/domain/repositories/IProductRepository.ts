@@ -19,6 +19,11 @@ export interface IProductRepository {
     filters: ProductFiltersDto,
     manager?: EntityManager,
   ): Promise<[IProduct[], number]>
+  findAllAfterLast(
+    lastId: number,
+    limit?: number,
+    manager?: EntityManager,
+  ): Promise<IProduct[]>
   findManyByIds(ids: number[], manager?: EntityManager): Promise<IProduct[]>
   create(product: Partial<IProduct>, manager?: EntityManager): Promise<IProduct>
   update(

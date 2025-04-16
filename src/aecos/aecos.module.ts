@@ -18,18 +18,21 @@ import { GetAllAecoController } from './infra/controllers/get-all-aeco.controlle
 import { PostAecoController } from './infra/controllers/post-aeco.controller'
 import { PutAecoController } from './infra/controllers/put-aeco.controller'
 import { DeleteAecoController } from './infra/controllers/delete-aeco.controller'
-import { INSERT_TICKETS_AECO_SERVICE } from './domain/services/IInsertTicketsAecoService'
+import { INSERT_TICKETS_AECO_SERVICE } from './domain/services/iot-services/IInsertTicketsAecoService'
 import { InsertTicketsAecoService } from './app/iot-services/insert-tickets-aeco.service'
 import { PostInsertTicketsController } from './infra/controllers/iot-controllers/post-insert-tickets.controller'
 import { InsertDailyStatsAecoService } from './app/iot-services/insert-daily-stats-aeco.service'
-import { INSERT_DAILY_STATS_AECO_SERVICE } from './domain/services/IInsertDailyStatsAecoService'
+import { INSERT_DAILY_STATS_AECO_SERVICE } from './domain/services/iot-services/IInsertDailyStatsAecoService'
 import { InsertProductStatsAecoService } from './app/iot-services/insert-product-stats-aeco.service'
-import { INSERT_PRODUCT_STATS_AECO_SERVICE } from './domain/services/IInsertProductStatsAecoService'
-import { INSERT_PACKAGING_STATS_AECO_SERVICE } from './domain/services/IInsertPackagingStatsAecoService'
+import { INSERT_PRODUCT_STATS_AECO_SERVICE } from './domain/services/iot-services/IInsertProductStatsAecoService'
+import { INSERT_PACKAGING_STATS_AECO_SERVICE } from './domain/services/iot-services/IInsertPackagingStatsAecoService'
 import { InsertPackagingStatsAecoService } from './app/iot-services/insert-packaging-stats-aeco.service'
 import { PostInsertDailyStatsController } from './infra/controllers/iot-controllers/post-insert-daily-stats.controller'
 import { PostInsertProductStatsController } from './infra/controllers/iot-controllers/post-insert-product-stats.controller'
 import { PostInsertPackagingStatsController } from './infra/controllers/iot-controllers/post-insert-packaging-stats.controller'
+import { GET_ALL_AECO_REWARDS_SERVICE } from './domain/services/iot-services/IGetAllAecoRewardsService'
+import { GetAllAecoRewardsService } from './app/iot-services/get-all-aeco-rewards.service'
+import { GetAllAecoRewardsController } from './infra/controllers/iot-controllers/get-all-aeco-rewards.controller'
 
 @Module({
   imports: [SharedModule],
@@ -74,8 +77,13 @@ import { PostInsertPackagingStatsController } from './infra/controllers/iot-cont
       provide: INSERT_PACKAGING_STATS_AECO_SERVICE,
       useClass: InsertPackagingStatsAecoService,
     },
+    {
+      provide: GET_ALL_AECO_REWARDS_SERVICE,
+      useClass: GetAllAecoRewardsService,
+    },
   ],
   controllers: [
+    GetAllAecoRewardsController,
     GetAecoController,
     GetAllAecoController,
     PostAecoController,

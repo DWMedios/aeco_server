@@ -11,7 +11,7 @@ import {
 import {
   INSERT_DAILY_STATS_AECO_SERVICE,
   type IInsertDailyStatsAecoService,
-} from '@aecos/domain/services/IInsertDailyStatsAecoService'
+} from '@aecos/domain/services/iot-services/IInsertDailyStatsAecoService'
 import { AecosGuard } from '@shared/app/guards/aecos.guard'
 import { DecodedAeco } from '@shared/domain/Types'
 import { CurrentAeco } from '@shared/app/decorators/current-logged.decorator'
