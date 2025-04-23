@@ -15,6 +15,7 @@ import { DailyStats } from './DailyStats.entity'
 import { ProductStats } from './ProductStats.entity'
 import { PackagingStats } from './PackagingStats.entity'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import { Campaign } from './Campaign.entity'
 import type { IAeco } from '@common/domain/entities/IAeco'
 import type { IAecoCoords } from '@common/domain/Types'
 
@@ -72,4 +73,7 @@ export class Aeco extends Base implements IAeco {
 
   @OneToMany(() => PackagingStats, (packagingStats) => packagingStats.aeco)
   packagingStats?: PackagingStats[]
+
+  @ManyToMany(() => Campaign, (campaign) => campaign.aecos)
+  campaigns?: Campaign[]
 }

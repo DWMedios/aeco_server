@@ -1,7 +1,8 @@
-import type { IAeco } from './IAeco'
 import type { IBase } from './IBase'
+import type { IAeco } from './IAeco'
+import type { IAdvertising } from './IAdvertising'
+import type { IContractor } from './IContractor'
 import type { ISetting } from './ICompanySetting'
-import type { IPromotion } from './IPromotion'
 import type { IReward } from './IReward'
 import type { IUser } from './IUser'
 
@@ -19,7 +20,8 @@ export interface ICompany extends IBase {
   settings?: ISetting
   rewards?: IReward[]
   aecos?: IAeco[]
-  promotions?: IPromotion[]
+  advertisings?: IAdvertising[]
+  contractors?: IContractor[]
   readonly totalAecos?: number
 }
 

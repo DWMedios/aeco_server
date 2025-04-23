@@ -1,13 +1,14 @@
-import { Entity, Column, OneToOne, OneToMany } from 'typeorm'
+import { Entity, Column, OneToOne, OneToMany, ManyToOne } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
-import { Promotion } from './Promotion.entity'
 import { Setting } from './CompanySettings.entity'
 import { Reward } from './Reward.entity'
 import { DailyStats } from './DailyStats.entity'
 import { ProductStats } from './ProductStats.entity'
 import { PackagingStats } from './PackagingStats.entity'
+import { Advertising } from './Advertising.entity'
+import { Contractor } from './Contractor.entity'
 import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
 
 @Entity({ name: 'companies' })
@@ -51,9 +52,6 @@ export class Company extends Base implements ICompany {
   @OneToMany(() => Aeco, (aeco) => aeco.company)
   aecos?: Aeco[]
 
-  @OneToMany(() => Promotion, (promotion) => promotion.company)
-  promotions?: Promotion[]
-
   @OneToMany(() => DailyStats, (dailyStats) => dailyStats.company)
   dailyStats?: DailyStats[]
 
@@ -62,4 +60,10 @@ export class Company extends Base implements ICompany {
 
   @OneToMany(() => PackagingStats, (packagingStats) => packagingStats.company)
   packagingStats?: PackagingStats[]
+
+  @OneToMany(() => Advertising, (advertising) => advertising.company)
+  advertisings?: Advertising[]
+
+  @ManyToOne(() => Contractor, (contractor) => contractor.company)
+  contractors?: Contractor[]
 }

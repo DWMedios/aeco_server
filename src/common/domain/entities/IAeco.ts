@@ -1,4 +1,5 @@
 import type { IBase } from './IBase'
+import type { ICampaign } from './ICampaign'
 import type { IPage } from './IPage'
 import type { ITicket } from './ITicket'
 import type { IReward } from './IReward'
@@ -26,4 +27,5 @@ export interface IAeco extends IBase {
   dailyStats?: IDailyStats[]
   productStats?: IProductStats[]
   packagingStats?: IPackagingStats[]
+  campaigns?: ICampaign[]
 }

@@ -73,6 +73,8 @@ export class AppModule implements NestModule {
           path: 'aecos/rewards',
           method: RequestMethod.GET,
         },
+      )
+      .exclude(
         {
           path: 'products/capacities/after-last',
           method: RequestMethod.GET,
