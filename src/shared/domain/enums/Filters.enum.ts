@@ -32,3 +32,11 @@ export type OrderByFieldProductType =
   | 'family'
   | 'capacityId'
   | BaseFiltersType
+
+export type OrderByFieldTicketType =
+  | 'folio'
+  | 'totalCans'
+  | 'totalBottles'
+  | 'aecoId'
+  | 'productId'
+  | BaseFiltersType

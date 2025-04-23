@@ -24,7 +24,7 @@ export class DeleteAecoController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+  async deleteAeco(@Param('id', ParseIntPipe) id: number) {
     return await this.service.run(id)
   }
 }
