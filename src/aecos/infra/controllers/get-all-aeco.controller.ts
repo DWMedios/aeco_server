@@ -24,7 +24,7 @@ export class GetAllAecoController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getOneUser(@Query() filters: AecoFiltersDto) {
+  async getAllAecos(@Query() filters: AecoFiltersDto) {
     return await this.service.run(filters)
   }
 }

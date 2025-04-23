@@ -27,7 +27,7 @@ export class GetAllCompanyController {
   @Get()
   @UseGuards(CompaniesRoleGuard)
   @HttpCode(HttpStatus.OK)
-  async getOneUser(@Query() filters: CompanyFiltersDto) {
+  async getAllCompanies(@Query() filters: CompanyFiltersDto) {
     return await this.service.run(filters)
   }
 }

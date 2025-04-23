@@ -93,41 +93,41 @@ export class RewardRepository
       ])
 
     if (companyId) {
-      qb.where('rewards.companyId = :companyId', { companyId })
+      qb.orWhere('rewards.companyId = :companyId', { companyId })
     }
 
     if (filters?.name) {
-      qb.andWhere('LOWER(unaccent(BTRIM(rewards.name))) ILIKE :name', {
+      qb.orWhere('LOWER(unaccent(BTRIM(rewards.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.description) {
-      qb.andWhere(
+      qb.orWhere(
         'LOWER(unaccent(BTRIM(rewards.description))) ILIKE :description',
         { description: `%${filters.description}%` },
       )
     }
 
     if (filters?.establishment) {
-      qb.andWhere(
+      qb.orWhere(
         'LOWER(unaccent(BTRIM(rewards.establishment))) ILIKE :establishment',
         { establishment: `%${filters.establishment}%` },
       )
     }
 
     if (filters?.note) {
-      qb.andWhere('LOWER(unaccent(BTRIM(rewards.note))) ILIKE :note', {
+      qb.orWhere('LOWER(unaccent(BTRIM(rewards.note))) ILIKE :note', {
         note: `%${filters.note}%`,
       })
     }
 
     if (filters?.status) {
-      qb.andWhere('rewards.status = :status', { status: filters.status })
+      qb.orWhere('rewards.status = :status', { status: filters.status })
     }
 
     if (filters?.type) {
-      qb.andWhere('rewards.type = :type', { type: filters.type })
+      qb.orWhere('rewards.type = :type', { type: filters.type })
     }
 
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)
