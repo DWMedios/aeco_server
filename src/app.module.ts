@@ -10,7 +10,7 @@ import { UsersModule } from '@users/users.module'
 import { CommonModule } from '@common/common.module'
 import { SharedModule } from '@shared/shared.module'
 import { RewardsModule } from '@rewards/rewards.module'
-import { UploadModule } from '@upload/upload.module'
+import { MediaAssetsModule } from '@media-assets/media-assets.module'
 import { AecosModule } from '@aecos/aecos.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -18,7 +18,7 @@ import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { ProductsModule } from './products/products.module'
 import { DashboardModule } from './dashboard/dashboard.module'
-import { TicketsModule } from './tickets/tickets.module';
+import { TicketsModule } from './tickets/tickets.module'
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { TicketsModule } from './tickets/tickets.module';
     AecosModule,
     RewardsModule,
     PagesModule,
-    UploadModule,
+    MediaAssetsModule,
     ProductsModule,
     DashboardModule,
     TicketsModule,
