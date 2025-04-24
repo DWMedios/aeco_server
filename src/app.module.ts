@@ -18,6 +18,7 @@ import { CompanyModule } from './company/company.module'
 import { PagesModule } from './pages/pages.module'
 import { ProductsModule } from './products/products.module'
 import { DashboardModule } from './dashboard/dashboard.module'
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DashboardModule } from './dashboard/dashboard.module'
     UploadModule,
     ProductsModule,
     DashboardModule,
+    TicketsModule,
   ],
   providers: [AppService],
   controllers: [AppController],
