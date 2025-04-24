@@ -1,7 +1,6 @@
 import type {
   IAeco,
   ICompany,
-  IPromotion,
   IUser,
   IUserRolePermissions,
 } from '@common/domain/entities'
@@ -9,20 +8,12 @@ import { CompanySettingSerializer } from './SetingsSerializer'
 
 export class CompanySerializer {
   readonly id: number
-
   readonly name: string
-
   readonly rfc: string
-
   readonly settings?: CompanySettingSerializer
-
   readonly users?: IUser[]
-
   readonly userCompanyPermissions?: IUserRolePermissions[]
-
   readonly aecos?: IAeco[]
-
-  readonly promotions?: IPromotion[]
 
   constructor(partial: Partial<CompanySerializer>) {
     Object.assign(this, partial)

@@ -1,15 +1,20 @@
+import { S3Client } from '@aws-sdk/client-s3'
+import { ConfigService } from '@nestjs/config'
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import {
+  Advertising,
   Aeco,
+  Campaign,
   Company,
+  Contractor,
   DailyStats,
+  MediaAsset,
   PackagingStats,
   Page,
   Product,
   ProductCapacity,
   ProductStats,
-  Promotion,
   Reward,
   Setting,
   Ticket,
@@ -26,6 +31,7 @@ import {
   REWARD_REPOSITORY,
   ROLE_REPOSITORY,
   SETTING_REPOSITORY,
+  TICKET_REPOSITORY,
   USER_REPOSITORY,
 } from './domain/repositories'
 import {
@@ -38,23 +44,24 @@ import {
   RewardRepository,
   RoleRepository,
   SettingsRepository,
+  TicketRepository,
   UserRepository,
 } from './infra/repositories'
 import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
 import { TransactionService } from './app/transaction/transaction.service'
-import { S3_SERVICES } from './domain/services/IS3Service'
+import { S3_SERVICE } from './domain/services/IS3Service'
 import { S3Service } from './app/files/s3.service'
-import { TICKET_REPOSITORY } from './domain/repositories/ITicketRepository'
-import { TicketRepository } from './infra/repositories/TicketRepository'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Aeco,
+      Advertising,
+      Campaign,
       Company,
+      Contractor,
       Setting,
       Page,
-      Promotion,
       Reward,
       Ticket,
       User,
@@ -64,6 +71,7 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
       DailyStats,
       ProductStats,
       PackagingStats,
+      MediaAsset,
     ]),
   ],
   providers: [
@@ -116,8 +124,21 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
       useClass: DashboardRepository,
     },
     {
-      provide: S3_SERVICES,
+      provide: S3_SERVICE,
       useClass: S3Service,
+    },
+    {
+      provide: S3Client,
+      useFactory: (configService: ConfigService) => {
+        return new S3Client({
+          region: configService.get<string>('s3.region'),
+          credentials: {
+            accessKeyId: configService.get<string>('s3.accessKeyId'),
+            secretAccessKey: configService.get<string>('s3.secretAccessKey'),
+          },
+        })
+      },
+      inject: [ConfigService],
     },
   ],
   exports: [
@@ -133,7 +154,7 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
     DASHBOARD_REPOSITORY,
     TICKET_REPOSITORY,
     TRANSACTION_SERVICE,
-    S3_SERVICES,
+    S3_SERVICE,
   ],
 })
 export class SharedModule {}

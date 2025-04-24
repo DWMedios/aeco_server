@@ -9,10 +9,7 @@ import {
   AECO_REPOSITORY,
   type IAecoRepository,
 } from '@shared/domain/repositories'
-import {
-  S3_SERVICES,
-  type IS3Service,
-} from '@shared/domain/services/IS3Service'
+import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import type { IAeco, ISetting } from '@common/domain/entities'
 import type { FinishSetupDto } from '../domain/dto/FinishSetupDto'
 import { FinishSetupType } from '../domain/enums/FinishSetupType.enum'
@@ -26,7 +23,7 @@ export class AecoService implements IAecoService {
   constructor(
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
-    @Inject(S3_SERVICES)
+    @Inject(S3_SERVICE)
     private readonly s3Service: IS3Service,
   ) {}
 
