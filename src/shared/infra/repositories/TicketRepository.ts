@@ -115,7 +115,7 @@ export class TicketRepository
     return this.repository(manager).save(newTickets)
   }
 
-  update(
+  partialUpdate(
     exists: ITicket,
     ticket: Partial<ITicket>,
     manager?: EntityManager,

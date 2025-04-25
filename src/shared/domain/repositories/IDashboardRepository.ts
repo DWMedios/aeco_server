@@ -42,4 +42,16 @@ export interface IDashboardRepository {
     stats: Partial<IProductStats>[],
     manager?: EntityManager,
   ): Promise<IProductStats[]>
+  softDeleteDailyStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
+  softDeletePackagingStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
+  softDeleteProductStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
 }

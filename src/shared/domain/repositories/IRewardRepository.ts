@@ -22,12 +22,16 @@ export interface IRewardRepository {
     reward: Partial<IReward>,
     manager?: EntityManager,
   ): Promise<IReward>
-  update(
+  updateById(
     id: number,
     reward: Partial<IReward>,
     manager?: EntityManager,
   ): Promise<IReward>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  softDeleteByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>
 }

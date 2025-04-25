@@ -61,7 +61,10 @@ export class AecoService implements IAecoService {
     else update.needsUpdate = false
 
     try {
-      const aecoUpdated = await this.aecoRepository.update(exists, update)
+      const aecoUpdated = await this.aecoRepository.partialUpdate(
+        exists,
+        update,
+      )
       return await this.aecoRepository.findBy({ id: aecoUpdated.id })
     } catch (error) {
       this.logger.error(error)

@@ -38,7 +38,9 @@ export class ResetPasswordService implements IResetPasswordService {
     }
 
     try {
-      const userUpdated = await this.userRepository.update(user, { password })
+      const userUpdated = await this.userRepository.partialUpdate(user, {
+        password,
+      })
       return { success: !!userUpdated }
     } catch (error) {
       this.logger.error(error)

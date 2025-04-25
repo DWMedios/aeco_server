@@ -1,5 +1,7 @@
 import { Column, Entity, OneToOne } from 'typeorm'
 import { Base } from './Base'
+import { User } from './User.entity'
+import { Reward } from './Reward.entity'
 import { Company } from './Company.entity'
 import { Campaign } from './Campaign.entity'
 import { Contractor } from './Contractor.entity'
@@ -28,6 +30,12 @@ export class MediaAsset extends Base implements IMediaAsset {
   @OneToOne(() => Contractor, (contractor) => contractor.mediaAsset)
   contractorLogo?: Contractor
 
-  @OneToOne(() => Company, (contractor) => contractor.mediaAsset)
+  @OneToOne(() => Company, (company) => company.mediaAsset)
   companyLogo?: Company
+
+  @OneToOne(() => Reward, (reward) => reward.mediaAsset)
+  rewardImage?: Reward
+
+  @OneToOne(() => User, (user) => user.mediaAsset)
+  userImage?: User
 }

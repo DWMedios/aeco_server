@@ -18,9 +18,11 @@ export class GetDownloadUrlService implements IGetDownloadUrlService {
   ) {}
 
   async run(fileKey: string): Promise<{ url: string }> {
-    const s3Key = `dw/image/${fileKey}`
+    const s3Key = `dw/${decodeURIComponent(fileKey)}`
     const fileExists = await this.s3Service.fileExist(s3Key)
+
     if (!fileExists) {
+      this.logger.error(`File ${fileKey} does not exist in S3`)
       throw new BadRequestException('El archivo no existe')
     }
 

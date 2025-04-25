@@ -14,7 +14,7 @@ export interface ITicketRepository {
     tickets: DeepPartial<ITicket>[],
     manager?: EntityManager,
   ): Promise<ITicket[]>
-  update(
+  partialUpdate(
     exists: ITicket,
     ticket: Partial<ITicket>,
     manager?: EntityManager,

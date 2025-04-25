@@ -69,13 +69,6 @@ export class CreateUploadUrlService implements ICreateUploadUrlService {
       'Content-Type': mimeType,
     }
 
-    console.log('fileData', {
-      fileNameCleaned,
-      fileKey,
-      s3Key,
-      fileMetadata,
-    })
-
     const response = await this.s3Service.getPresignedUploadUrl(
       s3Key,
       mimeType,
@@ -91,7 +84,7 @@ export class CreateUploadUrlService implements ICreateUploadUrlService {
     }
 
     return {
-      key: fileKey,
+      key: encodeURIComponent(`${assetType}/${fileKey}`),
       ...response,
     }
   }

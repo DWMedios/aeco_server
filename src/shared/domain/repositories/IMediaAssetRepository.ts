@@ -5,11 +5,15 @@ export const MEDIA_ASSET_REPOSITORY = Symbol('IMediaAssetRepository')
 
 export interface IMediaAssetRepository {
   findById(id: number, manager?: EntityManager): Promise<IMediaAsset | null>
+  findByKey(
+    fileKey: string,
+    manager?: EntityManager,
+  ): Promise<IMediaAsset | null>
   create(
     media: Partial<IMediaAsset>,
     manager?: EntityManager,
   ): Promise<IMediaAsset>
-  update(
+  partialUpdate(
     exists: IMediaAsset,
     media: Partial<IMediaAsset>,
     manager?: EntityManager,

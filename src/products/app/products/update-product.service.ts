@@ -55,7 +55,7 @@ export class UpdateProductService implements IUpdateProductService {
     }
 
     try {
-      const updateProduct = await this.productRepository.update(id, request)
+      const updateProduct = await this.productRepository.updateById(id, request)
       return await this.productRepository.findById(updateProduct.id, true)
     } catch (error) {
       throw new InternalServerErrorException('Error al crear el producto')

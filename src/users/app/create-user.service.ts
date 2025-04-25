@@ -10,16 +10,18 @@ import {
   USER_REPOSITORY,
   COMPANY_REPOSITORY,
   ROLE_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   type IUserRepository,
   type ICompanyRepository,
   type IRoleRepository,
+  type IMediaAssetRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
-import type { IUser } from '@common/domain/entities'
+import type { IMediaAsset, IUser } from '@common/domain/entities'
 import type { CreateUserDto } from '@users/domain/dto/CreateUser.dto'
 import type { ICreateUserService } from '@users/domain/services/ICreateUserService'
 
@@ -34,12 +36,14 @@ export class CreateUserService implements ICreateUserService {
     private readonly roleRepository: IRoleRepository,
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: ICompanyRepository,
+    @Inject(MEDIA_ASSET_REPOSITORY)
+    private readonly mediaRepository: IMediaAssetRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
-  async run(request: CreateUserDto): Promise<Partial<IUser>> {
-    const { role, ...user } = request
+  async run(request: CreateUserDto): Promise<IUser> {
+    const { role, mediaAsset, ...user } = request
 
     const companyExists = await this.companyRepository.exists({
       id: user.companyId,
@@ -53,8 +57,36 @@ export class CreateUserService implements ICreateUserService {
     const userTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
         let newUser: IUser | null = null
+        let newMedia: IMediaAsset | null = null
+
+        if (mediaAsset) {
+          try {
+            newMedia = await this.mediaRepository.create(
+              {
+                fileKey: mediaAsset.fileKey,
+                originalName: mediaAsset.originalName,
+                mimeType: mediaAsset.mimeType,
+                assetType: mediaAsset.assetType,
+                ...(mediaAsset?.fileSize && { fileSize: mediaAsset.fileSize }),
+              },
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException(
+              'Error al crear la imagen del usuario',
+            )
+          }
+        }
+
         try {
-          newUser = await this.userRepository.create(user, manager)
+          newUser = await this.userRepository.create(
+            {
+              ...user,
+              ...(mediaAsset && { imageId: newMedia?.id }),
+            },
+            manager,
+          )
         } catch (error) {
           throw new BadRequestException('Error al crear el usuario')
         }

@@ -10,6 +10,7 @@ import {
 } from 'typeorm'
 import { Base } from './Base'
 import { Company } from './Company.entity'
+import { MediaAsset } from './MediaAsset.entity'
 import { UserRolePermissions } from './UserRolePermissions.entity'
 import type { IUser } from '@common/domain/entities'
 
@@ -36,12 +37,19 @@ export class User extends Base implements IUser {
   @Column({ type: 'int', nullable: true })
   companyId?: number
 
+  @Column({ type: 'int', nullable: true })
+  imageId?: number
+
   @ManyToOne(() => Company, (company) => company.users)
   @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
   company?: Company
 
   @OneToOne(() => UserRolePermissions, (role) => role.user, { cascade: true })
   role?: UserRolePermissions
+
+  @OneToOne(() => MediaAsset, (mediaAsset) => mediaAsset.userImage)
+  @JoinColumn({ name: 'imageId', referencedColumnName: 'id' })
+  mediaAsset?: MediaAsset
 
   @BeforeInsert()
   @BeforeUpdate()

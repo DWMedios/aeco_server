@@ -4,5 +4,5 @@ import type { CreateUserDto } from '../dto/CreateUser.dto'
 export const CREATE_USER_SERVICE = Symbol('ICreateUserService')
 
 export interface ICreateUserService {
-  run(request: CreateUserDto): Promise<Partial<IUser>>
+  run(request: CreateUserDto): Promise<IUser>
 }

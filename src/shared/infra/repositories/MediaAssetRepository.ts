@@ -22,6 +22,15 @@ export class MediaAssetRepository
     })
   }
 
+  findByKey(
+    fileKey: string,
+    manager?: EntityManager,
+  ): Promise<IMediaAsset | null> {
+    return this.repository(manager).findOne({
+      where: { fileKey },
+    })
+  }
+
   create(
     media: Partial<IMediaAsset>,
     manager?: EntityManager,
@@ -30,7 +39,7 @@ export class MediaAssetRepository
     return this.repository(manager).save(newMedia)
   }
 
-  update(
+  partialUpdate(
     exists: IMediaAsset,
     media: Partial<IMediaAsset>,
     manager?: EntityManager,
@@ -49,6 +58,7 @@ export class MediaAssetRepository
       .update()
       .set(media)
       .where('id = :id', { id })
+      .returning('*')
       .execute()
 
     return qb.raw[0]

@@ -24,18 +24,19 @@ export class RewardRepository
       .createQueryBuilder('reward')
       .leftJoinAndSelect('reward.aecos', 'aecos')
       .leftJoinAndSelect('reward.company', 'company')
+      .leftJoinAndSelect('reward.mediaAsset', 'mediaAsset')
       .select([
         'reward.id',
         'reward.name',
         'reward.establishment',
         'reward.description',
         'reward.note',
-        'reward.image',
         'reward.status',
         'reward.type',
         'reward.order',
         'reward.metadata',
-        'reward:companyId',
+        'reward.imageId',
+        'reward.companyId',
         'reward.createdAt',
         'reward.updatedAt',
         'company.id',
@@ -46,6 +47,12 @@ export class RewardRepository
         'aecos.name',
         'aecos.serialNumber',
         'aecos.status',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
       ])
       .where('reward.id = :id', { id })
       .getOne()
@@ -80,10 +87,10 @@ export class RewardRepository
         'rewards.establishment',
         'rewards.description',
         'rewards.note',
-        'rewards.image',
         'rewards.status',
         'rewards.type',
         'rewards.order',
+        'rewards.imageId',
         'rewards.companyId',
         'rewards.createdAt',
         'rewards.updatedAt',
@@ -153,7 +160,7 @@ export class RewardRepository
     return this.repository(manager).save(updatedReward)
   }
 
-  async update(
+  async updateById(
     id: number,
     reward: Partial<IReward>,
     manager?: EntityManager,
@@ -184,6 +191,19 @@ export class RewardRepository
       .createQueryBuilder('reward')
       .softDelete()
       .where('id = :id', { id })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async softDeleteByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('reward')
+      .softDelete()
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return qb.affected !== 0

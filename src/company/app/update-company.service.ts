@@ -67,8 +67,8 @@ export class UpdateCompanyService implements IUpdateCompanyService {
             company.aecos = aecosExists
           }
 
-          companyToUpdate = await this.companyRepository.updateById(
-            company.id,
+          companyToUpdate = await this.companyRepository.partialUpdate(
+            company,
             {
               ...reqCompany,
               metadata: {
@@ -100,7 +100,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
               'Error al actualizar el logo de la empresa',
             )
           }
-        } else if (mediaAsset) {
+        } else if (mediaAsset && company?.id) {
           try {
             const mediaAssetCreated = await this.mediaRepository.create(
               mediaAsset,

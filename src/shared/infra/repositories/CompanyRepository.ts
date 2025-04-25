@@ -47,6 +47,7 @@ export class CompanyRepository
         'company.status',
         'company.metadata',
         'company.legalRepresentative',
+        'company.logoId',
         'company.createdAt',
         'aecos.id',
         'aecos.folio',
@@ -151,7 +152,7 @@ export class CompanyRepository
     return this.repository(manager).save(newCompany)
   }
 
-  update(
+  partialUpdate(
     exists: ICompany,
     company: Partial<ICompany>,
     manager?: EntityManager,
@@ -170,6 +171,7 @@ export class CompanyRepository
       .update()
       .set(company)
       .where('id = :id', { id })
+      .returning('*')
       .execute()
 
     return qb.raw[0]

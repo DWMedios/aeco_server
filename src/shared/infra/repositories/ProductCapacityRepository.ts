@@ -165,7 +165,7 @@ export class ProductCapacityRepository
     return this.repository(manager).save(newProductCapacity)
   }
 
-  async update(
+  async updateById(
     id: number,
     productCapacity: Partial<IProductCapacity>,
     manager?: EntityManager,

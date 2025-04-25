@@ -24,7 +24,7 @@ export interface IAecoRepository {
   ): Promise<IAeco[]>
   getRewardsByAeco(id: number, manager?: EntityManager): Promise<IAeco | null>
   create(company: Partial<IAeco>, manager?: EntityManager): Promise<IAeco>
-  update(
+  partialUpdate(
     exists: IAeco,
     aeco: Partial<IAeco>,
     manager?: EntityManager,

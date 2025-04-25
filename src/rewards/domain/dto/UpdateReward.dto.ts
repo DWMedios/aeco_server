@@ -1,11 +1,14 @@
+import { Type } from 'class-transformer'
 import {
   IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
+import { UpdateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 import { BaseRewardDto } from './RewardBase.dto'
 
 export class UpdateRewardDto extends BaseRewardDto {
@@ -27,4 +30,9 @@ export class UpdateRewardDto extends BaseRewardDto {
   @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
   @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
   readonly aecos?: number[]
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateMediaAssetDto)
+  readonly mediaAsset?: UpdateMediaAssetDto
 }

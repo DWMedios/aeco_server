@@ -201,7 +201,7 @@ export class AecoRepository
     return this.repository(manager).save(newAeco)
   }
 
-  update(
+  partialUpdate(
     exists: IAeco,
     aeco: Partial<IAeco>,
     manager?: EntityManager,
