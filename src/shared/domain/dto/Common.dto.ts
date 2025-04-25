@@ -40,9 +40,11 @@ export class CreateMediaAssetDto {
 }
 
 export class UpdateMediaAssetDto {
-  @IsOptional()
+  @IsNotEmpty({
+    message: 'La clave de la empresa no puede estar vacía',
+  })
   @IsString({ message: 'La clave de la empresa debe ser una cadena de texto' })
-  readonly fileKey?: string
+  readonly fileKey: string
 
   @IsOptional()
   @IsString({
