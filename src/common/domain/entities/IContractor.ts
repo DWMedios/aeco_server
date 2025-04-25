@@ -8,7 +8,7 @@ export interface IContractor extends IBase {
   readonly name: string
   readonly email: string
   readonly phone: string
-  readonly logoId?: string
+  readonly logoId?: number
   readonly companyId?: number
   company?: ICompany
   campaigns?: ICampaign[]

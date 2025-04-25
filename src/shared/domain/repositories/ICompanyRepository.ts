@@ -21,6 +21,11 @@ export interface ICompanyRepository {
     company: Partial<ICompany>,
     manager?: EntityManager,
   ): Promise<ICompany>
+  updateById(
+    id: number,
+    company: Partial<ICompany>,
+    manager?: EntityManager,
+  ): Promise<ICompany>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>

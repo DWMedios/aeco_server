@@ -1,6 +1,5 @@
 export * from './IAeco'
 export * from './ICompany'
-export * from './ICompanySetting'
 export * from './IPage'
 export * from './IUserRolePermissions'
 export * from './IReward'

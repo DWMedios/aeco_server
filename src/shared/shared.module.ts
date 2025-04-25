@@ -16,7 +16,6 @@ import {
   ProductCapacity,
   ProductStats,
   Reward,
-  Setting,
   Ticket,
   User,
   UserRolePermissions,
@@ -25,12 +24,12 @@ import {
   AECO_REPOSITORY,
   COMPANY_REPOSITORY,
   DASHBOARD_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   PAGE_REPOSITORY,
   PRODUCT_CAPACITY_REPOSITORY,
   PRODUCT_REPOSITORY,
   REWARD_REPOSITORY,
   ROLE_REPOSITORY,
-  SETTING_REPOSITORY,
   TICKET_REPOSITORY,
   USER_REPOSITORY,
 } from './domain/repositories'
@@ -38,12 +37,12 @@ import {
   AecoRepository,
   CompanyRepository,
   DashboardRepository,
+  MediaAssetRepository,
   PageRepository,
   ProductCapacityRepository,
   ProductRepository,
   RewardRepository,
   RoleRepository,
-  SettingsRepository,
   TicketRepository,
   UserRepository,
 } from './infra/repositories'
@@ -60,7 +59,6 @@ import { S3Service } from './app/files/s3.service'
       Campaign,
       Company,
       Contractor,
-      Setting,
       Page,
       Reward,
       Ticket,
@@ -82,10 +80,6 @@ import { S3Service } from './app/files/s3.service'
     {
       provide: REWARD_REPOSITORY,
       useClass: RewardRepository,
-    },
-    {
-      provide: SETTING_REPOSITORY,
-      useClass: SettingsRepository,
     },
     {
       provide: PAGE_REPOSITORY,
@@ -124,6 +118,10 @@ import { S3Service } from './app/files/s3.service'
       useClass: DashboardRepository,
     },
     {
+      provide: MEDIA_ASSET_REPOSITORY,
+      useClass: MediaAssetRepository,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -144,7 +142,6 @@ import { S3Service } from './app/files/s3.service'
   exports: [
     AECO_REPOSITORY,
     REWARD_REPOSITORY,
-    SETTING_REPOSITORY,
     PAGE_REPOSITORY,
     USER_REPOSITORY,
     ROLE_REPOSITORY,
@@ -153,6 +150,7 @@ import { S3Service } from './app/files/s3.service'
     PRODUCT_CAPACITY_REPOSITORY,
     DASHBOARD_REPOSITORY,
     TICKET_REPOSITORY,
+    MEDIA_ASSET_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
   ],

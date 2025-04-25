@@ -1,5 +1,6 @@
 import type { IBase } from './IBase'
 import type { ICampaign } from './ICampaign'
+import type { ICompany } from './ICompany'
 import type { IContractor } from './IContractor'
 
 export interface IMediaAsset extends IBase {
@@ -10,4 +11,5 @@ export interface IMediaAsset extends IBase {
   readonly assetType: string
   campaignMedia?: ICampaign
   contractorLogo?: IContractor
+  companyLogo?: ICompany
 }

@@ -10,7 +10,7 @@ import {
   type IAecoRepository,
 } from '@shared/domain/repositories'
 import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
-import type { IAeco, ISetting } from '@common/domain/entities'
+import type { IAeco } from '@common/domain/entities'
 import type { FinishSetupDto } from '../domain/dto/FinishSetupDto'
 import { FinishSetupType } from '../domain/enums/FinishSetupType.enum'
 import { processImagesInJson } from '@shared/utils/imageHelper'
@@ -32,12 +32,12 @@ export class AecoService implements IAecoService {
 
     if (!aeco) throw new NotFoundException('Aeco not found')
 
-    if (aeco?.company?.settings && aeco.company.settings.key) {
-      aeco.company.settings = (await processImagesInJson(
-        aeco.company.settings,
-        (key: string) => this.s3Service.getFileUrlIfExists(key),
-      )) as ISetting
-    }
+    // if (aeco?.company?.settings && aeco.company.settings.key) {
+    //   aeco.company.settings = (await processImagesInJson(
+    //     aeco.company.settings,
+    //     (key: string) => this.s3Service.getFileUrlIfExists(key),
+    //   )) as ISetting
+    // }
 
     await Promise.all(
       aeco.pages.map(async (page) => {

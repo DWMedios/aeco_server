@@ -1,14 +1,21 @@
-import { Entity, Column, OneToOne, OneToMany, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  Column,
+  OneToOne,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
-import { Setting } from './CompanySettings.entity'
 import { Reward } from './Reward.entity'
 import { DailyStats } from './DailyStats.entity'
 import { ProductStats } from './ProductStats.entity'
 import { PackagingStats } from './PackagingStats.entity'
 import { Advertising } from './Advertising.entity'
 import { Contractor } from './Contractor.entity'
+import { MediaAsset } from './MediaAsset.entity'
 import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
 
 @Entity({ name: 'companies' })
@@ -40,11 +47,18 @@ export class Company extends Base implements ICompany {
   @Column({ type: 'boolean', default: true })
   status: boolean
 
+  @Column({ type: 'jsonb', nullable: true })
+  metadata?: Record<string, any>
+
+  @Column({ type: 'int', nullable: true })
+  logoId?: number
+
   @OneToMany(() => User, (user) => user.company)
   users?: User[]
 
-  @OneToOne(() => Setting, (setting) => setting.company, { cascade: true })
-  settings?: Setting
+  @OneToOne(() => MediaAsset, (mediaAsset) => mediaAsset.companyLogo)
+  @JoinColumn({ name: 'logoId', referencedColumnName: 'id' })
+  mediaAsset?: MediaAsset
 
   @OneToMany(() => Reward, (reward) => reward.company)
   rewards?: Reward[]

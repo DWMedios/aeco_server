@@ -2,9 +2,9 @@ import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
 import type { IAdvertising } from './IAdvertising'
 import type { IContractor } from './IContractor'
-import type { ISetting } from './ICompanySetting'
 import type { IReward } from './IReward'
 import type { IUser } from './IUser'
+import type { IMediaAsset } from './IMediaAsset'
 
 export interface ICompany extends IBase {
   readonly name: string
@@ -16,8 +16,10 @@ export interface ICompany extends IBase {
   readonly phone?: string
   legalRepresentative?: ILegalRepresentative
   readonly status: boolean
+  metadata?: Record<string, any>
+  readonly logoId?: number
   users?: IUser[]
-  settings?: ISetting
+  mediaAsset?: IMediaAsset
   rewards?: IReward[]
   aecos?: IAeco[]
   advertisings?: IAdvertising[]

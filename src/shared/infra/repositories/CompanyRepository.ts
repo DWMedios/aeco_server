@@ -31,35 +31,37 @@ export class CompanyRepository
   }
 
   findById(id: number, manager?: EntityManager): Promise<ICompany | null> {
-    return this.repository(manager).findOne({
-      relations: ['settings', 'aecos'],
-      select: {
-        id: true,
-        name: true,
-        rfc: true,
-        state: true,
-        city: true,
-        address: true,
-        postalCode: true,
-        phone: true,
-        status: true,
-        legalRepresentative: {
-          name: true,
-          email: true,
-          phone: true,
-          position: true,
-        },
-        createdAt: true,
-        aecos: {
-          id: true,
-          folio: true,
-          name: true,
-          serialNumber: true,
-          status: true,
-        },
-      },
-      where: { id },
-    })
+    return this.repository(manager)
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.aecos', 'aecos')
+      .leftJoinAndSelect('company.mediaAsset', 'mediaAsset')
+      .select([
+        'company.id',
+        'company.name',
+        'company.rfc',
+        'company.state',
+        'company.city',
+        'company.address',
+        'company.postalCode',
+        'company.phone',
+        'company.status',
+        'company.metadata',
+        'company.legalRepresentative',
+        'company.createdAt',
+        'aecos.id',
+        'aecos.folio',
+        'aecos.name',
+        'aecos.serialNumber',
+        'aecos.status',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+      ])
+      .where('company.id = :id', { id })
+      .getOne()
   }
 
   findAll(
@@ -156,6 +158,21 @@ export class CompanyRepository
   ): Promise<ICompany> {
     const updatedCompany = this.repository(manager).merge(exists, company)
     return this.repository(manager).save(updatedCompany)
+  }
+
+  async updateById(
+    id: number,
+    company: Partial<ICompany>,
+    manager?: EntityManager,
+  ): Promise<ICompany> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('company')
+      .update()
+      .set(company)
+      .where('id = :id', { id })
+      .execute()
+
+    return qb.raw[0]
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {

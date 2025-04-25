@@ -25,7 +25,7 @@ export class Contractor extends Base implements IContractor {
   phone: string
 
   @Column({ type: 'int', nullable: true })
-  logoId?: string
+  logoId?: number
 
   @Column({ type: 'int', nullable: true })
   companyId?: number

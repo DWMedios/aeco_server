@@ -3,21 +3,26 @@ import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
 import {
   COMPANY_REPOSITORY,
   ROLE_REPOSITORY,
-  SETTING_REPOSITORY,
   USER_REPOSITORY,
   AECO_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   type IRoleRepository,
   type ICompanyRepository,
-  type ISettingRepository,
   type IUserRepository,
   type IAecoRepository,
+  type IMediaAssetRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
 import type { CreateCompanyDto } from '@company/domain/dto/CreateCompany.dto'
-import type { IAeco, ICompany, IUser } from '@common/domain/entities'
+import type {
+  IAeco,
+  ICompany,
+  IMediaAsset,
+  IUser,
+} from '@common/domain/entities'
 import type { ICreateCompanyService } from '@company/domain/services/ICreateCompanyService'
 import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 
@@ -32,16 +37,16 @@ export class CreateCompanyService implements ICreateCompanyService {
     private readonly roleRepository: IRoleRepository,
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: ICompanyRepository,
-    @Inject(SETTING_REPOSITORY)
-    private readonly settingRepository: ISettingRepository,
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
+    @Inject(MEDIA_ASSET_REPOSITORY)
+    private readonly mediaRepository: IMediaAssetRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
   async run(request: CreateCompanyDto): Promise<ICompany> {
-    const { userAdmin, legalRepresentative, settings, aecos, ...reqCompany } =
+    const { userAdmin, legalRepresentative, mediaAsset, aecos, ...reqCompany } =
       request
 
     const existsByName = await this.companyRepository.exists({
@@ -78,10 +83,34 @@ export class CreateCompanyService implements ICreateCompanyService {
     const companyTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
         let newCompany: ICompany | null = null
+        let newMedia: IMediaAsset | null = null
+
+        if (mediaAsset) {
+          try {
+            newMedia = await this.mediaRepository.create(
+              {
+                fileKey: mediaAsset.fileKey,
+                originalName: mediaAsset.originalName,
+                mimeType: mediaAsset.mimeType,
+                assetType: mediaAsset.assetType,
+                ...(mediaAsset?.fileSize && { fileSize: mediaAsset.fileSize }),
+              },
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException(
+              'Error al crear el logo de la empresa',
+            )
+          }
+        }
+
         try {
           newCompany = await this.companyRepository.create(
             {
               ...reqCompany,
+              ...(newMedia && { logoId: newMedia.id }),
+              ...(reqCompany.metadata && { metadata: reqCompany.metadata }),
               ...(legalRepresentative && { legalRepresentative }),
               ...(aecosExists.length > 0 && { aecos: aecosExists }),
             },
@@ -90,21 +119,6 @@ export class CreateCompanyService implements ICreateCompanyService {
         } catch (error) {
           this.logger.error(error)
           throw new BadRequestException('Error al crear la empresa')
-        }
-
-        try {
-          await this.settingRepository.create(
-            {
-              ...settings,
-              companyId: newCompany.id,
-            },
-            manager,
-          )
-        } catch (error) {
-          this.logger.error(error)
-          throw new BadRequestException(
-            'Error al crear la configuración de la empresa',
-          )
         }
 
         if (userAdmin) {
