@@ -81,7 +81,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al crear la empresa')
+          throw new BadRequestException('Error al actualizar la empresa')
         }
 
         if (settings) {
@@ -100,7 +100,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
           } catch (error) {
             this.logger.error(error)
             throw new BadRequestException(
-              'Error al crear la configuración de la empresa',
+              'Error al actializar la configuración de la empresa',
             )
           }
         }
