@@ -35,7 +35,7 @@ export class RewardRepository
         'reward.type',
         'reward.order',
         'reward.metadata',
-        'reward:companyId',
+        'reward.companyId',
         'reward.createdAt',
         'reward.updatedAt',
         'company.id',
