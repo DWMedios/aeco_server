@@ -100,7 +100,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
               'Error al actualizar el logo de la empresa',
             )
           }
-        } else if (mediaAsset && company?.id) {
+        } else if (mediaAsset && !company?.logoId) {
           try {
             const mediaAssetCreated = await this.mediaRepository.create(
               mediaAsset,
@@ -109,9 +109,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
 
             await this.companyRepository.updateById(
               company.id,
-              {
-                logoId: mediaAssetCreated.id,
-              },
+              { logoId: mediaAssetCreated.id },
               manager,
             )
           } catch (error) {

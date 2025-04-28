@@ -1,7 +1,7 @@
-import { S3Client } from '@aws-sdk/client-s3'
-import { ConfigService } from '@nestjs/config'
 import { Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { S3Client } from '@aws-sdk/client-s3'
 import {
   Advertising,
   Aeco,
@@ -23,6 +23,7 @@ import {
 import {
   AECO_REPOSITORY,
   COMPANY_REPOSITORY,
+  CONTRACTOR_REPOSITORY,
   DASHBOARD_REPOSITORY,
   MEDIA_ASSET_REPOSITORY,
   PAGE_REPOSITORY,
@@ -36,6 +37,7 @@ import {
 import {
   AecoRepository,
   CompanyRepository,
+  ContractorRepository,
   DashboardRepository,
   MediaAssetRepository,
   PageRepository,
@@ -46,10 +48,10 @@ import {
   TicketRepository,
   UserRepository,
 } from './infra/repositories'
-import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
-import { TransactionService } from './app/transaction/transaction.service'
 import { S3_SERVICE } from './domain/services/IS3Service'
 import { S3Service } from './app/files/s3.service'
+import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
+import { TransactionService } from './app/transaction/transaction.service'
 
 @Module({
   imports: [
@@ -122,6 +124,10 @@ import { S3Service } from './app/files/s3.service'
       useClass: MediaAssetRepository,
     },
     {
+      provide: CONTRACTOR_REPOSITORY,
+      useClass: ContractorRepository,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -151,6 +157,7 @@ import { S3Service } from './app/files/s3.service'
     DASHBOARD_REPOSITORY,
     TICKET_REPOSITORY,
     MEDIA_ASSET_REPOSITORY,
+    CONTRACTOR_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
   ],

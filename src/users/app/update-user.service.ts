@@ -99,7 +99,7 @@ export class UpdateUserService implements IUpdateUserService {
               'Error al actualizar la imagen del usuario',
             )
           }
-        } else if (mediaAsset && user?.id) {
+        } else if (mediaAsset && !findUser?.imageId) {
           try {
             const mediaAssetCreated = await this.mediaRepository.create(
               mediaAsset,
@@ -107,10 +107,8 @@ export class UpdateUserService implements IUpdateUserService {
             )
 
             await this.userRepository.updateById(
-              user.id,
-              {
-                imageId: mediaAssetCreated.id,
-              },
+              findUser.id,
+              { imageId: mediaAssetCreated.id },
               manager,
             )
           } catch (error) {

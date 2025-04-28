@@ -1,5 +1,6 @@
 export * from './IAecoRepository'
 export * from './ICompanyRepository'
+export * from './IContractorRepository'
 export * from './IPageRepository'
 export * from './IRewardRepository'
 export * from './IUserRepository'

@@ -94,7 +94,7 @@ export class UpdateRewardService implements IUpdateRewardService {
               'Error al actualizar la imagen de la recompensa',
             )
           }
-        } else if (mediaAsset && reward?.id) {
+        } else if (mediaAsset && !foundedReward?.imageId) {
           try {
             const mediaAssetCreated = await this.mediaRepository.create(
               mediaAsset,
@@ -103,9 +103,7 @@ export class UpdateRewardService implements IUpdateRewardService {
 
             await this.rewardRepository.updateById(
               reward.id,
-              {
-                imageId: mediaAssetCreated.id,
-              },
+              { imageId: mediaAssetCreated.id },
               manager,
             )
           } catch (error) {

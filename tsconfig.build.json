@@ -17,6 +17,7 @@
       "@products/*": ["src/products/*"],
       "@dashboard/*": ["src/dashboard/*"],
       "@tickets/*": ["src/tickets/*"],
+      "@advertisings/*": ["src/advertisings/*"],
     }
   },
   "include": ["src/**/*.ts", "src/shared/validators/blacklist.json"],
