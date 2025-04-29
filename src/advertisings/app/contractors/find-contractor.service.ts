@@ -3,6 +3,7 @@ import {
   CONTRACTOR_REPOSITORY,
   type IContractorRepository,
 } from '@shared/domain/repositories'
+import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import type { IContractor } from '@common/domain/entities'
 import type { IFindContractorService } from '@advertisings/domain/services/contractors/IFindContractorService'
 
@@ -13,13 +14,30 @@ export class FindContractorService implements IFindContractorService {
   constructor(
     @Inject(CONTRACTOR_REPOSITORY)
     private readonly contractorRepository: IContractorRepository,
+    @Inject(S3_SERVICE)
+    private readonly s3Service: IS3Service,
   ) {}
 
-  async run(id: number): Promise<IContractor> {
+  async run(id: number): Promise<IContractor & { logoUrl?: string }> {
     const contractor = await this.contractorRepository.findById(id)
     if (!contractor) {
       throw new NotFoundException('El contratista no existe')
     }
-    return contractor
+
+    let logoUrl: string | null = null
+
+    if (contractor.logoId) {
+      const mediaAsset = contractor.mediaAsset
+      const s3Key = `dw/${decodeURIComponent(mediaAsset.fileKey)}`
+      const fileExists = await this.s3Service.fileExist(s3Key)
+      if (fileExists) {
+        logoUrl = await this.s3Service.getPresignedUrl(s3Key)
+      }
+    }
+
+    return {
+      ...contractor,
+      logoUrl,
+    }
   }
 }

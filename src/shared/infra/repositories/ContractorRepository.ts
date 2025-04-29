@@ -29,6 +29,7 @@ export class ContractorRepository
         'contractor.name',
         'contractor.email',
         'contractor.phone',
+        'contractor.logoId',
         'contractor.companyId',
         'contractor.createdAt',
         'company.id',
