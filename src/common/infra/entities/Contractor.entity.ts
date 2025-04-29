@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
 } from 'typeorm'
@@ -30,7 +31,7 @@ export class Contractor extends Base implements IContractor {
   @Column({ type: 'int', nullable: true })
   companyId?: number
 
-  @OneToMany(() => Company, (company) => company.contractors)
+  @ManyToOne(() => Company, (company) => company.contractors)
   @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
   company?: Company
 

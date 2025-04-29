@@ -10,6 +10,11 @@ import { CREATE_CONTRACTOR_SERVICE } from './domain/services/contractors/ICreate
 import { CreateContractorService } from './app/contractors/create-contractor.service'
 import { UPDATE_CONTRACTOR_SERVICE } from './domain/services/contractors/IUpdateContractorService'
 import { UpdateContractorService } from './app/contractors/update-contractor.service'
+import { GetContractorController } from './infra/controllers/contractors/get-contractor.controller'
+import { GetAllContractorsController } from './infra/controllers/contractors/get-all-contractors.controller'
+import { PostContractorController } from './infra/controllers/contractors/post-contractor.controller'
+import { DeleteContractorController } from './infra/controllers/contractors/delete-contractor.controller'
+import { PutContractorController } from './infra/controllers/contractors/put-contractor.controller'
 
 @Module({
   imports: [SharedModule],
@@ -35,7 +40,13 @@ import { UpdateContractorService } from './app/contractors/update-contractor.ser
       useClass: UpdateContractorService,
     },
   ],
-  controllers: [],
+  controllers: [
+    GetContractorController,
+    GetAllContractorsController,
+    PostContractorController,
+    DeleteContractorController,
+    PutContractorController,
+  ],
   exports: [],
 })
 export class AdvertisingsModule {}

@@ -1,11 +1,4 @@
-import {
-  Entity,
-  Column,
-  OneToOne,
-  OneToMany,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm'
+import { Entity, Column, OneToOne, OneToMany, JoinColumn } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
@@ -78,6 +71,6 @@ export class Company extends Base implements ICompany {
   @OneToMany(() => Advertising, (advertising) => advertising.company)
   advertisings?: Advertising[]
 
-  @ManyToOne(() => Contractor, (contractor) => contractor.company)
+  @OneToMany(() => Contractor, (contractor) => contractor.company)
   contractors?: Contractor[]
 }
