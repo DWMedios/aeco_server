@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Contractor } from '@common/infra/entities'
 import type { IContractor } from '@common/domain/entities'
 import type { IContractorRepository } from '@shared/domain/repositories'
-import type { ContractorFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ContractorFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()
@@ -86,25 +86,25 @@ export class ContractorRepository
       ])
 
     if (filters?.companyId) {
-      qb.andWhere('contractors.companyId = :companyId', {
+      qb.orWhere('contractors.companyId = :companyId', {
         companyId: filters.companyId,
       })
     }
 
     if (filters?.name) {
-      qb.andWhere('LOWER(unaccent(BTRIM(contractors.name))) ILIKE :name', {
+      qb.orWhere('LOWER(unaccent(BTRIM(contractors.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.email) {
-      qb.andWhere('LOWER(unaccent(BTRIM(contractors.email))) ILIKE :email', {
+      qb.orWhere('LOWER(unaccent(BTRIM(contractors.email))) ILIKE :email', {
         email: `%${filters.email}%`,
       })
     }
 
     if (filters?.phone) {
-      qb.andWhere('LOWER(unaccent(BTRIM(contractors.phone))) ILIKE :phone', {
+      qb.orWhere('LOWER(unaccent(BTRIM(contractors.phone))) ILIKE :phone', {
         phone: `%${filters.phone}%`,
       })
     }

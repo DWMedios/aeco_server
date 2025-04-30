@@ -39,6 +39,13 @@ export type OrderByFieldContractorType =
   | 'status'
   | BaseFiltersType
 
+export type OrderByFieldCampaignType =
+  | 'contractName'
+  | 'startDate'
+  | 'endDate'
+  | 'contractorId'
+  | BaseFiltersType
+
 export type OrderByFieldTicketType =
   | 'folio'
   | 'totalCans'

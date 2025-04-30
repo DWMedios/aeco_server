@@ -22,6 +22,7 @@ import {
 } from '@common/infra/entities'
 import {
   AECO_REPOSITORY,
+  CAMPAIGN_REPOSITORY,
   COMPANY_REPOSITORY,
   CONTRACTOR_REPOSITORY,
   DASHBOARD_REPOSITORY,
@@ -36,6 +37,7 @@ import {
 } from './domain/repositories'
 import {
   AecoRepository,
+  CampaignRepository,
   CompanyRepository,
   ContractorRepository,
   DashboardRepository,
@@ -128,6 +130,10 @@ import { TransactionService } from './app/transaction/transaction.service'
       useClass: ContractorRepository,
     },
     {
+      provide: CAMPAIGN_REPOSITORY,
+      useClass: CampaignRepository,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -158,6 +164,7 @@ import { TransactionService } from './app/transaction/transaction.service'
     TICKET_REPOSITORY,
     MEDIA_ASSET_REPOSITORY,
     CONTRACTOR_REPOSITORY,
+    CAMPAIGN_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
   ],

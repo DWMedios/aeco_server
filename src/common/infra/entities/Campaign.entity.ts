@@ -22,10 +22,10 @@ export class Campaign extends Base implements ICampaign {
   @Column({ type: 'varchar', length: 200 })
   description: string
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamptz' })
   startDate: Date
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamptz' })
   endDate: Date
 
   @Column({ default: false })

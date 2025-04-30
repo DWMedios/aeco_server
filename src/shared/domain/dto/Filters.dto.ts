@@ -18,7 +18,6 @@ import type {
   OrderByFieldRewardType,
   OrderByFieldProductType,
   OrderByFieldProductCapacityType,
-  OrderByFieldContractorType,
 } from '../enums/Filters.enum'
 import { PageOptionsDto } from '../pagination/dto/page-options.dto'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
@@ -300,38 +299,4 @@ export class AecoFiltersDto extends BaseFiltersDto {
     message: 'orderByField debe ser createdAt, name, folio o status',
   })
   readonly orderByField?: OrderByFieldAecoType
-}
-
-export class ContractorFiltersDto extends BaseFiltersDto {
-  @IsOptional()
-  @IsString({ message: 'name debe ser una cadena de texto' })
-  @Transform(({ value }) =>
-    value ? normalizeString(value.toLowerCase()) : value,
-  )
-  readonly name?: string
-
-  @IsOptional()
-  @IsString({ message: 'email debe ser una cadena de texto' })
-  @Transform(({ value }) =>
-    value ? normalizeString(value.toLowerCase()) : value,
-  )
-  readonly email?: string
-
-  @IsOptional()
-  @IsString({ message: 'phone debe ser una cadena de texto' })
-  @Transform(({ value }) =>
-    value ? normalizeString(value.toLowerCase()) : value,
-  )
-  readonly phone?: string
-
-  @IsOptional()
-  @IsNumber({}, { message: 'companyId debe ser un número' })
-  @Transform(({ value }) => (value ? Number(value) : value))
-  readonly companyId?: number
-
-  @IsOptional()
-  @IsIn(['createdAt', 'name', 'email', 'status', 'id'], {
-    message: 'orderByField debe ser createdAt, name, email, status o id',
-  })
-  readonly orderByField?: OrderByFieldContractorType
 }

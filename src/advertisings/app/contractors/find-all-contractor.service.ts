@@ -11,7 +11,7 @@ import {
 import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { IContractor } from '@common/domain/entities'
-import type { ContractorFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ContractorFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 import type { IFindAllContractorService } from '@advertisings/domain/services/contractors/IFindAllContractorService'
 
 @Injectable()
@@ -46,7 +46,9 @@ export class FindAllContractorService implements IFindAllContractorService {
     }
   }
 
-  private async getLogos(contractors: IContractor[]): Promise<IContractor[]> {
+  private async getLogos(
+    contractors: IContractor[],
+  ): Promise<Partial<IContractor & { logoUrl?: string }>[]> {
     const contractorsWithLogo = await Promise.all(
       contractors.map(async (contractor) => {
         let logoUrl: string | null = null

@@ -11,7 +11,7 @@ import {
   FIND_ALL_CONTRACTOR_SERVICE,
   type IFindAllContractorService,
 } from '@advertisings/domain/services/contractors/IFindAllContractorService'
-import { ContractorFiltersDto } from '@shared/domain/dto/Filters.dto'
+import { ContractorFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 
 @Controller('advertisings')
 export class GetAllContractorsController {

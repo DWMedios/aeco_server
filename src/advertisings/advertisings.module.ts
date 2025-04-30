@@ -15,6 +15,21 @@ import { GetAllContractorsController } from './infra/controllers/contractors/get
 import { PostContractorController } from './infra/controllers/contractors/post-contractor.controller'
 import { DeleteContractorController } from './infra/controllers/contractors/delete-contractor.controller'
 import { PutContractorController } from './infra/controllers/contractors/put-contractor.controller'
+import { FIND_CAMPAIGN_SERVICE } from './domain/services/campaigns/IFindCampaignService'
+import { FindCampaignService } from './app/campaigns/find-campaign.service'
+import { FIND_ALL_CAMPAIGN_SERVICE } from './domain/services/campaigns/IFindAllCampaignService'
+import { FindAllCampaignService } from './app/campaigns/find-all-campaigns.service'
+import { DELETE_CAMPAIGN_SERVICE } from './domain/services/campaigns/IDeleteCampaignService'
+import { DeleteCampaignService } from './app/campaigns/delete-campaign.service'
+import { CREATE_CAMPAIGN_SERVICE } from './domain/services/campaigns/ICreateCampaignService'
+import { CreateCampaignService } from './app/campaigns/create-campaign.service'
+import { UPDATE_CAMPAIGN_SERVICE } from './domain/services/campaigns/IUpdateCampaignService'
+import { UpdateCampaignService } from './app/campaigns/update-campaign.service'
+import { GetCampaignController } from './infra/controllers/campaigns/get-campaign.controller'
+import { GetAllCampaignsController } from './infra/controllers/campaigns/get-all-campaigns.controller'
+import { DeleteCampaignController } from './infra/controllers/campaigns/delete-campaign.controller'
+import { PostCampaignController } from './infra/controllers/campaigns/post-campaign.controller'
+import { PutCampaignController } from './infra/controllers/campaigns/put-campaign.controller'
 
 @Module({
   imports: [SharedModule],
@@ -39,6 +54,26 @@ import { PutContractorController } from './infra/controllers/contractors/put-con
       provide: UPDATE_CONTRACTOR_SERVICE,
       useClass: UpdateContractorService,
     },
+    {
+      provide: FIND_CAMPAIGN_SERVICE,
+      useClass: FindCampaignService,
+    },
+    {
+      provide: FIND_ALL_CAMPAIGN_SERVICE,
+      useClass: FindAllCampaignService,
+    },
+    {
+      provide: DELETE_CAMPAIGN_SERVICE,
+      useClass: DeleteCampaignService,
+    },
+    {
+      provide: CREATE_CAMPAIGN_SERVICE,
+      useClass: CreateCampaignService,
+    },
+    {
+      provide: UPDATE_CAMPAIGN_SERVICE,
+      useClass: UpdateCampaignService,
+    },
   ],
   controllers: [
     GetContractorController,
@@ -46,6 +81,11 @@ import { PutContractorController } from './infra/controllers/contractors/put-con
     PostContractorController,
     DeleteContractorController,
     PutContractorController,
+    GetCampaignController,
+    GetAllCampaignsController,
+    DeleteCampaignController,
+    PostCampaignController,
+    PutCampaignController,
   ],
   exports: [],
 })

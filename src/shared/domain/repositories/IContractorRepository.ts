@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { IContractor } from '@common/domain/entities'
-import type { ContractorFiltersDto } from '../dto/Filters.dto'
+import type { ContractorFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 
 export const CONTRACTOR_REPOSITORY = Symbol('IContractorRepository')
 
