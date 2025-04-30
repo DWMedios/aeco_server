@@ -1,16 +1,19 @@
-import { Transform } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import {
   IsBoolean,
   IsEmail,
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Length,
   Matches,
+  ValidateNested,
 } from 'class-validator'
 import { IsNotInBlacklist } from '@shared/validators/email-blacklist.validator'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
+import { CreateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'El nombre es requerido' })
@@ -52,4 +55,9 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'El id de la compañía es requerido' })
   @IsNumber({}, { message: 'El id de la compañía debe ser un número' })
   readonly companyId: number
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateMediaAssetDto)
+  readonly mediaAsset?: CreateMediaAssetDto
 }

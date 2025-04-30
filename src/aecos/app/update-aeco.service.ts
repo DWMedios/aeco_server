@@ -58,7 +58,7 @@ export class UpdateAecoService implements IUpdateAecoService {
 
     try {
       delete aeco.company
-      const aecoUpdated = await this.aecoRepository.update(aeco, {
+      const aecoUpdated = await this.aecoRepository.partialUpdate(aeco, {
         ...aeco,
         ...request,
         currentCoords: {

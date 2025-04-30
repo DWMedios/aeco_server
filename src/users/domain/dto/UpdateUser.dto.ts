@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import {
   IsBoolean,
   IsEmail,
@@ -8,9 +8,11 @@ import {
   IsString,
   Length,
   Matches,
+  ValidateNested,
 } from 'class-validator'
 import { IsNotInBlacklist } from '@shared/validators/email-blacklist.validator'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
+import { UpdateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 
 export class UpdateUserDto {
   @IsOptional()
@@ -48,4 +50,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsNumber({}, { message: 'El id de la compañía debe ser un número' })
   readonly companyId?: number
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateMediaAssetDto)
+  readonly mediaAsset?: UpdateMediaAssetDto
 }

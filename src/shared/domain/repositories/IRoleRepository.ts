@@ -19,7 +19,7 @@ export interface IRoleRepository {
     role: Partial<IUserRolePermissions>,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions>
-  update(
+  partialUpdate(
     existingRole: IUserRolePermissions,
     role: Partial<IUserRolePermissions>,
     manager?: EntityManager,

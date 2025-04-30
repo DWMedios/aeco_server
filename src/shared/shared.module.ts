@@ -1,60 +1,69 @@
 import { Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { S3Client } from '@aws-sdk/client-s3'
 import {
+  Advertising,
   Aeco,
+  Campaign,
   Company,
+  Contractor,
   DailyStats,
+  MediaAsset,
   PackagingStats,
   Page,
   Product,
   ProductCapacity,
   ProductStats,
-  Promotion,
   Reward,
-  Setting,
   Ticket,
   User,
   UserRolePermissions,
 } from '@common/infra/entities'
 import {
   AECO_REPOSITORY,
+  CAMPAIGN_REPOSITORY,
   COMPANY_REPOSITORY,
+  CONTRACTOR_REPOSITORY,
   DASHBOARD_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   PAGE_REPOSITORY,
   PRODUCT_CAPACITY_REPOSITORY,
   PRODUCT_REPOSITORY,
   REWARD_REPOSITORY,
   ROLE_REPOSITORY,
-  SETTING_REPOSITORY,
+  TICKET_REPOSITORY,
   USER_REPOSITORY,
 } from './domain/repositories'
 import {
   AecoRepository,
+  CampaignRepository,
   CompanyRepository,
+  ContractorRepository,
   DashboardRepository,
+  MediaAssetRepository,
   PageRepository,
   ProductCapacityRepository,
   ProductRepository,
   RewardRepository,
   RoleRepository,
-  SettingsRepository,
+  TicketRepository,
   UserRepository,
 } from './infra/repositories'
+import { S3_SERVICE } from './domain/services/IS3Service'
+import { S3Service } from './app/files/s3.service'
 import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
 import { TransactionService } from './app/transaction/transaction.service'
-import { S3_SERVICES } from './domain/services/IS3Service'
-import { S3Service } from './app/files/s3.service'
-import { TICKET_REPOSITORY } from './domain/repositories/ITicketRepository'
-import { TicketRepository } from './infra/repositories/TicketRepository'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Aeco,
+      Advertising,
+      Campaign,
       Company,
-      Setting,
+      Contractor,
       Page,
-      Promotion,
       Reward,
       Ticket,
       User,
@@ -64,6 +73,7 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
       DailyStats,
       ProductStats,
       PackagingStats,
+      MediaAsset,
     ]),
   ],
   providers: [
@@ -74,10 +84,6 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
     {
       provide: REWARD_REPOSITORY,
       useClass: RewardRepository,
-    },
-    {
-      provide: SETTING_REPOSITORY,
-      useClass: SettingsRepository,
     },
     {
       provide: PAGE_REPOSITORY,
@@ -116,14 +122,38 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
       useClass: DashboardRepository,
     },
     {
-      provide: S3_SERVICES,
+      provide: MEDIA_ASSET_REPOSITORY,
+      useClass: MediaAssetRepository,
+    },
+    {
+      provide: CONTRACTOR_REPOSITORY,
+      useClass: ContractorRepository,
+    },
+    {
+      provide: CAMPAIGN_REPOSITORY,
+      useClass: CampaignRepository,
+    },
+    {
+      provide: S3_SERVICE,
       useClass: S3Service,
+    },
+    {
+      provide: S3Client,
+      useFactory: (configService: ConfigService) => {
+        return new S3Client({
+          region: configService.get<string>('s3.region'),
+          credentials: {
+            accessKeyId: configService.get<string>('s3.accessKeyId'),
+            secretAccessKey: configService.get<string>('s3.secretAccessKey'),
+          },
+        })
+      },
+      inject: [ConfigService],
     },
   ],
   exports: [
     AECO_REPOSITORY,
     REWARD_REPOSITORY,
-    SETTING_REPOSITORY,
     PAGE_REPOSITORY,
     USER_REPOSITORY,
     ROLE_REPOSITORY,
@@ -132,8 +162,11 @@ import { TicketRepository } from './infra/repositories/TicketRepository'
     PRODUCT_CAPACITY_REPOSITORY,
     DASHBOARD_REPOSITORY,
     TICKET_REPOSITORY,
+    MEDIA_ASSET_REPOSITORY,
+    CONTRACTOR_REPOSITORY,
+    CAMPAIGN_REPOSITORY,
     TRANSACTION_SERVICE,
-    S3_SERVICES,
+    S3_SERVICE,
   ],
 })
 export class SharedModule {}

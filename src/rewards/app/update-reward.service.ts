@@ -8,8 +8,10 @@ import {
 import {
   AECO_REPOSITORY,
   REWARD_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   type IAecoRepository,
   type IRewardRepository,
+  type IMediaAssetRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
@@ -28,12 +30,14 @@ export class UpdateRewardService implements IUpdateRewardService {
     private readonly rewardRepository: IRewardRepository,
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
+    @Inject(MEDIA_ASSET_REPOSITORY)
+    private readonly mediaRepository: IMediaAssetRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
   async run(rewardId: number, request: UpdateRewardDto): Promise<IReward> {
-    const { aecos, ...reqReward } = request
+    const { aecos, mediaAsset, ...reqReward } = request
 
     const foundedReward = await this.rewardRepository.findById(rewardId)
 
@@ -76,7 +80,41 @@ export class UpdateRewardService implements IUpdateRewardService {
           this.logger.error(error)
           throw new BadRequestException('Error al actualizar la recompensa')
         }
-        return reward
+
+        if (mediaAsset && foundedReward?.imageId) {
+          try {
+            await this.mediaRepository.updateById(
+              foundedReward.imageId,
+              mediaAsset,
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException(
+              'Error al actualizar la imagen de la recompensa',
+            )
+          }
+        } else if (mediaAsset && !foundedReward?.imageId) {
+          try {
+            const mediaAssetCreated = await this.mediaRepository.create(
+              mediaAsset,
+              manager,
+            )
+
+            await this.rewardRepository.updateById(
+              reward.id,
+              { imageId: mediaAssetCreated.id },
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException(
+              'Error al crear la imagen de la recompensa',
+            )
+          }
+        }
+
+        return reward ?? foundedReward
       },
     )
 

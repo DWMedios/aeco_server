@@ -39,7 +39,7 @@ export class UserRepository
     manager?: EntityManager,
   ): Promise<IUser | null> {
     return this.repository(manager).findOne({
-      relations: ['role', 'company'],
+      relations: ['role', 'company', 'mediaAsset'],
       select: {
         id: true,
         name: true,
@@ -48,6 +48,7 @@ export class UserRepository
         position: true,
         isActive: true,
         companyId: true,
+        imageId: true,
         createdAt: true,
         role: {
           id: true,
@@ -56,6 +57,14 @@ export class UserRepository
         company: {
           id: true,
           name: true,
+        },
+        mediaAsset: {
+          id: true,
+          fileKey: true,
+          originalName: true,
+          mimeType: true,
+          fileSize: true,
+          assetType: true,
         },
       },
       where: { id, isActive },
@@ -127,6 +136,8 @@ export class UserRepository
         'user.position',
         'user.isActive',
         'user.createdAt',
+        'user.companyId',
+        'user.imageId',
         'role.id',
         'role.role',
         'company.id',
@@ -168,13 +179,28 @@ export class UserRepository
     return this.repository(manager).save(newUser)
   }
 
-  update(
+  partialUpdate(
     exists: IUser,
     user: Partial<IUser>,
     manager?: EntityManager,
   ): Promise<IUser> {
     const updatedUser = this.repository(manager).merge(exists, user)
     return this.repository(manager).save(updatedUser)
+  }
+
+  async updateById(
+    id: number,
+    user: Partial<IUser>,
+    manager?: EntityManager,
+  ): Promise<IUser> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('user')
+      .update()
+      .set(user)
+      .where('id = :id', { id })
+      .execute()
+
+    return qb.raw[0]
   }
 
   async delete(id: number, manager?: EntityManager): Promise<boolean> {

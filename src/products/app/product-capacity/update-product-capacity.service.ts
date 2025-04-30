@@ -63,7 +63,7 @@ export class UpdateProductCapacityService
     }
 
     try {
-      const capacityUpdated = await this.productCapacityRepository.update(
+      const capacityUpdated = await this.productCapacityRepository.updateById(
         id,
         request,
       )

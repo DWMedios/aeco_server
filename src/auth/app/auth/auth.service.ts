@@ -59,7 +59,7 @@ export class AuthService implements IAuthService {
     const token = this.jwtService.sign(payload)
 
     try {
-      await this.roleRepository.update(role, { token })
+      await this.roleRepository.partialUpdate(role, { token })
     } catch (error) {
       this.logger.error(error)
     }

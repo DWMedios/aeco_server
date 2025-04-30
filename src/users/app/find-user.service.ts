@@ -15,7 +15,7 @@ export class FindUserService implements IFindUserService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async run(id: number): Promise<Partial<IUser>> {
+  async run(id: number): Promise<IUser> {
     const user = await this.userRepository.findById(id)
 
     if (!user) throw new NotFoundException('El usuario no existe')

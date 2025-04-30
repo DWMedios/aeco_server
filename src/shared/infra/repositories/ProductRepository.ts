@@ -170,7 +170,7 @@ export class ProductRepository
     return this.repository(manager).save(newProduct)
   }
 
-  async update(
+  async updateById(
     id: number,
     product: Partial<IProduct>,
     manager?: EntityManager,

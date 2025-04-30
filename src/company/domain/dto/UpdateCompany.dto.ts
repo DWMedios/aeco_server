@@ -3,6 +3,7 @@ import {
   IsArray,
   IsBoolean,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   Length,
@@ -11,6 +12,7 @@ import {
 } from 'class-validator'
 import { IsNotInBlacklist } from '@shared/validators/email-blacklist.validator'
 import { IsRFCValid } from '@shared/validators/is-rfc-valid.decorator'
+import { UpdateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 
 export class UpdateLegalRepresentativeDto {
   @IsOptional()
@@ -42,15 +44,6 @@ export class UpdateLegalRepresentativeDto {
     message: 'El puesto del representante legal debe ser una cadena de texto',
   })
   readonly position?: string
-}
-
-export class UpdateSettingsDto {
-  @IsOptional()
-  @IsString({ message: 'La clave de la empresa debe ser una cadena de texto' })
-  readonly key?: string
-
-  @IsOptional()
-  readonly metadata?: Record<string, any>
 }
 
 export class UpdateCompanyDto {
@@ -104,9 +97,13 @@ export class UpdateCompanyDto {
   readonly legalRepresentative?: UpdateLegalRepresentativeDto
 
   @IsOptional()
+  @IsObject()
+  readonly metadata?: Record<string, any>
+
+  @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateSettingsDto)
-  readonly settings?: UpdateSettingsDto
+  @Type(() => UpdateMediaAssetDto)
+  readonly mediaAsset?: UpdateMediaAssetDto
 
   @IsOptional()
   @IsArray({ message: 'Los aecos deben ser un arreglo de números' })

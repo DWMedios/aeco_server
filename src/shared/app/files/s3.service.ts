@@ -6,85 +6,74 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import type { IUploadUrl } from '@shared/domain/Types'
+import { Injectable, Logger } from '@nestjs/common'
 import type { IS3Service } from '@shared/domain/services/IS3Service'
 
 @Injectable()
 export class S3Service implements IS3Service {
-  private client: S3Client
+  logger = new Logger(S3Service.name)
   private bucketName: string
   private expiration: number
 
-  constructor(private readonly configService: ConfigService) {
-    const s3Region = this.configService.get<string>('s3.region')
-    const accessKeyId = this.configService.get<string>('s3.accessKeyId')
-    const secretAccessKey = this.configService.get<string>('s3.secretAccessKey')
+  constructor(
+    private readonly s3Client: S3Client,
+    private readonly configService: ConfigService,
+  ) {
     this.bucketName = this.configService.get<string>('s3.bucketName')
     this.expiration = this.configService.get<number>('s3.expiration')
-
-    if (
-      !s3Region ||
-      !accessKeyId ||
-      !secretAccessKey ||
-      !this.bucketName ||
-      !this.expiration
-    ) {
-      throw new Error('Missing S3 configuration in environment variables')
-    }
-
-    this.client = new S3Client({
-      region: s3Region,
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      },
-    })
   }
 
-  async generatePresignedUploadUrl({
-    fileType,
-    fileName,
-    pathFile,
-  }: IUploadUrl): Promise<string> {
+  async getPresignedUploadUrl(
+    key: string,
+    fileType: string,
+    fileName: string,
+    metadata: Record<string, string>,
+  ): Promise<{
+    url: string
+    headers: Record<string, string>
+  } | null> {
     try {
+      const contentDisposition = `attachment; filename=${encodeURIComponent(fileName)}`
+
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
-        Key: pathFile,
+        Key: key,
         ContentType: fileType,
         ACL: 'public-read',
-        Metadata: {
-          fileName,
-        },
+        Metadata: metadata,
+        ContentDisposition: contentDisposition,
       })
 
-      const url = await getSignedUrl(this.client, command, {
+      const url = await getSignedUrl(this.s3Client, command, {
         expiresIn: this.expiration,
       })
-      return url
+      return {
+        url,
+        headers: {
+          'Content-Type': fileType,
+          'Content-Disposition': contentDisposition,
+        },
+      }
     } catch (error) {
-      console.log(error)
-      throw new InternalServerErrorException(
-        'Error generating presigned upload URL',
-      )
+      this.logger.error('Error generating presigned upload URL', error)
+      return null
     }
   }
 
-  async getPresignedUrl(key: string): Promise<string> {
+  async getPresignedUrl(key: string): Promise<string | null> {
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucketName,
         Key: key,
       })
 
-      return await getSignedUrl(this.client, command, {
+      return await getSignedUrl(this.s3Client, command, {
         expiresIn: this.expiration,
       })
     } catch (error) {
-      throw new InternalServerErrorException(
-        'Error generating presigned get URL',
-      )
+      this.logger.error('Error generating presigned URL', error)
+      return null
     }
   }
 
@@ -95,10 +84,10 @@ export class S3Service implements IS3Service {
         Key: key,
       })
 
-      await this.client.send(command)
+      await this.s3Client.send(command)
       return true
     } catch (error) {
-      console.error(error)
+      this.logger.error('Error deleting file', error)
       return false
     }
   }
@@ -109,10 +98,10 @@ export class S3Service implements IS3Service {
         Bucket: this.bucketName,
         Key: key,
       })
-      await this.client.send(headCommand)
+      await this.s3Client.send(headCommand)
       return true
     } catch (error) {
-      console.error(error)
+      this.logger.error('Error checking file existence', error)
       return false
     }
   }

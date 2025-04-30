@@ -4,21 +4,22 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common'
-import { AuthMiddleware } from '@shared/app/middlewares/auth.middleware'
-import { AuthModule } from '@auth/auth.module'
-import { UsersModule } from '@users/users.module'
-import { CommonModule } from '@common/common.module'
-import { SharedModule } from '@shared/shared.module'
-import { RewardsModule } from '@rewards/rewards.module'
-import { UploadModule } from '@upload/upload.module'
 import { AecosModule } from '@aecos/aecos.module'
+import { AdvertisingsModule } from '@advertisings/advertisings.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { CompanyModule } from './company/company.module'
+import { AuthMiddleware } from '@shared/app/middlewares/auth.middleware'
+import { AuthModule } from '@auth/auth.module'
+import { CommonModule } from '@common/common.module'
+import { CompanyModule } from '@company/company.module'
+import { DashboardModule } from '@dashboard/dashboard.module'
+import { MediaAssetsModule } from '@media-assets/media-assets.module'
 import { PagesModule } from './pages/pages.module'
-import { ProductsModule } from './products/products.module'
-import { DashboardModule } from './dashboard/dashboard.module'
-import { TicketsModule } from './tickets/tickets.module';
+import { ProductsModule } from '@products/products.module'
+import { RewardsModule } from '@rewards/rewards.module'
+import { SharedModule } from '@shared/shared.module'
+import { TicketsModule } from '@tickets/tickets.module'
+import { UsersModule } from '@users/users.module'
 
 @Module({
   imports: [
@@ -30,10 +31,11 @@ import { TicketsModule } from './tickets/tickets.module';
     AecosModule,
     RewardsModule,
     PagesModule,
-    UploadModule,
+    MediaAssetsModule,
     ProductsModule,
     DashboardModule,
     TicketsModule,
+    AdvertisingsModule,
   ],
   providers: [AppService],
   controllers: [AppController],
@@ -75,6 +77,8 @@ export class AppModule implements NestModule {
           path: 'aecos/rewards',
           method: RequestMethod.GET,
         },
+      )
+      .exclude(
         {
           path: 'products/capacities/after-last',
           method: RequestMethod.GET,

@@ -5,10 +5,12 @@ import {
   JoinTable,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
 import { Company } from './Company.entity'
+import { MediaAsset } from './MediaAsset.entity'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
 import type { IReward } from '@common/domain/entities/IReward'
 
@@ -26,9 +28,6 @@ export class Reward extends Base implements IReward {
   @Column({ nullable: true, type: 'text' })
   note?: string
 
-  @Column({ nullable: true, type: 'text' })
-  image?: string
-
   @Column({ nullable: true, default: true, type: 'bool' })
   status: boolean
 
@@ -43,6 +42,9 @@ export class Reward extends Base implements IReward {
 
   @Column({ type: 'int', nullable: true })
   companyId?: number
+
+  @Column({ type: 'int', nullable: true })
+  imageId?: number
 
   @ManyToOne(() => Company, (company) => company.rewards)
   @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
@@ -61,4 +63,8 @@ export class Reward extends Base implements IReward {
     },
   })
   aecos?: Aeco[]
+
+  @OneToOne(() => MediaAsset, (mediaAsset) => mediaAsset.rewardImage)
+  @JoinColumn({ name: 'imageId', referencedColumnName: 'id' })
+  mediaAsset?: MediaAsset
 }

@@ -23,3 +23,42 @@ export const setDateToMidDay = (date: Date): Date | null => {
 
   return createdAtLuxon.toJSDate()
 }
+
+/**
+ * Takes a string as input and removes special characters and slashes, returning a modified version of the input string.
+ * @param {string} text - A string representing the file name that needs to be cleared.
+ * @returns A modified version of the input `text` string.
+ */
+export const clearFileName = (text: string) => {
+  return text
+    .normalize('NFD') // Descompone el string en caracteres base + diacríticos
+    .replace(/[&%$#¿?ª°œ@={}+()*~[\]<>,;`|]/g, '') // Elimina caracteres especiales
+    .replace(/[\u0300-\u036f]/g, '') // Elimina los diacríticos (acentos)
+    .replace(/\//g, ' ') // Elimina las barras
+}
+
+/**
+ * File name as input and returns a formatted string with a unique key based on the file name and current date and time.
+ * @param {string} fileName - The `fileName` parameter is a string that represents the name of a file.
+ * @param {string} fileExtension - The `fileExtension` parameter is a string that represents the file extension (e.g., "jpg", "png").
+ * @returns a string value.
+ */
+export const generateFileKey = (fileName: string, fileExtension: string) => {
+  return `${fileName.substring(0, fileName.lastIndexOf('.')).toLocaleLowerCase()}!!${DateTime.now().toFormat(
+    'yyyyMMddHHmmss',
+  )}.${fileExtension}`
+}
+
+/**
+ * Takes an S3 key as input and returns the file name by extracting it from the key and appending the file extension.
+ * @param {string} s3Key - The `s3Key` represents the key or path of a file stored in an S3 bucket.
+ * @returns the file name extracted from the given S3 key.
+ */
+export const getFileName = (s3Key: string): string => {
+  const lastDot = s3Key.lastIndexOf('.')
+  const fileExtension = s3Key.substring(lastDot + 1)
+  const lastSlash = s3Key.lastIndexOf('/')
+  const namePart = s3Key.substring(lastSlash + 1, s3Key.indexOf('!!'))
+
+  return `${namePart}.${fileExtension}`
+}

@@ -16,8 +16,13 @@ export interface ICompanyRepository {
     manager?: EntityManager,
   ): Promise<[ICompany[], number]>
   create(company: Partial<ICompany>, manager?: EntityManager): Promise<ICompany>
-  update(
+  partialUpdate(
     exists: ICompany,
+    company: Partial<ICompany>,
+    manager?: EntityManager,
+  ): Promise<ICompany>
+  updateById(
+    id: number,
     company: Partial<ICompany>,
     manager?: EntityManager,
   ): Promise<ICompany>

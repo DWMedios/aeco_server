@@ -22,10 +22,6 @@ export class BaseRewardDto {
   readonly note?: string
 
   @IsOptional()
-  @IsString({ message: 'La imagen debe ser una cadena de texto' })
-  readonly image?: string
-
-  @IsOptional()
   @IsBoolean({ message: 'El estado debe ser un booleano' })
   readonly status?: boolean
 

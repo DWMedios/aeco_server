@@ -33,6 +33,19 @@ export type OrderByFieldProductType =
   | 'capacityId'
   | BaseFiltersType
 
+export type OrderByFieldContractorType =
+  | 'name'
+  | 'email'
+  | 'status'
+  | BaseFiltersType
+
+export type OrderByFieldCampaignType =
+  | 'contractName'
+  | 'startDate'
+  | 'endDate'
+  | 'contractorId'
+  | BaseFiltersType
+
 export type OrderByFieldTicketType =
   | 'folio'
   | 'totalCans'

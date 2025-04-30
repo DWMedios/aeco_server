@@ -1,11 +1,11 @@
 import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
 import {
   COMPANY_REPOSITORY,
-  SETTING_REPOSITORY,
   AECO_REPOSITORY,
+  MEDIA_ASSET_REPOSITORY,
   type ICompanyRepository,
-  type ISettingRepository,
   type IAecoRepository,
+  type IMediaAssetRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
@@ -22,16 +22,16 @@ export class UpdateCompanyService implements IUpdateCompanyService {
   constructor(
     @Inject(COMPANY_REPOSITORY)
     private readonly companyRepository: ICompanyRepository,
-    @Inject(SETTING_REPOSITORY)
-    private readonly settingRepository: ISettingRepository,
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
+    @Inject(MEDIA_ASSET_REPOSITORY)
+    private readonly mediaRepository: IMediaAssetRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
   async run(companyId: number, request: UpdateCompanyDto): Promise<ICompany> {
-    const { legalRepresentative, settings, aecos, ...reqCompany } = request
+    const { legalRepresentative, mediaAsset, aecos, ...reqCompany } = request
 
     const company = await this.companyRepository.findById(companyId)
 
@@ -59,21 +59,24 @@ export class UpdateCompanyService implements IUpdateCompanyService {
 
     const companyTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
-        const { settings: foundedSettings, ...foundedCompany } = company
         let companyToUpdate: ICompany | null = null
         try {
           if (aecos && aecos.length === 0) {
-            foundedCompany.aecos = []
+            company.aecos = []
           } else {
-            foundedCompany.aecos = aecosExists
+            company.aecos = aecosExists
           }
 
-          companyToUpdate = await this.companyRepository.update(
-            foundedCompany,
+          companyToUpdate = await this.companyRepository.partialUpdate(
+            company,
             {
               ...reqCompany,
+              metadata: {
+                ...company.metadata,
+                ...(reqCompany.metadata && { ...reqCompany.metadata }),
+              },
               legalRepresentative: {
-                ...foundedCompany.legalRepresentative,
+                ...company.legalRepresentative,
                 ...(legalRepresentative && { ...legalRepresentative }),
               },
             },
@@ -84,27 +87,39 @@ export class UpdateCompanyService implements IUpdateCompanyService {
           throw new BadRequestException('Error al actualizar la empresa')
         }
 
-        if (settings) {
+        if (mediaAsset && company?.logoId) {
           try {
-            await this.settingRepository.update(
-              foundedSettings.id,
-              {
-                ...settings,
-                metadata: {
-                  ...foundedSettings.metadata,
-                  ...(settings.metadata && { ...settings.metadata }),
-                },
-              },
+            await this.mediaRepository.updateById(
+              company.logoId,
+              mediaAsset,
               manager,
             )
           } catch (error) {
             this.logger.error(error)
             throw new BadRequestException(
-              'Error al actializar la configuración de la empresa',
+              'Error al actualizar el logo de la empresa',
+            )
+          }
+        } else if (mediaAsset && !company?.logoId) {
+          try {
+            const mediaAssetCreated = await this.mediaRepository.create(
+              mediaAsset,
+              manager,
+            )
+
+            await this.companyRepository.updateById(
+              company.id,
+              { logoId: mediaAssetCreated.id },
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException(
+              'Error al crear el logo de la empresa',
             )
           }
         }
-        return companyToUpdate
+        return companyToUpdate ?? company
       },
     )
 

@@ -1,5 +1,14 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { Type } from 'class-transformer'
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
+import { CreateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 import { BaseRewardDto } from './RewardBase.dto'
 
 export class CreateRewardDto extends BaseRewardDto {
@@ -20,4 +29,9 @@ export class CreateRewardDto extends BaseRewardDto {
   @IsNotEmpty({ message: 'La compañía es requerida' })
   @IsNumber({}, { message: 'La compañía debe ser un número' })
   readonly companyId: number
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateMediaAssetDto)
+  readonly mediaAsset?: CreateMediaAssetDto
 }

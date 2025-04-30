@@ -28,7 +28,7 @@ export interface IProductCapacityRepository {
     productCapacity: Partial<IProductCapacity>,
     manager?: EntityManager,
   ): Promise<IProductCapacity>
-  update(
+  updateById(
     id: number,
     productCapacity: Partial<IProductCapacity>,
     manager?: EntityManager,

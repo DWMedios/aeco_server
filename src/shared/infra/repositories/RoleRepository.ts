@@ -74,7 +74,7 @@ export class RoleRepository
     return this.repository(manager).save(newRole)
   }
 
-  update(
+  partialUpdate(
     existingRole: IUserRolePermissions,
     role: Partial<IUserRolePermissions>,
     manager?: EntityManager,

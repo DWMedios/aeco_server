@@ -1,9 +1,11 @@
-import type { IAeco } from './IAeco'
 import type { IBase } from './IBase'
-import type { ISetting } from './ICompanySetting'
-import type { IPromotion } from './IPromotion'
-import type { IReward } from './IReward'
+import type { IAeco } from './IAeco'
 import type { IUser } from './IUser'
+import type { IReward } from './IReward'
+import type { ICampaign } from './ICampaign'
+import type { IContractor } from './IContractor'
+import type { IMediaAsset } from './IMediaAsset'
+import type { IAdvertising } from './IAdvertising'
 
 export interface ICompany extends IBase {
   readonly name: string
@@ -15,11 +17,15 @@ export interface ICompany extends IBase {
   readonly phone?: string
   legalRepresentative?: ILegalRepresentative
   readonly status: boolean
+  metadata?: Record<string, any>
+  readonly logoId?: number
   users?: IUser[]
-  settings?: ISetting
+  mediaAsset?: IMediaAsset
   rewards?: IReward[]
   aecos?: IAeco[]
-  promotions?: IPromotion[]
+  advertisings?: IAdvertising[]
+  contractors?: IContractor[]
+  campaigns?: ICampaign[]
   readonly totalAecos?: number
 }
 

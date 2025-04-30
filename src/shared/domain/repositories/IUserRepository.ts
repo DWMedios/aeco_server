@@ -31,8 +31,13 @@ export interface IUserRepository {
     manager?: EntityManager,
   ): Promise<[IUser[], number]>
   create(user: Partial<IUser>, manager?: EntityManager): Promise<IUser>
-  update(
+  partialUpdate(
     exists: IUser,
+    user: Partial<IUser>,
+    manager?: EntityManager,
+  ): Promise<IUser>
+  updateById(
+    id: number,
     user: Partial<IUser>,
     manager?: EntityManager,
   ): Promise<IUser>

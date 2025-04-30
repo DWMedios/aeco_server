@@ -26,7 +26,7 @@ export interface IProductRepository {
   ): Promise<IProduct[]>
   findManyByIds(ids: number[], manager?: EntityManager): Promise<IProduct[]>
   create(product: Partial<IProduct>, manager?: EntityManager): Promise<IProduct>
-  update(
+  updateById(
     id: number,
     product: Partial<IProduct>,
     manager?: EntityManager,

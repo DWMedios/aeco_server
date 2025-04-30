@@ -184,4 +184,43 @@ export class DashboardRepository
     const newStats = this.repository('product', manager).create(stats)
     return this.repository('product', manager).save(newStats)
   }
+
+  async softDeleteDailyStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository('daily', manager)
+      .createQueryBuilder('dailyStats')
+      .softDelete()
+      .where('dailyStats.companyId = :companyId', { companyId })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async softDeletePackagingStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository('packaging', manager)
+      .createQueryBuilder('packagingStats')
+      .softDelete()
+      .where('packagingStats.companyId = :companyId', { companyId })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async softDeleteProductStatsByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository('product', manager)
+      .createQueryBuilder('productStats')
+      .softDelete()
+      .where('productStats.companyId = :companyId', { companyId })
+      .execute()
+
+    return qb.affected !== 0
+  }
 }

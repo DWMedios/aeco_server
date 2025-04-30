@@ -14,6 +14,7 @@ import {
 } from 'class-validator'
 import { IsNotInBlacklist } from '@shared/validators/email-blacklist.validator'
 import { IsRFCValid } from '@shared/validators/is-rfc-valid.decorator'
+import { CreateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 
 export class CreateCompanyUserAdminDto {
   @IsNotEmpty({ message: 'El nombre es requerido' })
@@ -71,16 +72,6 @@ export class CreateLegalRepresentativeDto {
   readonly position: string
 }
 
-export class CreateSettingsDto {
-  @IsNotEmpty({ message: 'La clave de la empresa no puede estar vacía' })
-  @IsString({ message: 'La clave de la empresa debe ser una cadena de texto' })
-  readonly key: string
-
-  @IsOptional()
-  @IsObject()
-  readonly metadata?: Record<string, any>[] = []
-}
-
 export class CreateCompanyDto {
   @IsNotEmpty({ message: 'El nombre de la empresa no puede estar vacío' })
   @IsString({ message: 'El nombre de la empresa debe ser una cadena de texto' })
@@ -128,9 +119,13 @@ export class CreateCompanyDto {
   readonly legalRepresentative?: CreateLegalRepresentativeDto
 
   @IsOptional()
+  @IsObject()
+  readonly metadata?: Record<string, any>
+
+  @IsOptional()
   @ValidateNested()
-  @Type(() => CreateSettingsDto)
-  readonly settings?: CreateSettingsDto
+  @Type(() => CreateMediaAssetDto)
+  readonly mediaAsset?: CreateMediaAssetDto
 
   @IsOptional()
   @ValidateNested()
