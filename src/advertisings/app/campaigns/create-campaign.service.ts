@@ -104,6 +104,9 @@ export class CreateCampaignService implements ICreateCampaignService {
               ...(contractorId && { contractorId }),
               ...(newMedia && { mediaId: newMedia.id }),
               ...(aecosExists?.length > 0 && { aecos: aecosExists }),
+              planDescription: '10 800 Reproducciones / 30 días',
+              reproductionLimit: 10800,
+              planDurationDays: 30,
             },
             manager,
           )
