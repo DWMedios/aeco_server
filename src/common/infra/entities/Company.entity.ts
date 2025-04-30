@@ -9,6 +9,7 @@ import { PackagingStats } from './PackagingStats.entity'
 import { Advertising } from './Advertising.entity'
 import { Contractor } from './Contractor.entity'
 import { MediaAsset } from './MediaAsset.entity'
+import { Campaign } from './Campaign.entity'
 import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
 
 @Entity({ name: 'companies' })
@@ -73,4 +74,7 @@ export class Company extends Base implements ICompany {
 
   @OneToMany(() => Contractor, (contractor) => contractor.company)
   contractors?: Contractor[]
+
+  @OneToMany(() => Campaign, (campaign) => campaign.company)
+  campaigns?: Campaign[]
 }

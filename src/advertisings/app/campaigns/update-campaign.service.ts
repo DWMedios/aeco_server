@@ -6,9 +6,11 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import {
+  AECO_REPOSITORY,
   CAMPAIGN_REPOSITORY,
   CONTRACTOR_REPOSITORY,
   MEDIA_ASSET_REPOSITORY,
+  type IAecoRepository,
   type ICampaignRepository,
   type IContractorRepository,
   type IMediaAssetRepository,
@@ -17,7 +19,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import type { ICampaign } from '@common/domain/entities'
+import type { IAeco, ICampaign } from '@common/domain/entities'
 import type { UpdateCampaignDto } from '@advertisings/domain/dto/campaigns/UpdateCampaign.dto'
 import type { IUpdateCampaignService } from '@advertisings/domain/services/campaigns/IUpdateCampaignService'
 
@@ -32,12 +34,14 @@ export class UpdateCampaignService implements IUpdateCampaignService {
     private readonly contractorRepository: IContractorRepository,
     @Inject(MEDIA_ASSET_REPOSITORY)
     private readonly mediaAssetRepository: IMediaAssetRepository,
+    @Inject(AECO_REPOSITORY)
+    private readonly aecoRepository: IAecoRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
   async run(id: number, data: UpdateCampaignDto): Promise<ICampaign> {
-    const { contractorId, mediaAsset, ...campaignData } = data
+    const { contractorId, mediaAsset, aecos, ...campaignData } = data
 
     const campaign = await this.campaignRepository.findById(id)
     if (!campaign) {
@@ -45,9 +49,24 @@ export class UpdateCampaignService implements IUpdateCampaignService {
     }
 
     if (contractorId) {
-      const contractor = await this.contractorRepository.findById(contractorId)
+      const contractor = await this.contractorRepository.findByIdAndCompany(
+        contractorId,
+        campaign.companyId,
+      )
       if (!contractor) {
         throw new NotFoundException('El contratista especificado no existe')
+      }
+    }
+
+    let aecosExists: IAeco[] = []
+    if (aecos?.length > 0) {
+      aecosExists = await this.aecoRepository.findManyByIds({
+        ids: aecos,
+        companyId: campaign.companyId,
+      })
+
+      if (aecosExists.length !== aecos.length) {
+        throw new BadRequestException('Algunos aecos no existen')
       }
     }
 

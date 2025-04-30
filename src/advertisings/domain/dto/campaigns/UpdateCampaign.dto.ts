@@ -7,6 +7,7 @@ import {
   ValidateNested,
   MaxLength,
   IsISO8601,
+  IsArray,
 } from 'class-validator'
 import { UpdateMediaAssetDto } from '@shared/domain/dto/Common.dto'
 
@@ -45,4 +46,9 @@ export class UpdateCampaignDto {
   @ValidateNested()
   @Type(() => UpdateMediaAssetDto)
   readonly mediaAsset?: UpdateMediaAssetDto
+
+  @IsOptional()
+  @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
+  @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
+  readonly aecos?: number[]
 }

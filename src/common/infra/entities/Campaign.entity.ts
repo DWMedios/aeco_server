@@ -8,9 +8,10 @@ import {
   OneToOne,
 } from 'typeorm'
 import { Base } from './Base'
-import { MediaAsset } from './MediaAsset.entity'
 import { Aeco } from './Aeco.entity'
+import { Company } from './Company.entity'
 import { Contractor } from './Contractor.entity'
+import { MediaAsset } from './MediaAsset.entity'
 import { Advertising } from './Advertising.entity'
 import type { ICampaign } from '@common/domain/entities'
 
@@ -37,6 +38,9 @@ export class Campaign extends Base implements ICampaign {
   @Column({ type: 'int', nullable: true })
   contractorId?: number
 
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
+
   @OneToOne(() => MediaAsset, (mediaAsset) => mediaAsset.campaignMedia)
   @JoinColumn({ name: 'mediaId', referencedColumnName: 'id' })
   mediaAsset?: MediaAsset
@@ -44,6 +48,10 @@ export class Campaign extends Base implements ICampaign {
   @ManyToOne(() => Contractor, (contractor) => contractor.campaigns)
   @JoinColumn({ name: 'contractorId', referencedColumnName: 'id' })
   contractor?: Contractor
+
+  @ManyToOne(() => Company, (company) => company.contractors)
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
+  company?: Company
 
   @ManyToMany(() => Aeco, (aeco) => aeco.campaigns)
   @JoinTable({

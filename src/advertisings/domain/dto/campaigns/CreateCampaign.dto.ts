@@ -1,5 +1,7 @@
 import { Type } from 'class-transformer'
 import {
+  ArrayMinSize,
+  IsArray,
   IsBoolean,
   IsISO8601,
   IsNotEmpty,
@@ -42,8 +44,18 @@ export class CreateCampaignDto {
   @IsNumber({}, { message: 'El contractorId debe ser un número' })
   readonly contractorId?: number
 
+  @IsNotEmpty({ message: 'El companyId es requerido' })
+  @IsNumber({}, { message: 'El companyId debe ser un número' })
+  readonly companyId: number
+
   @IsOptional()
   @ValidateNested()
   @Type(() => CreateMediaAssetDto)
   readonly mediaAsset?: CreateMediaAssetDto
+
+  @IsOptional()
+  @IsArray({ message: 'Los aecos deben ser un arreglo de números' })
+  @IsNumber({}, { each: true, message: 'Los aecos deben ser números' })
+  @ArrayMinSize(1, { message: 'Debe haber al menos un aeco' })
+  readonly aecos?: number[]
 }

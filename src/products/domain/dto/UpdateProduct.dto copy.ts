@@ -14,9 +14,9 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsString({ message: 'El nombre debe ser una cadena de texto' })
-  readonly name: string
+  readonly name?: string
 
   @IsOptional()
   @IsNumber({}, { message: 'La capacidad debe ser un número' })
-  readonly capacityId: number
+  readonly capacityId?: number
 }

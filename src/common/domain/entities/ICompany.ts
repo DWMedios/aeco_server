@@ -1,10 +1,11 @@
 import type { IBase } from './IBase'
 import type { IAeco } from './IAeco'
-import type { IAdvertising } from './IAdvertising'
-import type { IContractor } from './IContractor'
-import type { IReward } from './IReward'
 import type { IUser } from './IUser'
+import type { IReward } from './IReward'
+import type { ICampaign } from './ICampaign'
+import type { IContractor } from './IContractor'
 import type { IMediaAsset } from './IMediaAsset'
+import type { IAdvertising } from './IAdvertising'
 
 export interface ICompany extends IBase {
   readonly name: string
@@ -24,6 +25,7 @@ export interface ICompany extends IBase {
   aecos?: IAeco[]
   advertisings?: IAdvertising[]
   contractors?: IContractor[]
+  campaigns?: ICampaign[]
   readonly totalAecos?: number
 }
 

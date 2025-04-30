@@ -8,10 +8,10 @@ import {
   OneToOne,
 } from 'typeorm'
 import { Base } from './Base'
+import { Company } from './Company.entity'
 import { Campaign } from './Campaign.entity'
 import { MediaAsset } from './MediaAsset.entity'
 import { Advertising } from './Advertising.entity'
-import { Company } from './Company.entity'
 import type { IContractor } from '@common/domain/entities'
 
 @Entity({ name: 'contractors' })

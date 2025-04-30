@@ -23,6 +23,7 @@ export class CampaignRepository
       .leftJoinAndSelect('campaign.mediaAsset', 'mediaAsset')
       .leftJoinAndSelect('campaign.contractor', 'contractor')
       .leftJoinAndSelect('contractor.mediaAsset', 'contractorMediaAsset')
+      .leftJoinAndSelect('campaign.company', 'company')
       .leftJoinAndSelect('campaign.aecos', 'aecos')
       .select([
         'campaign.id',
@@ -32,6 +33,8 @@ export class CampaignRepository
         'campaign.endDate',
         'campaign.isEnabled',
         'campaign.mediaId',
+        'campaign.companyId',
+        'campaign.createdAt',
         'mediaAsset.id',
         'mediaAsset.fileKey',
         'mediaAsset.originalName',
@@ -51,6 +54,8 @@ export class CampaignRepository
         'aecos.serialNumber',
         'aecos.status',
         'aecos.isOnline',
+        'company.id',
+        'company.name',
       ])
       .where('campaign.id = :id', { id })
       .getOne()
@@ -65,7 +70,8 @@ export class CampaignRepository
       .leftJoinAndSelect('campaigns.mediaAsset', 'mediaAsset')
       .leftJoinAndSelect('campaigns.contractor', 'contractor')
       .leftJoinAndSelect('contractor.mediaAsset', 'contractorMediaAsset')
-      .loadRelationCountAndMap('companies.totalAecos', 'companies.aecos')
+      .leftJoinAndSelect('campaigns.company', 'company')
+      .loadRelationCountAndMap('campaigns.totalAecos', 'campaigns.aecos')
       .select([
         'campaigns.id',
         'campaigns.contractName',
@@ -74,6 +80,8 @@ export class CampaignRepository
         'campaigns.endDate',
         'campaigns.isEnabled',
         'campaigns.mediaId',
+        'campaigns.companyId',
+        'campaigns.createdAt',
         'mediaAsset.id',
         'mediaAsset.fileKey',
         'mediaAsset.originalName',
@@ -87,6 +95,8 @@ export class CampaignRepository
         'contractorMediaAsset.fileKey',
         'contractorMediaAsset.originalName',
         'contractorMediaAsset.mimeType',
+        'company.id',
+        'company.name',
       ])
 
     if (filters?.contractName) {
