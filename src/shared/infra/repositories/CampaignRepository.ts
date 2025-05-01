@@ -2,9 +2,10 @@ import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Campaign } from '@common/infra/entities'
 import type { ICampaign } from '@common/domain/entities'
+import type { CountByDay } from '@advertisings/domain/Types'
 import type { ICampaignRepository } from '@shared/domain/repositories'
+import type { CampaignFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
-import { CampaignFiltersDto } from '@advertisings/domain/dto/Filters.dto'
 
 export class CampaignRepository
   extends TransactionalRepository<ICampaign>
@@ -160,6 +161,40 @@ export class CampaignRepository
     }
 
     return qb.getManyAndCount()
+  }
+
+  findByDatePeriod(
+    companyId: number,
+    startDate: Date,
+    endDate: Date,
+    manager?: EntityManager,
+  ): Promise<CountByDay[]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('campaigns')
+      .select([
+        "to_char(dates.date, 'DD Mon YYYY') AS date",
+        'COUNT(campaigns.id)::int as count',
+      ])
+      .from(
+        `(SELECT generate_series(
+          date_trunc('day', CAST(:startDate AS TIMESTAMP WITH TIME ZONE)),
+          date_trunc('day', CAST(:endDate AS TIMESTAMP WITH TIME ZONE)),
+          INTERVAL '1 day'
+        ) AS date)`,
+        'dates',
+      )
+      .where('campaigns.companyId = :companyId', { companyId })
+      .andWhere('campaigns.isEnabled = true')
+      .andWhere("dates.date >= date_trunc('day', campaigns.startDate)")
+      .andWhere("dates.date <= date_trunc('day', campaigns.endDate)")
+      .setParameters({
+        startDate,
+        endDate,
+      })
+      .groupBy('dates.date')
+      .orderBy('dates.date', 'ASC')
+
+    return qb.getRawMany()
   }
 
   create(

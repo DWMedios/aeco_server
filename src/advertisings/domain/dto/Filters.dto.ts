@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsIn,
   IsISO8601,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -99,4 +100,19 @@ export class CampaignFiltersDto extends BaseFiltersDto {
     },
   )
   readonly orderByField?: OrderByFieldCampaignType
+}
+
+export class FilterCampaignByDateDto {
+  @IsNotEmpty({ message: 'companyId es requerido' })
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId: number
+
+  @IsNotEmpty({ message: 'startDate es requerido' })
+  @IsISO8601({}, { message: 'startDate debe ser una fecha válida' })
+  readonly startDate: string
+
+  @IsNotEmpty({ message: 'endDate es requerido' })
+  @IsISO8601({}, { message: 'endDate debe ser una fecha válida' })
+  readonly endDate: string
 }

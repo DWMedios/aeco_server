@@ -30,6 +30,9 @@ import { GetAllCampaignsController } from './infra/controllers/campaigns/get-all
 import { DeleteCampaignController } from './infra/controllers/campaigns/delete-campaign.controller'
 import { PostCampaignController } from './infra/controllers/campaigns/post-campaign.controller'
 import { PutCampaignController } from './infra/controllers/campaigns/put-campaign.controller'
+import { FIND_CAMPAIGN_BY_DATE_SERVICE } from './domain/services/campaigns/IFindCampaignByDateService'
+import { FindCampaignByDateService } from './app/campaigns/find-campaign-by-date.service'
+import { GetCampaignByDateController } from './infra/controllers/campaigns/get-campaign-by-date.controller'
 
 @Module({
   imports: [SharedModule],
@@ -74,15 +77,20 @@ import { PutCampaignController } from './infra/controllers/campaigns/put-campaig
       provide: UPDATE_CAMPAIGN_SERVICE,
       useClass: UpdateCampaignService,
     },
+    {
+      provide: FIND_CAMPAIGN_BY_DATE_SERVICE,
+      useClass: FindCampaignByDateService,
+    },
   ],
   controllers: [
+    GetCampaignByDateController,
+    GetAllCampaignsController,
+    GetCampaignController,
     GetContractorController,
     GetAllContractorsController,
     PostContractorController,
     DeleteContractorController,
     PutContractorController,
-    GetCampaignController,
-    GetAllCampaignsController,
     DeleteCampaignController,
     PostCampaignController,
     PutCampaignController,
