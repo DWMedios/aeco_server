@@ -53,3 +53,8 @@ export type OrderByFieldTicketType =
   | 'aecoId'
   | 'productId'
   | BaseFiltersType
+
+export type OrderByFieldAdvertisingType =
+  | 'companyName'
+  | 'isEnabled'
+  | BaseFiltersType

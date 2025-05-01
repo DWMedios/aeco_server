@@ -13,6 +13,7 @@ import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
 import {
   OrderByFieldContractorType,
   OrderByFieldCampaignType,
+  OrderByFieldAdvertisingType,
 } from '@shared/domain/enums/Filters.enum'
 
 export class ContractorFiltersDto extends BaseFiltersDto {
@@ -115,4 +116,26 @@ export class FilterCampaignByDateDto {
   @IsNotEmpty({ message: 'endDate es requerido' })
   @IsISO8601({}, { message: 'endDate debe ser una fecha válida' })
   readonly endDate: string
+}
+
+export class FilterAdvertisingDto extends BaseFiltersDto {
+  @IsOptional()
+  @IsString({ message: 'companyName debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly companyName?: string
+
+  @IsOptional()
+  @IsBoolean({ message: 'isEnabled debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
+  readonly isEnabled?: boolean
+
+  @IsOptional()
+  @IsIn(['createdAt', 'id', 'companyName', 'isEnabled'], {
+    message: 'orderByField debe ser createdAt, id, companyName o isEnabled',
+  })
+  readonly orderByField?: OrderByFieldAdvertisingType
 }

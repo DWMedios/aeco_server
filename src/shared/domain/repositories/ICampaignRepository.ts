@@ -11,6 +11,11 @@ export interface ICampaignRepository {
     filters: CampaignFiltersDto,
     manager?: EntityManager,
   ): Promise<[ICampaign[], number]>
+  findManyByCompanyId(
+    ids: number[],
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<ICampaign[]>
   findByDatePeriod(
     companyId: number,
     startDate: Date,

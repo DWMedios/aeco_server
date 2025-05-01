@@ -163,6 +163,20 @@ export class CampaignRepository
     return qb.getManyAndCount()
   }
 
+  findManyByCompanyId(
+    ids: number[],
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<ICampaign[]> {
+    return this.repository(manager)
+      .createQueryBuilder('campaigns')
+      .select(['campaigns.id', 'campaigns.companyId'])
+      .where('campaigns.companyId = :companyId', { companyId })
+      .andWhere('campaigns.isEnabled = true')
+      .andWhere('campaigns.id IN (:...ids)', { ids })
+      .getMany()
+  }
+
   findByDatePeriod(
     companyId: number,
     startDate: Date,

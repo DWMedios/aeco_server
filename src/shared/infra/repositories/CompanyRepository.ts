@@ -1,10 +1,10 @@
 import type { EntityManager, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Company } from '@common/infra/entities'
-import type { ICompanyFilterOptions } from '@company/domain/Types'
 import type { ICompany } from '@common/domain/entities'
-import type { ICompanyRepository } from '@shared/domain/repositories'
+import type { ICompanyFilterOptions } from '@company/domain/Types'
 import type { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ICompanyRepository } from '@shared/domain/repositories'
 import { TransactionalRepository } from '../base/transactional.repository'
 export class CompanyRepository
   extends TransactionalRepository<ICompany>

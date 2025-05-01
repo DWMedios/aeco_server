@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import {
   BadRequestException,
   Inject,
@@ -44,8 +45,25 @@ export class CreateCampaignService implements ICreateCampaignService {
     private readonly transactionService: TransactionServiceInterface,
   ) {}
 
-  async run(data: CreateCampaignDto): Promise<ICampaign> {
-    const { contractorId, companyId, mediaAsset, aecos, ...campaignData } = data
+  async run(payload: CreateCampaignDto): Promise<ICampaign> {
+    const { contractorId, companyId, mediaAsset, aecos, ...campaignData } =
+      payload
+
+    let startDate = DateTime.fromISO(campaignData.startDate.toString())
+    let endDate = DateTime.fromISO(campaignData.endDate.toString())
+
+    if (!startDate.isValid || !endDate.isValid) {
+      throw new BadRequestException('Alguna de las fechas no es válida')
+    }
+
+    if (startDate > endDate) {
+      throw new BadRequestException(
+        'La fecha de inicio no puede ser mayor a la fecha de fin',
+      )
+    }
+
+    startDate = startDate.startOf('day')
+    endDate = endDate.endOf('day')
 
     const company = await this.companyRepository.findById(companyId)
     if (!company) {
@@ -100,6 +118,8 @@ export class CreateCampaignService implements ICreateCampaignService {
           newCampaign = await this.campaignRepository.create(
             {
               ...campaignData,
+              startDate: startDate.toJSDate(),
+              endDate: endDate.toJSDate(),
               companyId: company.id,
               ...(contractorId && { contractorId }),
               ...(newMedia && { mediaId: newMedia.id }),
