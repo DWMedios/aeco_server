@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsIn,
   IsISO8601,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -12,6 +13,7 @@ import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
 import {
   OrderByFieldContractorType,
   OrderByFieldCampaignType,
+  OrderByFieldAdvertisingType,
 } from '@shared/domain/enums/Filters.enum'
 
 export class ContractorFiltersDto extends BaseFiltersDto {
@@ -99,4 +101,41 @@ export class CampaignFiltersDto extends BaseFiltersDto {
     },
   )
   readonly orderByField?: OrderByFieldCampaignType
+}
+
+export class FilterCampaignByDateDto {
+  @IsNotEmpty({ message: 'companyId es requerido' })
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId: number
+
+  @IsNotEmpty({ message: 'startDate es requerido' })
+  @IsISO8601({}, { message: 'startDate debe ser una fecha válida' })
+  readonly startDate: string
+
+  @IsNotEmpty({ message: 'endDate es requerido' })
+  @IsISO8601({}, { message: 'endDate debe ser una fecha válida' })
+  readonly endDate: string
+}
+
+export class FilterAdvertisingDto extends BaseFiltersDto {
+  @IsOptional()
+  @IsString({ message: 'companyName debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly companyName?: string
+
+  @IsOptional()
+  @IsBoolean({ message: 'isEnabled debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
+  readonly isEnabled?: boolean
+
+  @IsOptional()
+  @IsIn(['createdAt', 'id', 'companyName', 'isEnabled'], {
+    message: 'orderByField debe ser createdAt, id, companyName o isEnabled',
+  })
+  readonly orderByField?: OrderByFieldAdvertisingType
 }

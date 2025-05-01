@@ -6,21 +6,18 @@ export class Advertising1745310819046 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "media_assets" (
             "id" SERIAL NOT NULL, 
-            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
-            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
-            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             "fileKey" character varying(200) NOT NULL, 
             "originalName" character varying(200) NOT NULL, 
             "mimeType" character varying(100) NOT NULL, 
             "fileSize" integer NOT NULL DEFAULT '0', 
             "assetType" character varying(100) NOT NULL, 
+            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
+            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
+            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             CONSTRAINT "PK_ca47e9f67a5e5d8af1e75d66ee6" PRIMARY KEY ("id"))`);
 
         await queryRunner.query(`CREATE TABLE "campaigns" (
             "id" SERIAL NOT NULL, 
-            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
-            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
-            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             "contractName" character varying(200) NOT NULL, 
             "description" character varying(200) NOT NULL, 
             "startDate" TIMESTAMP NOT NULL, 
@@ -28,29 +25,32 @@ export class Advertising1745310819046 implements MigrationInterface {
             "isEnabled" boolean NOT NULL DEFAULT false, 
             "mediaId" integer, 
             "contractorId" integer, 
+            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
+            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
+            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             CONSTRAINT "REL_312bfc3ca8ccd1d7d64fec2455" UNIQUE ("mediaId"), 
             CONSTRAINT "PK_831e3fcd4fc45b4e4c3f57a9ee4" PRIMARY KEY ("id"))`);
 
         await queryRunner.query(`CREATE TABLE "contractors" (
             "id" SERIAL NOT NULL, 
-            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
-            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
-            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             "name" character varying(200) NOT NULL, 
             "email" character varying(100) NOT NULL, 
             "phone" character varying(20) NOT NULL, 
             "logoId" integer, 
             "companyId" integer, 
+            "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
+            "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
+            "deletedAt" TIMESTAMP WITH TIME ZONE, 
             CONSTRAINT "REL_25a07818c705fb79b3ab2dc59a" UNIQUE ("logoId"), 
             CONSTRAINT "PK_6dbfde8813cdc4c4689f1e1e503" PRIMARY KEY ("id"))`);
 
         await queryRunner.query(`CREATE TABLE "advertisings" (
             "id" SERIAL NOT NULL, 
+            "isEnabled" boolean NOT NULL DEFAULT true, 
+            "companyId" integer, 
             "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), 
             "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(), 
             "deletedAt" TIMESTAMP WITH TIME ZONE, 
-            "isEnabled" boolean NOT NULL DEFAULT true, 
-            "companyId" integer, 
             CONSTRAINT "PK_d16adb7a4ffcb5caafed4930f9b" PRIMARY KEY ("id"))`);
 
         await queryRunner.query(`CREATE TABLE "campaigns_aecos" (

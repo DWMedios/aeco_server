@@ -41,11 +41,12 @@ import { GetAllUsersController } from './infra/controllers/get-all-users.control
     },
   ],
   controllers: [
-    PostUserController,
-    GetUserController,
-    PutUserController,
-    DeleteUserController,
-    GetAllUsersController,
+    // Rutas de users (más genéricas a más específicas)
+    GetAllUsersController, // GET /users
+    GetUserController, // GET /users/:id
+    PostUserController, // POST /users
+    PutUserController, // PUT /users/:id
+    DeleteUserController, // DELETE /users/:id
   ],
 })
 export class UsersModule {}

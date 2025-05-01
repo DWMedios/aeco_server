@@ -7,6 +7,6 @@ export interface IAdvertising extends IBase {
   readonly isEnabled: boolean
   readonly companyId?: number
   readonly company?: ICompany
-  readonly contractors?: IContractor[]
-  readonly campaigns?: ICampaign[]
+  contractors?: IContractor[]
+  campaigns?: ICampaign[]
 }

@@ -10,6 +10,11 @@ export interface IContractorRepository {
     filters: ContractorFiltersDto,
     manager?: EntityManager,
   ): Promise<[IContractor[], number]>
+  findManyByCompanyId(
+    ids: number[],
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IContractor[]>
   findByIdAndCompany(
     id: number,
     companyId: number,

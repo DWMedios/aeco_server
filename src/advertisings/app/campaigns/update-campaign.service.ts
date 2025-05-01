@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import {
   BadRequestException,
   Inject,
@@ -48,6 +49,50 @@ export class UpdateCampaignService implements IUpdateCampaignService {
       throw new NotFoundException('La campaña no existe')
     }
 
+    const campaignStart = DateTime.fromISO(campaign.startDate.toString())
+    const campaignEnd = DateTime.fromISO(campaign.endDate.toString())
+
+    if (campaignData?.startDate && !campaignData?.endDate) {
+      const startDate = DateTime.fromISO(campaignData.startDate.toString())
+      if (!startDate.isValid) {
+        throw new BadRequestException('La fecha de inicio no es válida')
+      }
+
+      if (startDate > campaignEnd) {
+        throw new BadRequestException(
+          'La fecha de inicio no puede ser menor a la fecha de fin',
+        )
+      }
+    }
+
+    if (campaignData?.endDate && !campaignData?.startDate) {
+      const endDate = DateTime.fromISO(campaignData.endDate.toString())
+      if (!endDate.isValid) {
+        throw new BadRequestException('La fecha de fin no es válida')
+      }
+
+      if (endDate < campaignStart) {
+        throw new BadRequestException(
+          'La fecha de fin no puede ser menor a la fecha de inicio',
+        )
+      }
+    }
+
+    if (campaignData?.startDate && campaignData?.endDate) {
+      const startDate = DateTime.fromISO(campaignData.startDate.toString())
+      const endDate = DateTime.fromISO(campaignData.endDate.toString())
+
+      if (!startDate.isValid || !endDate.isValid) {
+        throw new BadRequestException('Alguna de las fechas no es válida')
+      }
+
+      if (startDate > endDate) {
+        throw new BadRequestException(
+          'La fecha de inicio no puede ser mayor a la fecha de fin',
+        )
+      }
+    }
+
     if (contractorId) {
       const contractor = await this.contractorRepository.findByIdAndCompany(
         contractorId,
@@ -79,6 +124,17 @@ export class UpdateCampaignService implements IUpdateCampaignService {
             campaign,
             {
               ...campaignData,
+              ...(campaignData.startDate && {
+                startDate: DateTime.fromISO(campaignData.startDate.toString())
+                  .startOf('day')
+                  .toJSDate(),
+              }),
+              ...(campaignData.endDate && {
+                endDate: DateTime.fromISO(campaignData.endDate.toString())
+                  .startOf('day')
+                  .toJSDate(),
+              }),
+              ...(aecos.length > 0 && { aecos: aecosExists }),
               ...(contractorId !== undefined && { contractorId }),
             },
             manager,

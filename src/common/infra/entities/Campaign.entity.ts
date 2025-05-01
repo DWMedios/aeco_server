@@ -32,6 +32,15 @@ export class Campaign extends Base implements ICampaign {
   @Column({ default: false })
   isEnabled: boolean
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  planDescription?: string
+
+  @Column({ type: 'int', default: 0 })
+  reproductionLimit?: number
+
+  @Column({ type: 'int', default: 0 })
+  planDurationDays?: number
+
   @Column({ type: 'int', nullable: true })
   mediaId?: number
 

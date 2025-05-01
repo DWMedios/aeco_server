@@ -1,6 +1,7 @@
 import type { EntityManager } from 'typeorm'
 import type { ICampaign } from '@common/domain/entities'
 import type { CampaignFiltersDto } from '@advertisings/domain/dto/Filters.dto'
+import type { CountByDay } from '@advertisings/domain/Types'
 
 export const CAMPAIGN_REPOSITORY = Symbol('ICampaignRepository')
 
@@ -10,6 +11,17 @@ export interface ICampaignRepository {
     filters: CampaignFiltersDto,
     manager?: EntityManager,
   ): Promise<[ICampaign[], number]>
+  findManyByCompanyId(
+    ids: number[],
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<ICampaign[]>
+  findByDatePeriod(
+    companyId: number,
+    startDate: Date,
+    endDate: Date,
+    manager?: EntityManager,
+  ): Promise<CountByDay[]>
   create(
     campaign: Partial<ICampaign>,
     manager?: EntityManager,

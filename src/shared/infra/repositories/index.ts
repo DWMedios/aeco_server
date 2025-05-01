@@ -1,4 +1,5 @@
 export * from './AecoRepository'
+export * from './AdvertisingRepository'
 export * from './CompanyRepository'
 export * from './ContractorRepository'
 export * from './PageRepository'

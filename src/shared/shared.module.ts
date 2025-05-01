@@ -21,6 +21,7 @@ import {
   UserRolePermissions,
 } from '@common/infra/entities'
 import {
+  ADVERTISING_REPOSITORY,
   AECO_REPOSITORY,
   CAMPAIGN_REPOSITORY,
   COMPANY_REPOSITORY,
@@ -36,6 +37,7 @@ import {
   USER_REPOSITORY,
 } from './domain/repositories'
 import {
+  AdvertisingRepository,
   AecoRepository,
   CampaignRepository,
   CompanyRepository,
@@ -134,6 +136,10 @@ import { TransactionService } from './app/transaction/transaction.service'
       useClass: CampaignRepository,
     },
     {
+      provide: ADVERTISING_REPOSITORY,
+      useClass: AdvertisingRepository,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -165,6 +171,7 @@ import { TransactionService } from './app/transaction/transaction.service'
     MEDIA_ASSET_REPOSITORY,
     CONTRACTOR_REPOSITORY,
     CAMPAIGN_REPOSITORY,
+    ADVERTISING_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
   ],

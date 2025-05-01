@@ -27,9 +27,10 @@ import { DeleteFileController } from './infra/controllers/delete-file.controller
     },
   ],
   controllers: [
-    PostUploadUrlController,
-    GetDownloadUrlController,
-    DeleteFileController,
+    // Rutas de media-assets (ordenadas de más generales a más específicas)
+    GetDownloadUrlController, // GET /media-assets/download-url/:key
+    PostUploadUrlController, // POST /media-assets/upload-url
+    DeleteFileController, // DELETE /media-assets/:key
   ],
 })
 export class MediaAssetsModule {}

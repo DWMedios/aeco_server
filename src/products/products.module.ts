@@ -90,18 +90,23 @@ import { GetAllProductsAfterLastController } from './infra/controllers/iot-contr
     },
   ],
   controllers: [
-    GetAllProductsController,
-    GetAllProductCapacityController,
-    GetAllProductsAfterLastController,
-    GetAllProductCapacityAfterLastController,
-    GetProductController,
-    GetProductCapacityController,
-    PostProductCapacityController,
-    PostProductController,
-    PutProductCapacityController,
-    PutProductController,
-    DeleteProductCapacityController,
-    DeleteProductController,
+    // Rutas de productos (más genéricas a más específicas)
+    GetAllProductsController, // GET /products
+    GetProductController, // GET /products/:id
+    PostProductController, // POST /products
+    PutProductController, // PUT /products/:id
+    DeleteProductController, // DELETE /products/:id
+
+    // Rutas de capacidades de productos
+    GetAllProductCapacityController, // GET /products/capacities
+    GetProductCapacityController, // GET /products/capacities/:id
+    PostProductCapacityController, // POST /products/capacities
+    PutProductCapacityController, // PUT /products/capacities/:id
+    DeleteProductCapacityController, // DELETE /products/capacities/:id
+
+    // Rutas relacionadas con IOT
+    GetAllProductsAfterLastController, // GET /products/after-last
+    GetAllProductCapacityAfterLastController, // GET /products/capacities/after-last
   ],
 })
 export class ProductsModule {}

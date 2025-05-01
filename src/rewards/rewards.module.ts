@@ -41,11 +41,12 @@ import { PutRewardController } from './infra/controllers/put-reward.controller'
     },
   ],
   controllers: [
-    DeleteRewardController,
-    GetAllRewardController,
-    GetRewardController,
-    PostRewardController,
-    PutRewardController,
+    // Rutas de rewards (más genéricas a más específicas)
+    GetAllRewardController, // GET /rewards
+    GetRewardController, // GET /rewards/:id
+    PostRewardController, // POST /rewards
+    PutRewardController, // PUT /rewards/:id
+    DeleteRewardController, // DELETE /rewards/:id
   ],
 })
 export class RewardsModule {}

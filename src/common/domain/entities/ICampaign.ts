@@ -11,6 +11,9 @@ export interface ICampaign extends IBase {
   readonly startDate: Date
   readonly endDate: Date
   readonly isEnabled: boolean
+  readonly planDescription?: string
+  readonly reproductionLimit?: number
+  readonly planDurationDays?: number
   readonly mediaId?: number
   readonly contractorId?: number
   readonly companyId?: number

@@ -41,11 +41,12 @@ import { FindAllCompanyService } from './app/find-all-company.service'
     },
   ],
   controllers: [
-    PostCompanyController,
-    PutCompanyController,
-    DeleteCompanyController,
-    GetCompanyController,
-    GetAllCompanyController,
+    // Rutas de companies (más genéricas a más específicas)
+    GetAllCompanyController, // GET /companies
+    GetCompanyController, // GET /companies/:id
+    PostCompanyController, // POST /companies
+    PutCompanyController, // PUT /companies/:id
+    DeleteCompanyController, // DELETE /companies/:id
   ],
 })
 export class CompanyModule {}

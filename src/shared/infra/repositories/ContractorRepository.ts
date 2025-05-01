@@ -46,20 +46,6 @@ export class ContractorRepository
       .getOne()
   }
 
-  findByIdAndCompany(
-    id: number,
-    companyId: number,
-    manager?: EntityManager,
-  ): Promise<IContractor | null> {
-    return this.repository(manager)
-      .createQueryBuilder('contractor')
-      .select(['contractor.id', 'contractor.status', 'contractor.companyId'])
-      .where('contractor.id = :id', { id })
-      .andWhere('contractor.companyId = :companyId', { companyId })
-      .andWhere('contractor.deletedAt IS NULL')
-      .getOne()
-  }
-
   findAll(
     filters: ContractorFiltersDto,
     manager?: EntityManager,
@@ -119,6 +105,33 @@ export class ContractorRepository
     }
 
     return qb.getManyAndCount()
+  }
+
+  findByIdAndCompany(
+    id: number,
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IContractor | null> {
+    return this.repository(manager)
+      .createQueryBuilder('contractor')
+      .select(['contractor.id', 'contractor.status', 'contractor.companyId'])
+      .where('contractor.id = :id', { id })
+      .andWhere('contractor.companyId = :companyId', { companyId })
+      .andWhere('contractor.deletedAt IS NULL')
+      .getOne()
+  }
+
+  findManyByCompanyId(
+    ids: number[],
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IContractor[]> {
+    return this.repository(manager)
+      .createQueryBuilder('contractors')
+      .select(['contractors.id', 'contractors.companyId'])
+      .where('contractors.companyId = :companyId', { companyId })
+      .andWhere('contractors.id IN (:...ids)', { ids })
+      .getMany()
   }
 
   create(

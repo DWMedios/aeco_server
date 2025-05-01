@@ -83,17 +83,22 @@ import { GetAllAecoRewardsController } from './infra/controllers/iot-controllers
     },
   ],
   controllers: [
-    GetAllAecoRewardsController,
-    GetAecoController,
-    GetAllAecoController,
-    PostAecoController,
-    PutAecoController,
-    DeleteAecoController,
-    AecosController,
-    PostInsertTicketsController,
-    PostInsertDailyStatsController,
-    PostInsertProductStatsController,
-    PostInsertPackagingStatsController,
+    // Rutas de aecos (más genéricas a más específicas)
+    GetAllAecoController, // GET /aecos
+    GetAecoController, // GET /aecos/:id
+    PostAecoController, // POST /aecos
+    PutAecoController, // PUT /aecos/:id
+    DeleteAecoController, // DELETE /aecos/:id
+
+    // Rutas especiales de aecos
+    AecosController, // Contiene rutas específicas como initial-setup y finish-setup
+
+    // Rutas relacionadas con IOT (ordenadas por entidad)
+    GetAllAecoRewardsController, // GET /aecos/rewards
+    PostInsertDailyStatsController, // POST /aecos/upload-daily-stats
+    PostInsertPackagingStatsController, // POST /aecos/upload-packaging-stats
+    PostInsertProductStatsController, // POST /aecos/upload-product-stats
+    PostInsertTicketsController, // POST /aecos/upload-tickets
   ],
 })
 export class AecosModule {}
