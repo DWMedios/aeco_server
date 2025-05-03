@@ -4,7 +4,7 @@ import {
   PAGE_REPOSITORY,
   type IPageRepository,
 } from '@shared/domain/repositories'
-import type { CreatePageDto } from '../domain/dto/PageDto'
+import type { CreatePageDto } from '../domain/dto/Page.dto'
 import type { IPageService } from '../domain/IPageService'
 
 @Injectable()

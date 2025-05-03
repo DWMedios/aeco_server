@@ -11,7 +11,7 @@ import {
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { IAeco } from '@common/domain/entities'
-import type { AecoFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { AecoFiltersDto } from '@aecos/domain/dto/Filters.dto'
 import type { IFindAllAecoService } from '@aecos/domain/services/IFindAllAecoService'
 
 @Injectable()

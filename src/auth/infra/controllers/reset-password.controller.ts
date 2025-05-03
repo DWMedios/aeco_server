@@ -1,3 +1,4 @@
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   Body,
   Controller,
@@ -17,6 +18,7 @@ import {
 import { ResetPasswordDto } from '@auth/domain/dto/ResetPassword.dto'
 import { ResetPasswordGuard } from '../guards/reset-password.guard'
 
+@ApiTags('Autenticación')
 @Controller('auth')
 export class ResetPasswordController {
   logger = new Logger(ResetPasswordController.name)
@@ -29,6 +31,20 @@ export class ResetPasswordController {
   @Put('users/:id/reset-password')
   @UseGuards(ResetPasswordGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Restablecimiento de contraseña de usuario' })
+  @ApiParam({ name: 'id', description: 'ID del usuario', example: 1 })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Contraseña restablecida exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Usuario no encontrado',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
   async login(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: ResetPasswordDto,

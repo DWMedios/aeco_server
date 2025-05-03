@@ -1,7 +1,14 @@
+import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Transform, Type } from 'class-transformer'
 import { IsNumber, IsOptional, Max, Min } from 'class-validator'
 
 export class PageOptionsDto {
+  @ApiPropertyOptional({
+    description: 'Número de página actual',
+    example: 1,
+    default: 1,
+    minimum: 1,
+  })
   @IsOptional()
   @IsNumber({}, { message: 'page debe ser um número' })
   @Min(1, { message: 'page debe ser mayor o igual a 1' })
@@ -9,6 +16,13 @@ export class PageOptionsDto {
   @Transform(({ value }) => (value ? Number(value) : value))
   readonly page?: number = 1
 
+  @ApiPropertyOptional({
+    description: 'Cantidad de elementos por página',
+    example: 10,
+    default: 10,
+    minimum: 1,
+    maximum: 50,
+  })
   @IsOptional()
   @IsNumber({}, { message: 'perpage debe ser un número' })
   @Min(1, { message: 'perpage debe ser mayor o igual a 1' })

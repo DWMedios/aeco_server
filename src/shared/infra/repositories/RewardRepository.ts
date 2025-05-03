@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Reward } from '@common/infra/entities'
 import type { IReward } from '@common/domain/entities'
 import type { IRewardRepository } from '@shared/domain/repositories'
-import type { RewardFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { RewardFiltersDto } from '@rewards/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()

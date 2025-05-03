@@ -4,7 +4,7 @@ import type {
   IAecoFilterManyOptions,
   IAecoFilterOptions,
 } from '@aecos/domain/Types'
-import type { AecoFiltersDto } from '../dto/Filters.dto'
+import type { AecoFiltersDto } from '@aecos/domain/dto/Filters.dto'
 
 export const AECO_REPOSITORY = Symbol('IAecoRepository')
 

@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { User } from '@common/infra/entities'
 import type { IUser } from '@common/domain/entities'
 import type { IUserRepository } from '@shared/domain/repositories'
-import type { UserFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { UserFiltersDto } from '@users/domain/dto/Filters.dto'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()

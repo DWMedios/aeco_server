@@ -6,7 +6,7 @@ import type {
   IAecoFilterManyOptions,
   IAecoFilterOptions,
 } from '@aecos/domain/Types'
-import type { AecoFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { AecoFiltersDto } from '@aecos/domain/dto/Filters.dto'
 import type { IAecoRepository } from '@shared/domain/repositories'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import { TransactionalRepository } from '../base/transactional.repository'
@@ -179,6 +179,7 @@ export class AecoRepository
     return this.repository(manager)
       .createQueryBuilder('aeco')
       .leftJoinAndSelect('aeco.rewards', 'rewards')
+      .leftJoinAndSelect('rewards.mediaAsset', 'mediaAsset')
       .select([
         'aeco.id',
         'rewards.id',
@@ -186,11 +187,17 @@ export class AecoRepository
         'rewards.establishment',
         'rewards.description',
         'rewards.note',
-        'rewards.image',
+        'rewards.imageId',
         'rewards.status',
         'rewards.type',
         'rewards.order',
         'rewards.metadata',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
       ])
       .where('aeco.id = :id', { id })
       .getOne()

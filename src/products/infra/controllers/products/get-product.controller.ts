@@ -1,4 +1,11 @@
 import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
+import {
   Controller,
   Get,
   HttpCode,
@@ -15,6 +22,7 @@ import {
 } from '@products/domain/services/products/IFindProductService'
 import { GetOneProductQueryFilter } from '@products/domain/dto/GetOneQueryFilter'
 
+@ApiTags('Productos')
 @Controller('products')
 export class GetProductController {
   logger = new Logger(GetProductController.name)
@@ -24,6 +32,30 @@ export class GetProductController {
     private readonly service: IFindProductService,
   ) {}
 
+  @ApiOperation({
+    summary: 'Obtener un producto por ID',
+    description: 'Devuelve un producto específico según el ID proporcionado',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Producto obtenido exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Producto no encontrado',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID del producto',
+    type: Number,
+    required: true,
+  })
+  @ApiQuery({
+    name: 'withCapacity',
+    description: 'Incluir información de capacidad del producto',
+    type: Boolean,
+    required: false,
+  })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getOneProduct(

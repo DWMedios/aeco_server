@@ -1,4 +1,11 @@
 import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
+import {
   Body,
   Controller,
   HttpCode,
@@ -17,6 +24,7 @@ import {
 import { UpdateCompanyDto } from '@company/domain/dto/UpdateCompany.dto'
 import { CompaniesRoleGuard } from '../guards/companies-role.guard'
 
+@ApiTags('Empresas')
 @Controller('companies')
 export class PutCompanyController {
   logger = new Logger(PutCompanyController.name)
@@ -29,6 +37,29 @@ export class PutCompanyController {
   @Put(':id')
   @UseGuards(CompaniesRoleGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Actualizar una empresa existente' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID de la empresa a actualizar',
+    example: 1,
+  })
+  @ApiBody({ type: UpdateCompanyDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Empresa actualizada exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Empresa no encontrada',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Datos inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
   async updateCompany(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateCompanyDto,

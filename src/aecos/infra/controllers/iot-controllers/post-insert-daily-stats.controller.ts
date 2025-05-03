@@ -1,3 +1,4 @@
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   Body,
   Controller,
@@ -17,6 +18,7 @@ import { DecodedAeco } from '@shared/domain/Types'
 import { CurrentAeco } from '@shared/app/decorators/current-logged.decorator'
 import { CreateDailyStatsDto } from '@aecos/domain/dto/CreateAecoStats.dto'
 
+@ApiTags('AECOS - IoT')
 @Controller('aecos')
 export class PostInsertDailyStatsController {
   logger = new Logger(PostInsertDailyStatsController.name)
@@ -29,6 +31,26 @@ export class PostInsertDailyStatsController {
   @Post('upload-daily-stats')
   @UseGuards(AecosGuard)
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Subir estadísticas diarias de un dispositivo AECO',
+  })
+  @ApiBody({ type: CreateDailyStatsDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Estadísticas diarias guardadas exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Datos inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Error al guardar las estadísticas diarias',
+  })
   async insertDailyStats(
     @CurrentAeco() aeco: DecodedAeco,
     @Body() payload: CreateDailyStatsDto,

@@ -13,7 +13,7 @@ import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { DecodedUser } from '@shared/domain/Types'
 import type { IReward } from '@common/domain/entities'
-import type { RewardFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { RewardFiltersDto } from '@rewards/domain/dto/Filters.dto'
 import type { IFindAllRewardService } from '@rewards/domain/services/IFindAllRewardService'
 
 @Injectable()

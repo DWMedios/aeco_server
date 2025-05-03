@@ -11,7 +11,7 @@ import {
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { IProduct } from '@common/domain/entities'
-import type { ProductFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ProductFiltersDto } from '@products/domain/dto/Filters.dto'
 import type { IFindAllProductsService } from '@products/domain/services/products/IFindAllProductService'
 
 @Injectable()

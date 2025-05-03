@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { IUser } from '@common/domain/entities'
-import type { UserFiltersDto } from '../dto/Filters.dto'
+import type { UserFiltersDto } from '@users/domain/dto/Filters.dto'
 
 export const USER_REPOSITORY = Symbol('IUserRepository')
 
