@@ -1,4 +1,11 @@
 import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger'
+import {
   Controller,
   Get,
   HttpCode,
@@ -13,7 +20,9 @@ import {
   type IGetDownloadUrlService,
 } from '@media-assets/domain/services/IGetDownloadUrlService'
 import { GetDownloadUrlDto } from '@media-assets/domain/dto/GetDownloadUrl.dto'
+import { GetDownloadUrlResponseDto } from '@media-assets/domain/dto/GetDownloadUrlResponse.dto'
 
+@ApiTags('Media Assets')
 @Controller('media-assets')
 export class GetDownloadUrlController {
   logger = new Logger(GetDownloadUrlController.name)
@@ -25,6 +34,27 @@ export class GetDownloadUrlController {
 
   @Get('download-url/:key')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Obtiene una URL temporal para descargar un archivo multimedia',
+  })
+  @ApiParam({
+    name: 'key',
+    description: 'Clave única que identifica el archivo a descargar',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({
+    description: 'URL de descarga generada correctamente',
+    type: GetDownloadUrlResponseDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'El archivo no fue encontrado',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado para acceder al archivo',
+  })
   async getDownloadUrl(
     @Param(new ValidationPipe({ transform: true })) param: GetDownloadUrlDto,
   ): Promise<{ url: string }> {

@@ -1,3 +1,4 @@
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   Controller,
   Get,
@@ -15,6 +16,7 @@ import {
 } from '@users/domain/services/IFindUserService'
 import { UsersRoleGuard } from '../guards/users-role.guard'
 
+@ApiTags('Usuarios')
 @Controller('users')
 export class GetUserController {
   logger = new Logger(GetUserController.name)
@@ -27,6 +29,20 @@ export class GetUserController {
   @Get(':id')
   @UseGuards(UsersRoleGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Obtener un usuario por ID' })
+  @ApiParam({ name: 'id', description: 'ID del usuario', example: 1 })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Usuario encontrado exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Usuario no encontrado',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
   async getOneUser(@Param('id', ParseIntPipe) id: number) {
     return await this.service.run(id)
   }

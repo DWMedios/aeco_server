@@ -1,7 +1,9 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Inject, Post, HttpStatus } from '@nestjs/common'
 import { PAGE_SERVICE, type IPageService } from '../domain/IPageService'
-import type { CreatePageDto } from '../domain/dto/PageDto'
+import { CreatePageDto } from '../domain/dto/Page.dto'
 
+@ApiTags('Páginas')
 @Controller('pages')
 export class PagesController {
   constructor(
@@ -10,7 +12,24 @@ export class PagesController {
   ) {}
 
   @Post()
-  async create(@Body() createPage: CreatePageDto) {
-    return await this.pageService.create(createPage)
+  @ApiOperation({
+    summary: 'Crear una nueva página',
+    description: 'Crea una nueva página en el sistema',
+  })
+  @ApiBody({ type: CreatePageDto, description: 'Datos de la página a crear' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Página creada exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Datos de entrada inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
+  async create(@Body() payload: CreatePageDto) {
+    return await this.pageService.create(payload)
   }
 }

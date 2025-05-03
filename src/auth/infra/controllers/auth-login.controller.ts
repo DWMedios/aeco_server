@@ -1,3 +1,4 @@
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   Body,
   Controller,
@@ -13,6 +14,7 @@ import {
 } from '@auth/domain/services/IAuthService'
 import { LoginUserDto } from '@auth/domain/dto/LoginUser.dto'
 
+@ApiTags('Autenticación')
 @Controller('auth')
 export class LoginController {
   logger = new Logger(LoginController.name)
@@ -24,6 +26,15 @@ export class LoginController {
 
   @Post('login')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Inicio de sesión de usuario' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Usuario autenticado exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Credenciales inválidas',
+  })
   async login(@Body() payload: LoginUserDto) {
     return await this.service.run(payload)
   }

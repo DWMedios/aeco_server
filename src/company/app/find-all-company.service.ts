@@ -11,7 +11,7 @@ import {
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { ICompany } from '@common/domain/entities'
-import type { CompanyFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { CompanyFiltersDto } from '@company/domain/dto/Filters.dto'
 import type { IFindAllCompanyService } from '@company/domain/services/IFindAllCompanyService'
 
 @Injectable()

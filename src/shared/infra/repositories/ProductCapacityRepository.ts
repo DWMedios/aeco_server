@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { ProductCapacity } from '@common/infra/entities'
 import type { IProductCapacity } from '@common/domain/entities'
 import type { IProductCapacityRepository } from '@shared/domain/repositories'
-import type { ProductCapacityFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ProductCapacityFiltersDto } from '@products/domain/dto/Filters.dto'
 import type { ProductCapacityFilterByOptions } from '@products/domain/Types'
 import { TransactionalRepository } from '../base/transactional.repository'
 

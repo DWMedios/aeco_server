@@ -11,7 +11,7 @@ import {
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { IProductCapacity } from '@common/domain/entities'
-import type { ProductCapacityFiltersDto } from '@shared/domain/dto/Filters.dto'
+import type { ProductCapacityFiltersDto } from '@products/domain/dto/Filters.dto'
 import type { IFindAllProductCapacityService } from '@products/domain/services/product-capacity/IFindAllProductCapacityService'
 
 @Injectable()

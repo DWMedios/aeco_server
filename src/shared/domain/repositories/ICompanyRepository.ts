@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { ICompany } from '@common/domain/entities'
-import type { CompanyFiltersDto } from '../dto/Filters.dto'
+import type { CompanyFiltersDto } from '@company/domain/dto/Filters.dto'
 import type { ICompanyFilterOptions } from '@company/domain/Types'
 
 export const COMPANY_REPOSITORY = Symbol('ICompanyRepository')

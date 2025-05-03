@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { IReward } from '@common/domain/entities'
-import type { RewardFiltersDto } from '../dto/Filters.dto'
+import type { RewardFiltersDto } from '@rewards/domain/dto/Filters.dto'
 
 export const REWARD_REPOSITORY = Symbol('IRewardRepository')
 

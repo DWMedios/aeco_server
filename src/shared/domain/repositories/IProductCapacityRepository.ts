@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { IProductCapacity } from '@common/domain/entities'
-import type { ProductCapacityFiltersDto } from '../dto/Filters.dto'
+import type { ProductCapacityFiltersDto } from '@products/domain/dto/Filters.dto'
 import type { ProductCapacityFilterByOptions } from '@products/domain/Types'
 
 export const PRODUCT_CAPACITY_REPOSITORY = Symbol('IProductCapacityRepository')

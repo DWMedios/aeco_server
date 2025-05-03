@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Page } from '@common/infra/entities'
 import type { IPage } from '@common/domain/entities'
 import type { IPageRepository } from '@shared/domain/repositories'
-import type { CreatePageDto } from '../../../pages/domain/dto/PageDto'
+import type { CreatePageDto } from '../../../pages/domain/dto/Page.dto'
 
 export class PageRepository implements IPageRepository {
   constructor(

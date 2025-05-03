@@ -1,4 +1,11 @@
 import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
+import {
   Body,
   Controller,
   HttpCode,
@@ -15,6 +22,7 @@ import {
 } from '@aecos/domain/services/IUpdateAecoService'
 import { UpdateAecoDto } from '@aecos/domain/dto/UpdateAecoDto'
 
+@ApiTags('AECOS')
 @Controller('aecos')
 export class PutAecoController {
   logger = new Logger(PutAecoController.name)
@@ -26,6 +34,29 @@ export class PutAecoController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Actualizar un dispositivo AECO' })
+  @ApiParam({
+    name: 'id',
+    description: 'ID del dispositivo AECO',
+    type: 'number',
+  })
+  @ApiBody({ type: UpdateAecoDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Dispositivo AECO actualizado exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Datos inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Dispositivo AECO no encontrado',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
   async updateAeco(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateAecoDto,

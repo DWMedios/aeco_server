@@ -1,3 +1,4 @@
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import {
   Body,
   Controller,
@@ -13,6 +14,7 @@ import {
 } from '@advertisings/domain/services/campaigns/ICreateCampaignService'
 import { CreateCampaignDto } from '@advertisings/domain/dto/campaigns/CreateCampaign.dto'
 
+@ApiTags('Campañas')
 @Controller('advertisings')
 export class PostCampaignController {
   logger = new Logger(PostCampaignController.name)
@@ -24,6 +26,23 @@ export class PostCampaignController {
 
   @Post('campaigns')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear una nueva campaña publicitaria' })
+  @ApiBody({
+    type: CreateCampaignDto,
+    description: 'Datos para crear la campaña publicitaria',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'La campaña ha sido creada exitosamente',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Datos de entrada inválidos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'No autorizado',
+  })
   async createCampaign(@Body() payload: CreateCampaignDto) {
     return await this.service.run(payload)
   }
