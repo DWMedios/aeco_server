@@ -3,6 +3,7 @@ import { SharedModule } from '@shared/shared.module'
 import { GET_DOWNLOAD_URL_SERVICE } from './domain/services/IGetDownloadUrlService'
 import { GetDownloadUrlService } from './app/get-download-url.service'
 import { GetDownloadUrlController } from './infra/controllers/get-download-url.controller'
+import { GetDownloadUrlAecoController } from './infra/controllers/iot-controllers/get-download-url-aeco.controller'
 import { CREATE_UPLOAD_URL_SERVICE } from './domain/services/ICreateUploadUrlService'
 import { CreateUploadUrlService } from './app/create-upload-url.service'
 import { PostUploadUrlController } from './infra/controllers/post-upload-url.controller'
@@ -28,6 +29,7 @@ import { DeleteFileController } from './infra/controllers/delete-file.controller
   ],
   controllers: [
     // Rutas de media-assets (ordenadas de más generales a más específicas)
+    GetDownloadUrlAecoController, // GET /media-assets/aecos/download-url/:key
     GetDownloadUrlController, // GET /media-assets/download-url/:key
     PostUploadUrlController, // POST /media-assets/upload-url
     DeleteFileController, // DELETE /media-assets/:key

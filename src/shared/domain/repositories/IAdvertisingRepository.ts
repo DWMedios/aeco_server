@@ -6,6 +6,11 @@ export const ADVERTISING_REPOSITORY = Symbol('IAdvertisingRepository')
 
 export interface IAdvertisingRepository {
   findById(id: number, manager?: EntityManager): Promise<IAdvertising | null>
+  findManyByCompanyAndAeco(
+    companyId: number,
+    aecoId: number,
+    manager?: EntityManager,
+  ): Promise<IAdvertising[]>
   findAll(
     filters: FilterAdvertisingDto,
     manager?: EntityManager,
