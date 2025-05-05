@@ -23,6 +23,9 @@ import { AecosController } from './infra/controllers/aecos.controller'
 import { GET_ALL_AECO_REWARDS_SERVICE } from './domain/services/iot-services/IGetAllAecoRewardsService'
 import { GetAllAecoRewardsService } from './app/iot-services/get-all-aeco-rewards.service'
 import { GetAllAecoRewardsController } from './infra/controllers/iot-controllers/get-all-aeco-rewards.controller'
+import { GET_ALL_AECO_ADVERTISINGS_SERVICE } from './domain/services/iot-services/IGetAllAecoAdvertisingsService'
+import { GetAllAecoAdvertisingsService } from './app/iot-services/get-all-aeco-advertisings.service'
+import { GetAllAecoAdvertisingsController } from './infra/controllers/iot-controllers/get-all-aeco-advertisings.controller'
 import { INSERT_DAILY_STATS_AECO_SERVICE } from './domain/services/iot-services/IInsertDailyStatsAecoService'
 import { InsertDailyStatsAecoService } from './app/iot-services/insert-daily-stats-aeco.service'
 import { PostInsertDailyStatsController } from './infra/controllers/iot-controllers/post-insert-daily-stats.controller'
@@ -70,6 +73,10 @@ import { PostInsertTicketsController } from './infra/controllers/iot-controllers
       useClass: GetAllAecoRewardsService,
     },
     {
+      provide: GET_ALL_AECO_ADVERTISINGS_SERVICE,
+      useClass: GetAllAecoAdvertisingsService,
+    },
+    {
       provide: INSERT_DAILY_STATS_AECO_SERVICE,
       useClass: InsertDailyStatsAecoService,
     },
@@ -89,6 +96,7 @@ import { PostInsertTicketsController } from './infra/controllers/iot-controllers
   controllers: [
     // Rutas especiales y específicas primero
     GetAllAecoRewardsController, // GET /aecos/rewards
+    GetAllAecoAdvertisingsController, // GET /aecos/advertisings
     AecosController, // Contiene rutas específicas como initial-setup y finish-setup
 
     // Rutas relacionadas con IOT (ordenadas por entidad)

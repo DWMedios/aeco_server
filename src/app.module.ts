@@ -77,6 +77,10 @@ export class AppModule implements NestModule {
           path: 'aecos/rewards',
           method: RequestMethod.GET,
         },
+        {
+          path: 'aecos/advertisings',
+          method: RequestMethod.GET,
+        },
       )
       .exclude(
         {
@@ -88,6 +92,10 @@ export class AppModule implements NestModule {
           method: RequestMethod.GET,
         },
       )
+      .exclude({
+        path: 'media-assets/aecos/download-url/:key',
+        method: RequestMethod.GET,
+      })
       .forRoutes('*')
   }
 }

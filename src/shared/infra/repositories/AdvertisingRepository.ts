@@ -41,6 +41,51 @@ export class AdvertisingRepository
       .getOne()
   }
 
+  findManyByCompanyAndAeco(
+    companyId: number,
+    aecoId: number,
+    manager?: EntityManager,
+  ): Promise<IAdvertising[]> {
+    return this.repository(manager)
+      .createQueryBuilder('advertisings')
+      .leftJoinAndSelect('advertisings.campaigns', 'campaigns')
+      .leftJoinAndSelect('campaigns.contractors', 'contractors')
+      .leftJoinAndSelect('campaigns.aecos', 'aecos')
+      .leftJoinAndSelect('campaigns.mediaAsset', 'mediaAsset')
+      .select([
+        'advertisings.id',
+        'advertisings.isEnabled',
+        'advertisings.companyId',
+        'campaigns.id',
+        'campaigns.contractName',
+        'campaigns.description',
+        'campaigns.startDate',
+        'campaigns.endDate',
+        'campaigns.isEnabled',
+        'campaigns.planDescription',
+        'campaigns.reproductionLimit',
+        'campaigns.planDurationDays',
+        'campaigns.mediaId',
+        'campaigns.contractorId',
+        'campaigns.companyId',
+        'contractors.id',
+        'contractors.name',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+        'aecos.id',
+      ])
+
+      .where('advertisings.companyId = :companyId', { companyId })
+      .andWhere('aecos.id = :aecoId', { aecoId })
+      .andWhere('advertisings.isEnabled = :isEnabled', { isEnabled: true })
+      .andWhere('campaigns.isEnabled = :isEnabled', { isEnabled: true })
+      .getMany()
+  }
+
   findAll(
     filters: FilterAdvertisingDto,
     manager?: EntityManager,

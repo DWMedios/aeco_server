@@ -200,6 +200,48 @@ export class AecoRepository
         'mediaAsset.assetType',
       ])
       .where('aeco.id = :id', { id })
+      .andWhere('aeco.status = :status', {
+        status: AecoStatusEnum.ENABLED,
+      })
+      .getOne()
+  }
+
+  getCampaignsByAeco(
+    id: number,
+    manager?: EntityManager,
+  ): Promise<IAeco | null> {
+    return this.repository(manager)
+      .createQueryBuilder('aeco')
+      .leftJoinAndSelect('aeco.campaigns', 'campaigns')
+      .leftJoinAndSelect('campaigns.contractor', 'contractor')
+      .leftJoinAndSelect('campaigns.mediaAsset', 'mediaAsset')
+      .select([
+        'aeco.id',
+        'campaigns.id',
+        'campaigns.contractName',
+        'campaigns.description',
+        'campaigns.startDate',
+        'campaigns.endDate',
+        'campaigns.isEnabled',
+        'campaigns.planDescription',
+        'campaigns.reproductionLimit',
+        'campaigns.planDurationDays',
+        'campaigns.mediaId',
+        'campaigns.contractorId',
+        'campaigns.companyId',
+        'contractor.id',
+        'contractor.name',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+      ])
+      .where('aeco.id = :id', { id })
+      .andWhere('aeco.status = :status', {
+        status: AecoStatusEnum.ENABLED,
+      })
       .getOne()
   }
 
