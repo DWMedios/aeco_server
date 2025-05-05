@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsEnum, IsIn, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
 import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
@@ -48,4 +48,16 @@ export class UserFiltersDto extends BaseFiltersDto {
     message: 'orderByField debe ser createdAt, name, email o id',
   })
   readonly orderByField?: OrderByFieldUserType
+
+  @ApiPropertyOptional({
+    description: 'Filtrar por estado activo/inactivo',
+    example: true,
+    type: Boolean,
+  })
+  @IsOptional()
+  @IsBoolean({ message: 'isActive debe ser un booleano' })
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : value,
+  )
+  readonly isActive?: boolean
 }
