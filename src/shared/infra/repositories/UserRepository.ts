@@ -35,40 +35,42 @@ export class UserRepository
 
   findById(
     id: number,
-    isActive = true,
+    isActive?: boolean,
     manager?: EntityManager,
   ): Promise<IUser | null> {
-    return this.repository(manager).findOne({
-      relations: ['role', 'company', 'mediaAsset'],
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        position: true,
-        isActive: true,
-        companyId: true,
-        imageId: true,
-        createdAt: true,
-        role: {
-          id: true,
-          role: true,
-        },
-        company: {
-          id: true,
-          name: true,
-        },
-        mediaAsset: {
-          id: true,
-          fileKey: true,
-          originalName: true,
-          mimeType: true,
-          fileSize: true,
-          assetType: true,
-        },
-      },
-      where: { id, isActive },
-    })
+    const qb = this.repository(manager)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.company', 'company')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.mediaAsset', 'mediaAsset')
+      .select([
+        'user.id',
+        'user.name',
+        'user.email',
+        'user.phone',
+        'user.position',
+        'user.isActive',
+        'user.createdAt',
+        'user.companyId',
+        'user.imageId',
+        'role.id',
+        'role.role',
+        'company.id',
+        'company.name',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+      ])
+      .where('user.id = :id', { id })
+
+    if (isActive !== undefined) {
+      qb.andWhere('user.isActive = :isActive', { isActive })
+    }
+
+    return qb.getOne()
   }
 
   findByEmail(email: string, manager?: EntityManager): Promise<IUser | null> {
@@ -163,6 +165,10 @@ export class UserRepository
 
     if (filters?.role) {
       qb.orWhere('role.role = :role', { role: filters.role })
+    }
+
+    if (filters?.isActive !== undefined) {
+      qb.andWhere('user.isActive = :isActive', { isActive: filters.isActive })
     }
 
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)

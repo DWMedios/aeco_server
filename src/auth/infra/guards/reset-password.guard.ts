@@ -43,7 +43,7 @@ export class ResetPasswordGuard implements CanActivate {
 
       if (!body?.password) return false
 
-      const userToUpdate = await this.userRepository.findById(userId)
+      const userToUpdate = await this.userRepository.findById(userId, true)
 
       if (!userToUpdate) return false
       const currentUserCompany = currentUser?.company
