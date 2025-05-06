@@ -190,9 +190,9 @@ export class DashboardRepository
     manager?: EntityManager,
   ): Promise<boolean> {
     const qb = await this.repository('daily', manager)
-      .createQueryBuilder('dailyStats')
+      .createQueryBuilder()
       .softDelete()
-      .where('dailyStats.companyId = :companyId', { companyId })
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return qb.affected !== 0
@@ -203,9 +203,9 @@ export class DashboardRepository
     manager?: EntityManager,
   ): Promise<boolean> {
     const qb = await this.repository('packaging', manager)
-      .createQueryBuilder('packagingStats')
+      .createQueryBuilder()
       .softDelete()
-      .where('packagingStats.companyId = :companyId', { companyId })
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return qb.affected !== 0
@@ -216,9 +216,9 @@ export class DashboardRepository
     manager?: EntityManager,
   ): Promise<boolean> {
     const qb = await this.repository('product', manager)
-      .createQueryBuilder('productStats')
+      .createQueryBuilder()
       .softDelete()
-      .where('productStats.companyId = :companyId', { companyId })
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return qb.affected !== 0
