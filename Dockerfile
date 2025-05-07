@@ -1,5 +1,4 @@
-# Base image
-FROM node:20.11.1-slim
+FROM node:23.11.0-slim
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -20,9 +19,6 @@ COPY . .
 
 # Build the application
 RUN npm run build
-
-# Set node environment to development to have access to all deps
-ENV NODE_ENV development
 
 # Expose the port the app will run on
 EXPOSE 3000
