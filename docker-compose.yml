@@ -1,6 +1,8 @@
 services:
   api:
-    image: campos1587/aeco-backend:dev-v1
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: aeco-api
     restart: always
     ports:
