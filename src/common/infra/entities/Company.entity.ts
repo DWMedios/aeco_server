@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, OneToMany, JoinColumn } from 'typeorm'
+import { Entity, Column, OneToOne, OneToMany, JoinColumn, Index } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
 import { Aeco } from './Aeco.entity'
@@ -13,11 +13,15 @@ import { Campaign } from './Campaign.entity'
 import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
 
 @Entity({ name: 'companies' })
+@Index('companies_rfc_unique', ['rfc'], {
+  unique: true,
+  where: '"deletedAt" IS NULL',
+})
 export class Company extends Base implements ICompany {
-  @Column({ length: 100, unique: true })
+  @Column({ length: 100 })
   name: string
 
-  @Column({ length: 13, unique: true })
+  @Column({ length: 13 })
   rfc: string
 
   @Column({ nullable: true, length: 100 })
