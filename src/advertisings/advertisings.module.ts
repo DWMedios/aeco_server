@@ -126,27 +126,27 @@ import { DeleteContractorController } from './infra/controllers/contractors/dele
     },
   ],
   controllers: [
-    // Rutas de advertising (más genéricas a más específicas)
-    GetAllAdvertisingController, // GET /advertisings
-    GetAdvertisingController, // GET /advertisings/:id
-    PostAdvertisingController, // POST /advertisings
-    PutAdvertisingController, // PUT /advertisings/:id
-    DeleteAdvertisingController, // DELETE /advertisings/:id
-
-    // Rutas de campaigns (más genéricas a más específicas)
-    GetAllCampaignsController, // GET /advertisings/campaigns
+    // Rutas específicas de campañas primero
     GetCampaignByDateController, // GET /advertisings/campaigns/by-date
+    GetAllCampaignsController, // GET /advertisings/campaigns
     GetCampaignController, // GET /advertisings/campaigns/:id
     PostCampaignController, // POST /advertisings/campaigns
     PutCampaignController, // PUT /advertisings/campaigns/:id
     DeleteCampaignController, // DELETE /advertisings/campaigns/:id
 
-    // Rutas de contractors (más genéricas a más específicas)
+    // Rutas de contractors
     GetAllContractorsController, // GET /advertisings/contractors
     GetContractorController, // GET /advertisings/contractors/:id
     PostContractorController, // POST /advertisings/contractors
     PutContractorController, // PUT /advertisings/contractors/:id
     DeleteContractorController, // DELETE /advertisings/contractors/:id
+
+    // Rutas CRUD básicas de advertising al final (más generales)
+    GetAllAdvertisingController, // GET /advertisings
+    GetAdvertisingController, // GET /advertisings/:id
+    PostAdvertisingController, // POST /advertisings
+    PutAdvertisingController, // PUT /advertisings/:id
+    DeleteAdvertisingController, // DELETE /advertisings/:id
   ],
   exports: [],
 })
