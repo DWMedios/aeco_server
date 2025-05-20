@@ -1,3 +1,5 @@
+import { PrometheusModule } from '@willsoto/nestjs-prometheus'
+import { APP_INTERCEPTOR } from '@nestjs/core'
 import {
   MiddlewareConsumer,
   Module,
@@ -9,6 +11,7 @@ import { AdvertisingsModule } from '@advertisings/advertisings.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthMiddleware } from '@shared/app/middlewares/auth.middleware'
+import { CorrelationIdMiddleware } from '@shared/app/middlewares/correlation-id.middleware'
 import { AuthModule } from '@auth/auth.module'
 import { CommonModule } from '@common/common.module'
 import { CompanyModule } from '@company/company.module'
@@ -20,9 +23,11 @@ import { RewardsModule } from '@rewards/rewards.module'
 import { SharedModule } from '@shared/shared.module'
 import { TicketsModule } from '@tickets/tickets.module'
 import { UsersModule } from '@users/users.module'
+import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
 
 @Module({
   imports: [
+    PrometheusModule.register(),
     SharedModule,
     CommonModule,
     UsersModule,
@@ -37,11 +42,18 @@ import { UsersModule } from '@users/users.module'
     TicketsModule,
     AdvertisingsModule,
   ],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
   controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*')
     consumer
       .apply(AuthMiddleware)
       .exclude({
@@ -94,6 +106,10 @@ export class AppModule implements NestModule {
       )
       .exclude({
         path: 'media-assets/aecos/download-url/:key',
+        method: RequestMethod.GET,
+      })
+      .exclude({
+        path: 'metrics',
         method: RequestMethod.GET,
       })
       .forRoutes('*')
