@@ -90,6 +90,7 @@ export class RewardRepository
         'rewards.status',
         'rewards.type',
         'rewards.order',
+        'rewards.metadata',
         'rewards.imageId',
         'rewards.companyId',
         'rewards.createdAt',
