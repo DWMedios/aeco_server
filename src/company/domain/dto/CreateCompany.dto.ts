@@ -3,6 +3,7 @@ import { Transform, Type } from 'class-transformer'
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -169,6 +170,14 @@ export class CreateCompanyDto {
     message: 'El teléfono debe contener solo números',
   })
   readonly phone?: string
+
+  @ApiPropertyOptional({
+    description: 'Estado activo/inactivo de la empresa',
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean({ message: 'El estatus de la empresa debe ser un booleano' })
+  readonly status?: boolean
 
   @ApiPropertyOptional({
     description: 'Información del representante legal',
