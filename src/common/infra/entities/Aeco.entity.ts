@@ -15,6 +15,7 @@ import { Campaign } from './Campaign.entity'
 import { DailyStats } from './DailyStats.entity'
 import { ProductStats } from './ProductStats.entity'
 import { PackagingStats } from './PackagingStats.entity'
+import { AecoRequestHistory } from './AecoRequestHistory.entity'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import type { IAeco } from '@common/domain/entities/IAeco'
 import type { IAecoCoords } from '@common/domain/Types'
@@ -52,6 +53,9 @@ export class Aeco extends Base implements IAeco {
   @Column({ type: 'int', nullable: true })
   companyId?: number
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  lastConnection?: string
+
   @ManyToOne(() => Company, (company) => company.aecos)
   @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
   company?: Company
@@ -76,4 +80,7 @@ export class Aeco extends Base implements IAeco {
 
   @ManyToMany(() => Campaign, (campaign) => campaign.aecos)
   campaigns?: Campaign[]
+
+  @OneToMany(() => AecoRequestHistory, (requestHistory) => requestHistory.aeco)
+  requestHistory?: AecoRequestHistory[]
 }
