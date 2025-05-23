@@ -22,6 +22,36 @@ export class AecoRepository
     super(entityRepository)
   }
 
+  initialSetup(
+    serialNumber: string,
+    manager?: EntityManager,
+  ): Promise<IAeco | null> {
+    return this.repository(manager)
+      .createQueryBuilder('aeco')
+      .leftJoinAndSelect('aeco.company', 'company')
+      .leftJoinAndSelect('aeco.pages', 'pages')
+      .leftJoinAndSelect('aeco.rewardCategories', 'rewardCategories')
+      .select([
+        'aeco.id',
+        'aeco.name',
+        'company.id',
+        'company.name',
+        'pages.id',
+        'pages.name',
+        'pages.metadata',
+        'rewardCategories.id',
+        'rewardCategories.name',
+        'rewardCategories.order',
+        'rewardCategories.status',
+      ])
+      .where('aeco.serialNumber = :serialNumber', { serialNumber })
+      .andWhere('aeco.status = :aecoStatus', {
+        aecoStatus: AecoStatusEnum.ENABLED,
+      })
+      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: true })
+      .getOne()
+  }
+
   findBy(
     filters: IAecoFilterOptions,
     manager?: EntityManager,
@@ -259,35 +289,22 @@ export class AecoRepository
     return this.repository(manager).save(updatedAeco)
   }
 
-  initialSetup(
-    serialNumber: string,
+  async updateById(
+    id: number,
+    aeco: Partial<IAeco>,
     manager?: EntityManager,
-  ): Promise<IAeco | null> {
-    return this.repository(manager)
+  ): Promise<IAeco> {
+    const qb = await this.repository(manager)
       .createQueryBuilder('aeco')
-      .leftJoinAndSelect('aeco.company', 'company')
-      .leftJoinAndSelect('aeco.pages', 'pages')
-      .leftJoinAndSelect('aeco.rewardCategories', 'rewardCategories')
-      .select([
-        'aeco.id',
-        'aeco.name',
-        'company.id',
-        'company.name',
-        'pages.id',
-        'pages.name',
-        'pages.metadata',
-        'rewardCategories.id',
-        'rewardCategories.name',
-        'rewardCategories.order',
-        'rewardCategories.status',
-      ])
-      .where('aeco.serialNumber = :serialNumber', { serialNumber })
-      .andWhere('aeco.status = :aecoStatus', {
-        aecoStatus: AecoStatusEnum.ENABLED,
-      })
-      .andWhere('aeco.initialSetup = :initialSetup', { initialSetup: true })
-      .getOne()
+      .update()
+      .set(aeco)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute()
+
+    return qb.raw[0]
   }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('aeco')

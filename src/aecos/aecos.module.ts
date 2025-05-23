@@ -38,6 +38,9 @@ import { PostInsertProductStatsController } from './infra/controllers/iot-contro
 import { INSERT_TICKETS_AECO_SERVICE } from './domain/services/iot-services/IInsertTicketsAecoService'
 import { InsertTicketsAecoService } from './app/iot-services/insert-tickets-aeco.service'
 import { PostInsertTicketsController } from './infra/controllers/iot-controllers/post-insert-tickets.controller'
+import { ACCESS_CONTROL_AECO_SERVICE } from './domain/services/iot-services/IAccessControlAecoService'
+import { AccessControlAecoService } from './app/iot-services/access-control-aeco.service'
+import { GetAccessControlAecoController } from './infra/controllers/iot-controllers/get-access-control-aeco.controller'
 
 @Module({
   imports: [SharedModule],
@@ -69,6 +72,10 @@ import { PostInsertTicketsController } from './infra/controllers/iot-controllers
     },
     // Providers para servicios IOT
     {
+      provide: ACCESS_CONTROL_AECO_SERVICE,
+      useClass: AccessControlAecoService,
+    },
+    {
       provide: GET_ALL_AECO_REWARDS_SERVICE,
       useClass: GetAllAecoRewardsService,
     },
@@ -95,6 +102,7 @@ import { PostInsertTicketsController } from './infra/controllers/iot-controllers
   ],
   controllers: [
     // Rutas especiales y específicas primero
+    GetAccessControlAecoController, // GET /aecos/access-control
     GetAllAecoRewardsController, // GET /aecos/rewards
     GetAllAecoAdvertisingsController, // GET /aecos/advertisings
     AecosController, // Contiene rutas específicas como initial-setup y finish-setup
