@@ -8,6 +8,7 @@ import type { IDailyStats } from './IDailyStats'
 import type { IProductStats } from './IProductStats'
 import type { IPackagingStats } from './IPackagingStats'
 import type { AecoStatusEnum } from '../enums/AecoStatus.enum'
+import type { IAecoRequestHistory } from './IAecoRequestHistory'
 import type { IAecoCoords } from '../Types'
 
 export interface IAeco extends IBase {
@@ -20,6 +21,7 @@ export interface IAeco extends IBase {
   readonly serialNumber: string
   currentCoords?: IAecoCoords
   readonly companyId?: number
+  readonly lastConnection?: string
   company?: ICompany
   tickets?: ITicket[]
   pages?: IPage[]
@@ -28,4 +30,5 @@ export interface IAeco extends IBase {
   productStats?: IProductStats[]
   packagingStats?: IPackagingStats[]
   campaigns?: ICampaign[]
+  requestHistory?: IAecoRequestHistory[]
 }

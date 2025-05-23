@@ -93,6 +93,10 @@ export class AppModule implements NestModule {
           path: 'aecos/advertisings',
           method: RequestMethod.GET,
         },
+        {
+          path: 'aecos/access-control',
+          method: RequestMethod.GET,
+        },
       )
       .exclude(
         {

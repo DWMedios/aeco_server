@@ -5,6 +5,8 @@ import { S3Client } from '@aws-sdk/client-s3'
 import {
   Advertising,
   Aeco,
+  AecoAttempts,
+  AecoRequestHistory,
   Campaign,
   Company,
   Contractor,
@@ -22,7 +24,9 @@ import {
 } from '@common/infra/entities'
 import {
   ADVERTISING_REPOSITORY,
+  AECO_ATTEMPTS_REPOSITORY,
   AECO_REPOSITORY,
+  AECO_REQUEST_HISTORY_REPOSITORY,
   CAMPAIGN_REPOSITORY,
   COMPANY_REPOSITORY,
   CONTRACTOR_REPOSITORY,
@@ -38,7 +42,9 @@ import {
 } from './domain/repositories'
 import {
   AdvertisingRepository,
+  AecoAttemptsRepository,
   AecoRepository,
+  AecoRequestHistoryRepository,
   CampaignRepository,
   CompanyRepository,
   ContractorRepository,
@@ -76,12 +82,22 @@ import { TransactionService } from './app/transaction/transaction.service'
       ProductStats,
       PackagingStats,
       MediaAsset,
+      AecoAttempts,
+      AecoRequestHistory,
     ]),
   ],
   providers: [
     {
       provide: AECO_REPOSITORY,
       useClass: AecoRepository,
+    },
+    {
+      provide: AECO_ATTEMPTS_REPOSITORY,
+      useClass: AecoAttemptsRepository,
+    },
+    {
+      provide: AECO_REQUEST_HISTORY_REPOSITORY,
+      useClass: AecoRequestHistoryRepository,
     },
     {
       provide: REWARD_REPOSITORY,
@@ -172,6 +188,8 @@ import { TransactionService } from './app/transaction/transaction.service'
     CONTRACTOR_REPOSITORY,
     CAMPAIGN_REPOSITORY,
     ADVERTISING_REPOSITORY,
+    AECO_ATTEMPTS_REPOSITORY,
+    AECO_REQUEST_HISTORY_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
   ],

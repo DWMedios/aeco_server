@@ -1,3 +1,5 @@
+import { IAecoCoords } from '@common/domain/Types'
+import { lookup } from 'geoip-lite'
 import { DateTime } from 'luxon'
 
 /**
@@ -22,6 +24,28 @@ export const setDateToMidDay = (date: Date): Date | null => {
   if (!createdAtLuxon.isValid) return null
 
   return createdAtLuxon.toJSDate()
+}
+
+/**
+ * The function `currentDateTZ` returns the current date and time in the 'America/Mexico_City' time zone.
+ * @returns A Date object representing the current date and time in the 'America/Mexico_City' time zone.
+ */
+export const currentDateTZ = (): Date => {
+  const timeZone = 'America/Mexico_City'
+  return DateTime.now().setZone(timeZone).toJSDate()
+}
+
+/**
+ * The function `formatDate` takes a Date object, converts it to a specific time zone and locale, and returns the
+ * date in the format 'yyyy-MM-dd'.
+ * @param {Date} date - A JavaScript Date object that represents a specific date and time.
+ * @returns The `formatDate` function returns a formatted date string in the format 'yyyy-MM-dd'.
+ */
+export const formatDate = (date: Date): string => {
+  const dateTime = DateTime.fromJSDate(date, {
+    zone: 'America/Mexico_City',
+  }).setLocale('es')
+  return dateTime.toFormat('yyyy-MM-dd hh:mm:ss a')
 }
 
 /**
@@ -61,4 +85,14 @@ export const getFileName = (s3Key: string): string => {
   const namePart = s3Key.substring(lastSlash + 1, s3Key.indexOf('!!'))
 
   return `${namePart}.${fileExtension}`
+}
+
+export const getCoordsFromIp = (ip: string): IAecoCoords | undefined => {
+  if (!ip || ip === '::1') return undefined
+  const geo = lookup(ip)
+  const [latitude, longitude] = geo?.ll
+  return {
+    latitude: latitude ? String(latitude) : '',
+    longitude: longitude ? String(longitude) : '',
+  }
 }

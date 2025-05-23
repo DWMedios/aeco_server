@@ -9,6 +9,10 @@ import type { AecoFiltersDto } from '@aecos/domain/dto/Filters.dto'
 export const AECO_REPOSITORY = Symbol('IAecoRepository')
 
 export interface IAecoRepository {
+  initialSetup(
+    serialNumber: string,
+    manager?: EntityManager,
+  ): Promise<IAeco | null>
   findBy(
     filters: IAecoFilterOptions,
     manager?: EntityManager,
@@ -30,10 +34,11 @@ export interface IAecoRepository {
     aeco: Partial<IAeco>,
     manager?: EntityManager,
   ): Promise<IAeco>
-  initialSetup(
-    serialNumber: string,
+  updateById(
+    id: number,
+    aeco: Partial<IAeco>,
     manager?: EntityManager,
-  ): Promise<IAeco | null>
+  ): Promise<IAeco>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>
