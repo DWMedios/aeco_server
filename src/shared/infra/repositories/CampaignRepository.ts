@@ -106,6 +106,7 @@ export class CampaignRepository
         'contractorMediaAsset.mimeType',
         'company.id',
         'company.name',
+        'company.status',
       ])
 
     if (filters?.contractName) {
@@ -126,8 +127,14 @@ export class CampaignRepository
       )
     }
     if (filters?.companyName) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.name))) ILIKE :companyName', {
+      qb.orWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
+      })
+    }
+
+    if (filters?.companyId) {
+      qb.orWhere('campaigns.companyId = :companyId', {
+        companyId: filters.companyId,
       })
     }
 
