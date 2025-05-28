@@ -108,6 +108,8 @@ export class AdvertisingRepository
         'advertisings.id',
         'advertisings.isEnabled',
         'advertisings.companyId',
+        'advertisings.createdAt',
+        'advertisings.updatedAt',
         'company.id',
         'company.name',
       ])

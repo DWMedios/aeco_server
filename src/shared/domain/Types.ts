@@ -1,3 +1,4 @@
+import type { IAecoPayload } from '@aecos/domain/Types'
 import type { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 
 export interface IResponseMessage {
@@ -41,6 +42,7 @@ export type DecodedAeco = {
     id: number
     name: string
   }
+  requestPayload?: IAecoPayload
 }
 
 export type DeepPartial<T> = {
