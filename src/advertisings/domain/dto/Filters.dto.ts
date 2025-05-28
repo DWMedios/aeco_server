@@ -18,6 +18,17 @@ import {
 } from '@shared/domain/enums/Filters.enum'
 
 export class ContractorFiltersDto extends BaseFiltersDto {
+  @ApiProperty({
+    description: 'ID de la compañía para filtrar campañas',
+    example: 1,
+    type: Number,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
+
   @ApiPropertyOptional({
     description: 'Filtrar por nombre del contratista',
     example: 'juan',
@@ -52,16 +63,6 @@ export class ContractorFiltersDto extends BaseFiltersDto {
   readonly phone?: string
 
   @ApiPropertyOptional({
-    description: 'Filtrar por ID de compañía',
-    example: 1,
-    type: Number,
-  })
-  @IsOptional()
-  @IsNumber({}, { message: 'companyId debe ser un número' })
-  @Transform(({ value }) => (value ? Number(value) : value))
-  readonly companyId?: number
-
-  @ApiPropertyOptional({
     description: 'Campo por el cual ordenar los resultados',
     enum: ['createdAt', 'name', 'email', 'status', 'id'],
     example: 'name',
@@ -74,6 +75,17 @@ export class ContractorFiltersDto extends BaseFiltersDto {
 }
 
 export class CampaignFiltersDto extends BaseFiltersDto {
+  @ApiProperty({
+    description: 'ID de la compañía para filtrar campañas',
+    example: 1,
+    type: Number,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
+
   @ApiPropertyOptional({
     description: 'Filtrar por nombre del contrato',
     example: 'campaña verano',
