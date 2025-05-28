@@ -23,6 +23,7 @@ import { decryptStr } from '@shared/utils/crypto.utils'
 import { DecodedAeco } from '@shared/domain/Types'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import { AecoAttemptsEnum } from '@common/domain/enums/AecoAttempts.enum'
+import type { IAecoRequestData } from '@aecos/domain/Types'
 import type { IAecoAttempts } from '@common/domain/entities'
 
 @Injectable()
@@ -43,7 +44,7 @@ export class AecosGuard implements CanActivate {
     const apiKey = request.headers['x-api-key'] as string
     const ipAddress = request.ip // Obtener IP del request
     const geolocation = getCoordsFromIp(ipAddress)
-    const requestData = {
+    const requestData: IAecoRequestData = {
       method: request.method,
       url: request.url,
       body: request.body,
@@ -116,6 +117,12 @@ export class AecosGuard implements CanActivate {
       company: {
         id: aeco.company?.id,
         name: aeco.company?.name,
+      },
+      requestPayload: {
+        serialNumber: aeco.serialNumber,
+        ipAddress,
+        geolocation,
+        requestData,
       },
     }
 
