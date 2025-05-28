@@ -90,9 +90,10 @@ export const getFileName = (s3Key: string): string => {
 export const getCoordsFromIp = (ip: string): IAecoCoords | undefined => {
   if (!ip || ip === '::1') return undefined
   const geo = lookup(ip)
-  const [latitude, longitude] = geo?.ll
+  if (!geo?.ll) return undefined
+  const [latitude, longitude] = geo.ll
   return {
-    latitude: latitude ? String(latitude) : '',
-    longitude: longitude ? String(longitude) : '',
+    latitude: latitude ? String(latitude ?? '') : '',
+    longitude: longitude ? String(longitude ?? '') : '',
   }
 }
