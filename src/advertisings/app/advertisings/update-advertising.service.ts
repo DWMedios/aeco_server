@@ -69,7 +69,6 @@ export class UpdateAdvertisingService implements IUpdateAdvertisingService {
         contractors,
         currentCompanyId,
       )
-      console.log('contractorsExists', contractorsExists)
       if (contractorsExists.length !== contractors.length) {
         throw new BadRequestException('Algunos contratistas no existen')
       }
@@ -81,6 +80,7 @@ export class UpdateAdvertisingService implements IUpdateAdvertisingService {
         campaigns,
         currentCompanyId,
       )
+
       if (campaignsExists.length !== campaigns.length) {
         throw new BadRequestException('Algunas campañas no existen')
       }

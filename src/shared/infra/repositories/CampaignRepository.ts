@@ -150,8 +150,8 @@ export class CampaignRepository
         { endDate: filters.endDate },
       )
     }
-    if (filters?.isEnabled) {
-      qb.orWhere('campaigns.isEnabled = :isEnabled', {
+    if (filters?.isEnabled !== undefined) {
+      qb.andWhere('campaigns.isEnabled = :isEnabled', {
         isEnabled: filters.isEnabled,
       })
     }
