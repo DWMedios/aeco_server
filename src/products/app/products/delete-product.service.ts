@@ -19,6 +19,12 @@ export class DeleteProductService implements IDeleteProductService {
 
     if (!product) throw new NotFoundException('El producto no existe')
 
+    const currentDate = Number(new Date())
+    await this.productRepository.updateById(id, {
+      code: `${product.code}-deleted-${currentDate}`,
+      name: `${product.name}-deleted-${currentDate}`,
+      family: `${product.family}-deleted-${currentDate}`,
+    })
     const isDeleted = await this.productRepository.softDelete(id)
 
     return { success: isDeleted }
