@@ -20,9 +20,10 @@ export class DeleteAecoService implements IDeleteAecoService {
 
     if (!aeco) throw new NotFoundException('El Aeco no existe')
 
+    const currentDate = Number(new Date())
     await this.aecoRepository.updateById(id, {
-      folio: `${aeco.folio}-deleted-${Number(new Date())}`,
-      serialNumber: `${aeco.serialNumber}-deleted-${Number(new Date())}`,
+      folio: `${aeco.folio}-deleted-${currentDate}`,
+      serialNumber: `${aeco.serialNumber}-deleted-${currentDate}`,
       isOnline: false,
       initialSetup: false,
       needsUpdate: false,
