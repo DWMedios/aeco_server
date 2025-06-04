@@ -38,7 +38,7 @@ export class DeleteUserService implements IDeleteUserService {
   ) {}
 
   async run(id: number): Promise<{ success: boolean }> {
-    const user = await this.userRepository.findById(id, false)
+    const user = await this.userRepository.findById(id)
 
     if (!user) throw new NotFoundException('El usuario no existe')
 
