@@ -70,7 +70,7 @@ export class InsertProductStatsAecoService
       throw new BadRequestException('Error al establecer alguna fecha')
     }
 
-    const mapProductIds = stats.map((stat) => stat.productId)
+    const mapProductIds = [...new Set(stats.map((stat) => stat.productId))]
 
     const products = await this.productRepository.findManyByIds(mapProductIds)
 
