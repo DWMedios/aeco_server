@@ -1,16 +1,18 @@
-import type { ICompany } from './ICompany';
-import type { IUserCompanyPermissions } from './IPermission';
+import type { IBase } from './IBase'
+import type { ICompany } from './ICompany'
+import type { IMediaAsset } from './IMediaAsset'
+import type { IUserRolePermissions } from './IUserRolePermissions'
 
-export interface IUser {
-  name: string;
-  email: string;
-  phone?: string;
-  position?: string;
-  photoUrl?: string | null;
-  gender?: string;
-  password?: string;
-  isActive: boolean;
-  companyId?: number;
-  companies: ICompany[];
-  userCompanyPermissions: IUserCompanyPermissions[];
+export interface IUser extends IBase {
+  readonly name: string
+  readonly email: string
+  readonly phone?: string
+  readonly position?: string
+  readonly password?: string
+  readonly isActive: boolean
+  readonly companyId?: number
+  readonly imageId?: number
+  company?: ICompany
+  role?: IUserRolePermissions
+  mediaAsset?: IMediaAsset
 }

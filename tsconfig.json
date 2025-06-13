@@ -16,6 +16,22 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "paths": {
+      "@common/*": ["src/common/*"],
+      "@shared/*": ["src/shared/*"],
+      "@users/*": ["src/users/*"],
+      "@auth/*": ["src/auth/*"],
+      "@rewards/*": ["src/rewards/*"],
+      "@media-assets/*": ["src/media-assets/*"],
+      "@company/*": ["src/company/*"],
+      "@aecos/*": ["src/aecos/*"],
+      "@products/*": ["src/products/*"],
+      "@dashboard/*": ["src/dashboard/*"],
+      "@tickets/*": ["src/tickets/*"],
+      "@advertisings/*": ["src/advertisings/*"],
+    }
+  },
+  "include": ["src/**/*.ts", "src/shared/validators/blacklist.json"],
 }

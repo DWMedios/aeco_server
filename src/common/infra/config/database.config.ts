@@ -1,4 +1,4 @@
-import { registerAs } from '@nestjs/config';
+import { registerAs } from '@nestjs/config'
 
 export default registerAs('database', () => ({
   type: 'postgres',
@@ -12,4 +12,4 @@ export default registerAs('database', () => ({
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../../migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations_typeorm',
-}));
+}))

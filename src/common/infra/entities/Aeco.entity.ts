@@ -1,44 +1,86 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Base } from './Base';
-import { Ticket } from './Ticket.entity';
-import { Company } from './Company.entity';
-import { Address } from './Address.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
+import { Base } from './Base'
+import { Page } from './Page.entity'
+import { Company } from './Company.entity'
+import { Ticket } from './Ticket.entity'
+import { Reward } from './Reward.entity'
+import { Campaign } from './Campaign.entity'
+import { DailyStats } from './DailyStats.entity'
+import { ProductStats } from './ProductStats.entity'
+import { PackagingStats } from './PackagingStats.entity'
+import { AecoRequestHistory } from './AecoRequestHistory.entity'
+import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
+import type { IAeco } from '@common/domain/entities/IAeco'
+import type { IAecoCoords } from '@common/domain/Types'
 
-export enum AecoStatus {
-  ENABLED = 'enabled',
-  DISABLED = 'disabled',
-}
+@Entity({ name: 'aecos' })
+export class Aeco extends Base implements IAeco {
+  @Column({ length: 100 })
+  folio: string
 
-@Entity('aecos')
-export class Aeco extends Base {
-  @Column()
-  name: string;
+  @Column({ length: 100 })
+  name: string
 
   @Column('enum', {
-    enum: AecoStatus,
-    default: AecoStatus.DISABLED,
+    enum: AecoStatusEnum,
+    default: AecoStatusEnum.DISABLED,
     nullable: false,
   })
-  status: AecoStatus;
+  status: AecoStatusEnum
 
-  @Column({ default: false })
-  isOnline: boolean;
+  @Column({ type: 'boolean', default: false })
+  isOnline: boolean
 
-  @Column('jsonb')
-  currentCoords: Record<string, any>;
+  @Column({ type: 'boolean', default: true })
+  initialSetup: boolean
 
-  @Column()
-  companyId: number;
+  @Column({ type: 'boolean', default: false })
+  needsUpdate: boolean
 
-  @Column()
-  addressId: number;
+  @Column({ type: 'text', unique: true })
+  serialNumber: string
+
+  @Column({ type: 'jsonb', nullable: true })
+  currentCoords?: IAecoCoords
+
+  @Column({ type: 'int', nullable: true })
+  companyId?: number
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  lastConnection?: string
 
   @ManyToOne(() => Company, (company) => company.aecos)
-  company: Company;
-
-  @ManyToOne(() => Address, (address) => address.aecos)
-  address: Address;
+  @JoinColumn({ name: 'companyId', referencedColumnName: 'id' })
+  company?: Company
 
   @OneToMany(() => Ticket, (ticket) => ticket.aeco)
-  tickets: Ticket[];
+  tickets?: Ticket[]
+
+  @OneToMany(() => Page, (page) => page.aeco)
+  pages?: Page[]
+
+  @ManyToMany(() => Reward, (reward) => reward.aecos)
+  rewards?: Reward[]
+
+  @OneToMany(() => DailyStats, (dailyStats) => dailyStats.aeco)
+  dailyStats?: DailyStats[]
+
+  @OneToMany(() => ProductStats, (productStats) => productStats.aeco)
+  productStats?: ProductStats[]
+
+  @OneToMany(() => PackagingStats, (packagingStats) => packagingStats.aeco)
+  packagingStats?: PackagingStats[]
+
+  @ManyToMany(() => Campaign, (campaign) => campaign.aecos)
+  campaigns?: Campaign[]
+
+  @OneToMany(() => AecoRequestHistory, (requestHistory) => requestHistory.aeco)
+  requestHistory?: AecoRequestHistory[]
 }
