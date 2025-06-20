@@ -118,7 +118,6 @@ export class UpdateCampaignService implements IUpdateCampaignService {
     const campaignTransaction =
       await this.transactionService.executeTransaction(async (manager) => {
         let campaignToUpdate: ICampaign | null = null
-
         try {
           campaignToUpdate = await this.campaignRepository.partialUpdate(
             campaign,
@@ -134,7 +133,7 @@ export class UpdateCampaignService implements IUpdateCampaignService {
                   .startOf('day')
                   .toJSDate(),
               }),
-              ...(aecos.length > 0 && { aecos: aecosExists }),
+              ...(aecos?.length > 0 && { aecos: aecosExists }),
               ...(contractorId !== undefined && { contractorId }),
             },
             manager,

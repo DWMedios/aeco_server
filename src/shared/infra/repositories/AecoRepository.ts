@@ -133,7 +133,7 @@ export class AecoRepository
       ])
 
     if (filters?.serialNumber) {
-      qb.orWhere(
+      qb.andWhere(
         'LOWER(unaccent(BTRIM(aecos.serialNumber))) ILIKE :serialNumber',
         {
           serialNumber: `%${filters.serialNumber}%`,
@@ -142,33 +142,33 @@ export class AecoRepository
     }
 
     if (filters?.folio) {
-      qb.orWhere('LOWER(unaccent(BTRIM(aecos.folio))) ILIKE :folio', {
+      qb.andWhere('LOWER(unaccent(BTRIM(aecos.folio))) ILIKE :folio', {
         folio: `%${filters.folio}%`,
       })
     }
 
     if (filters?.name) {
-      qb.orWhere('LOWER(unaccent(BTRIM(aecos.name))) ILIKE :name', {
+      qb.andWhere('LOWER(unaccent(BTRIM(aecos.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.companyId) {
-      qb.orWhere('aecos.companyId = :companyId', {
+      qb.andWhere('aecos.companyId = :companyId', {
         companyId: filters.companyId,
       })
     }
 
     if (filters?.withoutCompany === true) {
-      qb.orWhere('aecos.companyId IS NULL')
+      qb.andWhere('aecos.companyId IS NULL')
     }
 
     if (filters?.withoutCompany === false) {
-      qb.orWhere('aecos.companyId IS NOT NULL')
+      qb.andWhere('aecos.companyId IS NOT NULL')
     }
 
     if (filters?.status) {
-      qb.orWhere('aecos.status = :status', { status: filters.status })
+      qb.andWhere('aecos.status = :status', { status: filters.status })
     }
 
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)

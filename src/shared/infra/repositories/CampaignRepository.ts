@@ -110,7 +110,7 @@ export class CampaignRepository
       ])
 
     if (filters?.contractName) {
-      qb.orWhere(
+      qb.andWhere(
         'LOWER(unaccent(BTRIM(campaigns.contractName))) ILIKE :contractName',
         {
           contractName: `%${filters.contractName}%`,
@@ -119,7 +119,7 @@ export class CampaignRepository
     }
 
     if (filters?.description) {
-      qb.orWhere(
+      qb.andWhere(
         'LOWER(unaccent(BTRIM(campaigns.description))) ILIKE :description',
         {
           description: `%${filters.description}%`,
@@ -127,25 +127,25 @@ export class CampaignRepository
       )
     }
     if (filters?.companyName) {
-      qb.orWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
+      qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
       })
     }
 
     if (filters?.companyId) {
-      qb.orWhere('campaigns.companyId = :companyId', {
+      qb.andWhere('campaigns.companyId = :companyId', {
         companyId: filters.companyId,
       })
     }
 
     if (filters?.startDate) {
-      qb.orWhere(
+      qb.andWhere(
         `campaigns.startDate = date_trunc('day', CAST(:startDate AS TIMESTAMP WITH TIME ZONE))`,
         { startDate: filters.startDate },
       )
     }
     if (filters?.endDate) {
-      qb.orWhere(
+      qb.andWhere(
         `campaigns.endDate = date_trunc('day', CAST(:endDate AS TIMESTAMP WITH TIME ZONE))`,
         { endDate: filters.endDate },
       )
@@ -156,7 +156,7 @@ export class CampaignRepository
       })
     }
     if (filters?.contractorId) {
-      qb.orWhere('campaigns.contractorId = :contractorId', {
+      qb.andWhere('campaigns.contractorId = :contractorId', {
         contractorId: filters.contractorId,
       })
     }
