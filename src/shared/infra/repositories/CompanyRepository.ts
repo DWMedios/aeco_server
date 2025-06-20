@@ -87,37 +87,37 @@ export class CompanyRepository
       ])
 
     if (filters?.name) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.name))) ILIKE :name', {
+      qb.andWhere('LOWER(unaccent(BTRIM(companies.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.rfc) {
-      qb.orWhere('UPPER(BTRIM(companies.rfc)) ILIKE :rfc', {
+      qb.andWhere('UPPER(BTRIM(companies.rfc)) ILIKE :rfc', {
         rfc: `%${filters.rfc}%`,
       })
     }
 
     if (filters?.state) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.state))) ILIKE :state', {
+      qb.andWhere('LOWER(unaccent(BTRIM(companies.state))) ILIKE :state', {
         state: `%${filters.state}%`,
       })
     }
 
     if (filters?.city) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.city))) ILIKE :city', {
+      qb.andWhere('LOWER(unaccent(BTRIM(companies.city))) ILIKE :city', {
         city: `%${filters.city}%`,
       })
     }
 
     if (filters?.address) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.address))) ILIKE :address', {
+      qb.andWhere('LOWER(unaccent(BTRIM(companies.address))) ILIKE :address', {
         address: `%${filters.address}%`,
       })
     }
 
     if (filters?.postalCode) {
-      qb.orWhere(
+      qb.andWhere(
         'LOWER(unaccent(BTRIM(companies.postalCode))) ILIKE :postalCode',
         {
           postalCode: `%${filters.postalCode}%`,
@@ -126,13 +126,13 @@ export class CompanyRepository
     }
 
     if (filters?.phone) {
-      qb.orWhere('LOWER(unaccent(BTRIM(companies.phone))) ILIKE :phone', {
+      qb.andWhere('LOWER(unaccent(BTRIM(companies.phone))) ILIKE :phone', {
         phone: `%${filters.phone}%`,
       })
     }
 
     if (filters?.status !== undefined) {
-      qb.orWhere('companies.status = :status', { status: filters.status })
+      qb.andWhere('companies.status = :status', { status: filters.status })
     }
 
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)

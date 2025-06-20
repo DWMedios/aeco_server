@@ -8,13 +8,13 @@ import {
   USER_REPOSITORY,
   type IUserRepository,
 } from '@shared/domain/repositories'
-import type { DecodedUser } from '@shared/domain/Types'
+import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
+import type { DecodedUser } from '@shared/domain/Types'
 import type { IUser } from '@common/domain/entities'
 import type { UserFiltersDto } from '@users/domain/dto/Filters.dto'
 import type { IFindAllUserService } from '@users/domain/services/IFindAllUserService'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
 
 @Injectable()
 export class FindAllUserService implements IFindAllUserService {
