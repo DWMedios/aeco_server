@@ -91,32 +91,32 @@ export class ProductRepository
     }
 
     if (filters.capacityId) {
-      qb.orWhere('products.capacityId = :capacityId', {
+      qb.andWhere('products.capacityId = :capacityId', {
         capacityId: filters.capacityId,
       })
     }
 
     if (filters.name) {
-      qb.orWhere('LOWER(unaccent(BTRIM(products.name))) ILIKE :name', {
+      qb.andWhere('LOWER(unaccent(BTRIM(products.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters.family) {
-      qb.orWhere('LOWER(unaccent(BTRIM(products.family))) ILIKE :family', {
+      qb.andWhere('LOWER(unaccent(BTRIM(products.family))) ILIKE :family', {
         family: `%${filters.family}%`,
       })
     }
 
     if (filters.description) {
-      qb.orWhere(
+      qb.andWhere(
         'LOWER(unaccent(BTRIM(products.description))) ILIKE :description',
         { description: `%${filters.description}%` },
       )
     }
 
     if (filters.code) {
-      qb.orWhere('LOWER(unaccent(BTRIM(products.code))) ILIKE :code', {
+      qb.andWhere('LOWER(unaccent(BTRIM(products.code))) ILIKE :code', {
         code: `%${filters.code}%`,
       })
     }

@@ -79,17 +79,17 @@ export class TicketRepository
       ])
 
     if (filters?.folio) {
-      qb.orWhere('LOWER(unaccent(BTRIM(tickets.folio))) LIKE :folio', {
+      qb.andWhere('LOWER(unaccent(BTRIM(tickets.folio))) LIKE :folio', {
         folio: `%${filters.folio}%`,
       })
     }
 
     if (filters?.aecoId) {
-      qb.orWhere('tickets.aecoId = :aecoId', { aecoId: filters.aecoId })
+      qb.andWhere('tickets.aecoId = :aecoId', { aecoId: filters.aecoId })
     }
 
     if (filters?.productId) {
-      qb.orWhere('items.productId = :productId', {
+      qb.andWhere('items.productId = :productId', {
         productId: filters.productId,
       })
     }

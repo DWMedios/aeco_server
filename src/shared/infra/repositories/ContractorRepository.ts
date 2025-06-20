@@ -72,25 +72,25 @@ export class ContractorRepository
       ])
 
     if (filters?.companyId) {
-      qb.orWhere('contractors.companyId = :companyId', {
+      qb.andWhere('contractors.companyId = :companyId', {
         companyId: filters.companyId,
       })
     }
 
     if (filters?.name) {
-      qb.orWhere('LOWER(unaccent(BTRIM(contractors.name))) ILIKE :name', {
+      qb.andWhere('LOWER(unaccent(BTRIM(contractors.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.email) {
-      qb.orWhere('LOWER(unaccent(BTRIM(contractors.email))) ILIKE :email', {
+      qb.andWhere('LOWER(unaccent(BTRIM(contractors.email))) ILIKE :email', {
         email: `%${filters.email}%`,
       })
     }
 
     if (filters?.phone) {
-      qb.orWhere('LOWER(unaccent(BTRIM(contractors.phone))) ILIKE :phone', {
+      qb.andWhere('LOWER(unaccent(BTRIM(contractors.phone))) ILIKE :phone', {
         phone: `%${filters.phone}%`,
       })
     }

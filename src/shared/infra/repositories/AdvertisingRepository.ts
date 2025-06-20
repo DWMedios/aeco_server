@@ -115,13 +115,13 @@ export class AdvertisingRepository
       ])
 
     if (filters?.companyName) {
-      qb.orWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
+      qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
       })
     }
 
     if (filters?.isEnabled) {
-      qb.orWhere('advertisings.isEnabled = :isEnabled', {
+      qb.andWhere('advertisings.isEnabled = :isEnabled', {
         isEnabled: filters.isEnabled,
       })
     }

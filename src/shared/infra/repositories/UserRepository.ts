@@ -148,23 +148,23 @@ export class UserRepository
       .where('company.id IS NOT NULL')
 
     if (companies?.length) {
-      qb.orWhere('company.id IN (:...companies)', { companies })
+      qb.andWhere('company.id IN (:...companies)', { companies })
     }
 
     if (filters?.name) {
-      qb.orWhere('LOWER(unaccent(BTRIM(user.name))) ILIKE :name', {
+      qb.andWhere('LOWER(unaccent(BTRIM(user.name))) ILIKE :name', {
         name: `%${filters.name}%`,
       })
     }
 
     if (filters?.email) {
-      qb.orWhere('LOWER(unaccent(BTRIM(user.email))) ILIKE :email', {
+      qb.andWhere('LOWER(unaccent(BTRIM(user.email))) ILIKE :email', {
         email: `%${filters.email}%`,
       })
     }
 
     if (filters?.role) {
-      qb.orWhere('role.role = :role', { role: filters.role })
+      qb.andWhere('role.role = :role', { role: filters.role })
     }
 
     if (filters?.isActive !== undefined) {
