@@ -3,6 +3,7 @@ import {
   AECO_REPOSITORY,
   type IAecoRepository,
 } from '@shared/domain/repositories'
+import { currentDateTZ } from '@shared/utils/functions'
 import type { IAeco } from '@common/domain/entities'
 import type { DecodedAeco } from '@shared/domain/Types'
 import type { IGetAllAecoAdvertisingsService } from '@aecos/domain/services/iot-services/IGetAllAecoAdvertisingsService'
@@ -19,7 +20,11 @@ export class GetAllAecoAdvertisingsService
   ) {}
   async run(currentAeco: DecodedAeco): Promise<IAeco> {
     const { aecoId } = currentAeco
-    const aeco = await this.aecoRepository.getCampaignsByAeco(aecoId)
+    const currentDate = currentDateTZ()
+    const aeco = await this.aecoRepository.getCampaignsByAeco(
+      aecoId,
+      currentDate,
+    )
 
     if (!aeco) throw new NotFoundException('El Aeco no existe')
 

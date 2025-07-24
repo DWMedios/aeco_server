@@ -238,11 +238,18 @@ export class AecoRepository
 
   getCampaignsByAeco(
     id: number,
+    currentDate: Date,
     manager?: EntityManager,
   ): Promise<IAeco | null> {
-    return this.repository(manager)
+    const qb = this.repository(manager)
       .createQueryBuilder('aeco')
-      .leftJoinAndSelect('aeco.campaigns', 'campaigns')
+      .leftJoinAndSelect(
+        'aeco.campaigns',
+        'campaigns',
+        `campaigns.isEnabled = :isEnabled AND 
+        (campaigns.startDate <= :currentDate AND campaigns.endDate >= :currentDate)`,
+        { isEnabled: true, currentDate },
+      )
       .leftJoinAndSelect('campaigns.contractor', 'contractor')
       .leftJoinAndSelect('campaigns.mediaAsset', 'mediaAsset')
       .select([
@@ -272,7 +279,7 @@ export class AecoRepository
       .andWhere('aeco.status = :status', {
         status: AecoStatusEnum.ENABLED,
       })
-      .getOne()
+    return qb.getOne()
   }
 
   create(aeco: Partial<IAeco>, manager?: EntityManager): Promise<IAeco> {
