@@ -30,6 +30,17 @@ export class ContractorFiltersDto extends BaseFiltersDto {
   readonly companyId?: number
 
   @ApiPropertyOptional({
+    description: 'Filtrar por nombre de la compañía',
+    example: 'empresa',
+  })
+  @IsOptional()
+  @IsString({ message: 'companyName debe ser una cadena de texto' })
+  @Transform(({ value }) =>
+    value ? normalizeString(value.toLowerCase()) : value,
+  )
+  readonly companyName?: string
+
+  @ApiPropertyOptional({
     description: 'Filtrar por nombre del contratista',
     example: 'juan',
   })
