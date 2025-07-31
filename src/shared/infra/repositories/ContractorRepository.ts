@@ -77,6 +77,12 @@ export class ContractorRepository
       })
     }
 
+    if (filters?.companyName) {
+      qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
+        companyName: `%${filters.companyName}%`,
+      })
+    }
+
     if (filters?.name) {
       qb.andWhere('LOWER(unaccent(BTRIM(contractors.name))) ILIKE :name', {
         name: `%${filters.name}%`,
