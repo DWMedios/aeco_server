@@ -37,9 +37,8 @@ export class JwtService implements IJwtService {
   async verify(token: string): Promise<DecodedUser> {
     try {
       const decoded = jwt.verify(token, this.secret) as DecodedUser
-      const role = await this.roleRepository.findByApiKeyAndToken(
+      const role = await this.roleRepository.findByApiKey(
         decoded.sub,
-        token,
         decoded.roleType,
       )
 

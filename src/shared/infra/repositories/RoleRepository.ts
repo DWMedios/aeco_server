@@ -29,9 +29,8 @@ export class RoleRepository
     })
   }
 
-  findByApiKeyAndToken(
+  findByApiKey(
     apiKey: string,
-    token?: string,
     type?: UserRoleEntiyEnum,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null> {
@@ -54,10 +53,6 @@ export class RoleRepository
       .andWhere('role.deletedAt IS NULL')
       .andWhere('user.deletedAt IS NULL AND user.isActive = true')
       .andWhere('company.deletedAt IS NULL')
-
-    if (token) {
-      qb.andWhere('role.token = :token', { token })
-    }
 
     if (type) {
       qb.andWhere('role.role = :type', { type })
