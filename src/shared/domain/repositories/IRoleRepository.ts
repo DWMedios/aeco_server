@@ -9,9 +9,8 @@ export interface IRoleRepository {
     id: number,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null>
-  findByApiKeyAndToken(
+  findByApiKey(
     apiKey: string,
-    token?: string,
     type?: UserRoleEntiyEnum,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null>
