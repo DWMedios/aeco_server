@@ -62,6 +62,8 @@ import { S3_SERVICE } from './domain/services/IS3Service'
 import { S3Service } from './app/files/s3.service'
 import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
 import { TransactionService } from './app/transaction/transaction.service'
+import { EMAIL_SERVICE } from './domain/services/email-service.interface'
+import { MailService } from './app/mail/mail.service'
 
 @Module({
   imports: [
@@ -172,6 +174,10 @@ import { TransactionService } from './app/transaction/transaction.service'
       },
       inject: [ConfigService],
     },
+    {
+      provide: EMAIL_SERVICE,
+      useClass: MailService,
+    },
   ],
   exports: [
     AECO_REPOSITORY,
@@ -192,6 +198,7 @@ import { TransactionService } from './app/transaction/transaction.service'
     AECO_REQUEST_HISTORY_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
+    EMAIL_SERVICE,
   ],
 })
 export class SharedModule {}

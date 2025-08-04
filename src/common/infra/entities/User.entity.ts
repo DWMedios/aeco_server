@@ -7,10 +7,12 @@ import {
   ManyToOne,
   JoinColumn,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm'
 import { Base } from './Base'
 import { Company } from './Company.entity'
 import { MediaAsset } from './MediaAsset.entity'
+import { UserInvite } from './UserInvite.entity'
 import { UserRolePermissions } from './UserRolePermissions.entity'
 import type { IUser } from '@common/domain/entities'
 
@@ -21,6 +23,9 @@ export class User extends Base implements IUser {
 
   @Column({ nullable: false, unique: true })
   email: string
+
+  @Column({ type: 'boolean', default: false })
+  isVerified: boolean
 
   @Column({ nullable: true, length: 20 })
   phone?: string
@@ -50,6 +55,12 @@ export class User extends Base implements IUser {
   @OneToOne(() => MediaAsset, (mediaAsset) => mediaAsset.userImage)
   @JoinColumn({ name: 'imageId', referencedColumnName: 'id' })
   mediaAsset?: MediaAsset
+
+  @OneToMany(() => UserInvite, (ui) => ui.invitedBy)
+  invitedUsers?: UserInvite[]
+
+  @OneToMany(() => UserInvite, (ui) => ui.invitedUser)
+  invites?: UserInvite[]
 
   @BeforeInsert()
   @BeforeUpdate()

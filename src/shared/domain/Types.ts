@@ -52,3 +52,18 @@ export type DeepPartial<T> = {
       ? DeepPartial<T[P]>
       : T[P]
 }
+
+export interface SendEmailPostmark {
+  to: string
+  templateId: number
+  templateModel: Record<string, any>
+}
+
+export interface ResetPasswordEmailTemplateModel {
+  product_url: string
+  product_name: string
+  name: string
+  company_name: string
+  action_url: string
+  company_address: string
+}

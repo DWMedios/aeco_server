@@ -19,7 +19,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { type IS3Service, S3_SERVICE } from '@shared/domain/services/IS3Service'
+import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import type { IDeleteCompanyService } from '@company/domain/services/IDeleteCompanyService'
 
 @Injectable()
