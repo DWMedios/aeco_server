@@ -12,9 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import {
-  RESET_PASSWORD_SERVICE,
-  type IResetPasswordService,
-} from '@auth/domain/services/IResetPasswordService'
+  RESET_INTERNAL_PASSWORD_SERVICE,
+  type IResetInternalPasswordService,
+} from '@auth/domain/services/IResetInternalPasswordService'
 import { ResetPasswordDto } from '@auth/domain/dto/reset-password.dto'
 import { ResetPasswordGuard } from '../guards/reset-password.guard'
 
@@ -24,8 +24,8 @@ export class ResetPasswordController {
   logger = new Logger(ResetPasswordController.name)
 
   constructor(
-    @Inject(RESET_PASSWORD_SERVICE)
-    private readonly service: IResetPasswordService,
+    @Inject(RESET_INTERNAL_PASSWORD_SERVICE)
+    private readonly service: IResetInternalPasswordService,
   ) {}
 
   @Put('users/:id/reset-password')

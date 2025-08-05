@@ -5,8 +5,8 @@ import { JwtService } from './app/jwt/jwt.service'
 import { AUTH_SERVICE } from './domain/services/IAuthService'
 import { AuthService } from './app/auth/auth.service'
 import { LoginController } from './infra/controllers/auth-login.controller'
-import { RESET_PASSWORD_SERVICE } from './domain/services/IResetPasswordService'
-import { ResetPasswordService } from './app/reset-password/reset-password.service'
+import { RESET_INTERNAL_PASSWORD_SERVICE } from './domain/services/IResetInternalPasswordService'
+import { ResetInternalPasswordService } from './app/reset-password/reset-internal-password.service'
 import { ResetPasswordController } from './infra/controllers/reset-password.controller'
 import { FORGOT_PASSWORD_SERVICE } from './domain/services/IForgotPasswordService'
 import { ForgotPasswordService } from './app/forgot-password/forgot-password.service'
@@ -23,8 +23,8 @@ import { ForgotPasswordService } from './app/forgot-password/forgot-password.ser
       useClass: AuthService,
     },
     {
-      provide: RESET_PASSWORD_SERVICE,
-      useClass: ResetPasswordService,
+      provide: RESET_INTERNAL_PASSWORD_SERVICE,
+      useClass: ResetInternalPasswordService,
     },
     {
       provide: FORGOT_PASSWORD_SERVICE,
