@@ -3,10 +3,10 @@ import type { MessageSendingResponse } from 'postmark/dist/client/models'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import type { SendEmailPostmark } from '@shared/domain/Types'
-import type { EmailServiceInterface } from '@shared/domain/services/email-service.interface'
+import type { IEmailService } from '@shared/domain/services/email-service.interface'
 
 @Injectable()
-export class MailService implements EmailServiceInterface {
+export class MailService implements IEmailService {
   private readonly logger = new Logger(MailService.name)
   private readonly client: ServerClient
   private readonly from: string

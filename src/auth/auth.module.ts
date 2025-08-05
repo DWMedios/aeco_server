@@ -8,6 +8,8 @@ import { LoginController } from './infra/controllers/auth-login.controller'
 import { RESET_PASSWORD_SERVICE } from './domain/services/IResetPasswordService'
 import { ResetPasswordService } from './app/reset-password/reset-password.service'
 import { ResetPasswordController } from './infra/controllers/reset-password.controller'
+import { FORGOT_PASSWORD_SERVICE } from './domain/services/IForgotPasswordService'
+import { ForgotPasswordService } from './app/forgot-password/forgot-password.service'
 
 @Module({
   imports: [SharedModule],
@@ -23,6 +25,10 @@ import { ResetPasswordController } from './infra/controllers/reset-password.cont
     {
       provide: RESET_PASSWORD_SERVICE,
       useClass: ResetPasswordService,
+    },
+    {
+      provide: FORGOT_PASSWORD_SERVICE,
+      useClass: ForgotPasswordService,
     },
   ],
   controllers: [LoginController, ResetPasswordController],

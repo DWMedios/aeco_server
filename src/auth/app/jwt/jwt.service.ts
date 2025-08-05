@@ -18,20 +18,28 @@ export class JwtService implements IJwtService {
   logger = new Logger(JwtService.name)
   private readonly expiresIn: string
   private readonly secret: string
+  private readonly secretReset: string
 
   constructor(
     @Inject(ROLE_REPOSITORY)
     private readonly roleRepository: IRoleRepository,
     private readonly configService: ConfigService,
   ) {
-    const expInt = this.configService.get<number>('jwt.expInt')
-    const timeStr = this.configService.get<string>('jwt.timeStr')
+    const expInt = this.configService.get<number>('jwt.exp_int')
+    const timeStr = this.configService.get<string>('jwt.time_str')
     this.expiresIn = `${expInt} ${timeStr}`
     this.secret = this.configService.get<string>('jwt.secret')
+    this.secretReset = this.configService.get<string>(
+      'jwt.secret_reset_password',
+    )
   }
 
   sign(payload: Partial<DecodedUser>): string {
     return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
+  }
+
+  signResetPassword(payload: { email: string; sub: number }): string {
+    return jwt.sign(payload, this.secretReset, { expiresIn: this.expiresIn })
   }
 
   async verify(token: string): Promise<DecodedUser> {
@@ -68,6 +76,15 @@ export class JwtService implements IJwtService {
     } catch (error) {
       this.logger.error(error)
       throw new UnauthorizedException('Usuario no permitido')
+    }
+  }
+
+  async verifyResetPassword(token: string): Promise<any> {
+    try {
+      return jwt.verify(token, this.secretReset)
+    } catch (error) {
+      this.logger.error(error)
+      throw new UnauthorizedException('Token no válido')
     }
   }
 }

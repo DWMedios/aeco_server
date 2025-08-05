@@ -11,7 +11,7 @@ import {
   type IJwtService,
 } from '@auth/domain/services/IJwtService'
 import { DecodedUser } from '@shared/domain/Types'
-import { LoginUserDto } from '@auth/domain/dto/LoginUser.dto'
+import { LoginUserDto } from '@auth/domain/dto/login-user.dto'
 import type { IAuthService } from '@auth/domain/services/IAuthService'
 
 @Injectable()

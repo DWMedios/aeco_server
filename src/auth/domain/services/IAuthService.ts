@@ -1,4 +1,4 @@
-import type { LoginUserDto } from '../dto/LoginUser.dto'
+import type { LoginUserDto } from '../dto/login-user.dto'
 
 export const AUTH_SERVICE = Symbol('IAuthService')
 

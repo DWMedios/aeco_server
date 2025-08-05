@@ -12,7 +12,7 @@ import {
   AUTH_SERVICE,
   type IAuthService,
 } from '@auth/domain/services/IAuthService'
-import { LoginUserDto } from '@auth/domain/dto/LoginUser.dto'
+import { LoginUserDto } from '@auth/domain/dto/login-user.dto'
 
 @ApiTags('Autenticación')
 @Controller('auth')

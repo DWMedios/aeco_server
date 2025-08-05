@@ -64,6 +64,6 @@ export interface ResetPasswordEmailTemplateModel {
   product_name: string
   name: string
   company_name: string
-  action_url: string
   company_address: string
+  action_url: string
 }

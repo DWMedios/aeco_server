@@ -15,7 +15,7 @@ import {
   RESET_PASSWORD_SERVICE,
   type IResetPasswordService,
 } from '@auth/domain/services/IResetPasswordService'
-import { ResetPasswordDto } from '@auth/domain/dto/ResetPassword.dto'
+import { ResetPasswordDto } from '@auth/domain/dto/reset-password.dto'
 import { ResetPasswordGuard } from '../guards/reset-password.guard'
 
 @ApiTags('Autenticación')

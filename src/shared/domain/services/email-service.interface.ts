@@ -1,9 +1,9 @@
 import type { MessageSendingResponse } from 'postmark/dist/client/models'
 import type { SendEmailPostmark } from '../Types'
 
-export const EMAIL_SERVICE = Symbol('EmailServiceInterface')
+export const EMAIL_SERVICE = Symbol('IEmailService')
 
-export interface EmailServiceInterface {
+export interface IEmailService {
   sendEmailWithTemplate(
     sendEmail: SendEmailPostmark,
   ): Promise<MessageSendingResponse>
