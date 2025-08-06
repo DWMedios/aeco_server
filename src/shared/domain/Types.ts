@@ -34,6 +34,10 @@ export type DecodedUser = BaseDecoded & {
   }
 }
 
+export type ForgotPasswordDecodedUser = BaseDecoded & {
+  email: string
+}
+
 export type DecodedAeco = {
   aecoId: number
   aecoName: string

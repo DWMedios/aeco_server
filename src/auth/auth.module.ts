@@ -10,6 +10,8 @@ import { ResetInternalPasswordService } from './app/reset-password/reset-interna
 import { ResetPasswordController } from './infra/controllers/reset-password.controller'
 import { FORGOT_PASSWORD_SERVICE } from './domain/services/IForgotPasswordService'
 import { ForgotPasswordService } from './app/forgot-password/forgot-password.service'
+import { VERIFY_RESET_PASSWORD_TOKEN_SERVICE } from './domain/services/IVerifyResetPasswordService'
+import { VerifyResetPasswordTokenService } from './app/verify-reset-password-token/verify-reset-password-token.service'
 
 @Module({
   imports: [SharedModule],
@@ -29,6 +31,10 @@ import { ForgotPasswordService } from './app/forgot-password/forgot-password.ser
     {
       provide: FORGOT_PASSWORD_SERVICE,
       useClass: ForgotPasswordService,
+    },
+    {
+      provide: VERIFY_RESET_PASSWORD_TOKEN_SERVICE,
+      useClass: VerifyResetPasswordTokenService,
     },
   ],
   controllers: [LoginController, ResetPasswordController],

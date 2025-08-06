@@ -10,7 +10,10 @@ import {
   ROLE_REPOSITORY,
   type IRoleRepository,
 } from '@shared/domain/repositories'
-import type { DecodedUser } from '@shared/domain/Types'
+import type {
+  DecodedUser,
+  ForgotPasswordDecodedUser,
+} from '@shared/domain/Types'
 import type { IJwtService } from '@auth/domain/services/IJwtService'
 
 @Injectable()
@@ -38,7 +41,7 @@ export class JwtService implements IJwtService {
     return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
   }
 
-  signResetPassword(payload: { email: string; sub: number }): string {
+  signResetPassword(payload: { email: string; sub: string }): string {
     return jwt.sign(payload, this.secretReset, { expiresIn: this.expiresIn })
   }
 
@@ -79,9 +82,9 @@ export class JwtService implements IJwtService {
     }
   }
 
-  async verifyResetPassword(token: string): Promise<any> {
+  async verifyResetPassword(token: string): Promise<ForgotPasswordDecodedUser> {
     try {
-      return jwt.verify(token, this.secretReset)
+      return jwt.verify(token, this.secretReset) as ForgotPasswordDecodedUser
     } catch (error) {
       this.logger.error(error)
       throw new UnauthorizedException('Token no válido')
