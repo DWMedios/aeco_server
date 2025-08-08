@@ -1,6 +1,6 @@
 import type { EntityManager } from 'typeorm'
 import type { IUserRolePermissions } from '@common/domain/entities'
-import type { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import type { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { UserRoleFilters } from '../Filters'
 
 export const ROLE_REPOSITORY = Symbol('IRoleRepository')
@@ -16,7 +16,7 @@ export interface IRoleRepository {
   ): Promise<IUserRolePermissions | null>
   findByApiKey(
     apiKey: string,
-    type?: UserRoleEntiyEnum,
+    type?: UserRoleEntityEnum,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null>
   create(

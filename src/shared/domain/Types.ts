@@ -1,5 +1,5 @@
 import type { IAecoPayload } from '@aecos/domain/Types'
-import type { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import type { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 export interface IResponseMessage {
   status: number
@@ -27,7 +27,7 @@ export type DecodedUser = BaseDecoded & {
   userId?: number
   username: string
   email: string
-  roleType?: UserRoleEntiyEnum
+  roleType?: UserRoleEntityEnum
   company?: {
     id: number
     name: string

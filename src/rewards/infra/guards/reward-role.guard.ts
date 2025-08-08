@@ -11,7 +11,7 @@ import {
   REWARD_REPOSITORY,
   type IRewardRepository,
 } from '@shared/domain/repositories'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 @Injectable()
 export class RewardRoleGuard implements CanActivate {
@@ -30,8 +30,8 @@ export class RewardRoleGuard implements CanActivate {
     const body = request?.body
 
     const roleType = user.roleType
-    const isSuperAdmin = roleType === UserRoleEntiyEnum.SUPER_ADMIN
-    const isAdmin = roleType === UserRoleEntiyEnum.ADMIN
+    const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
+    const isAdmin = roleType === UserRoleEntityEnum.ADMIN
 
     if (!isSuperAdmin && !isAdmin) return false
 

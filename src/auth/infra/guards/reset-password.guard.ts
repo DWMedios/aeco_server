@@ -11,7 +11,7 @@ import {
   type IUserRepository,
 } from '@shared/domain/repositories'
 import type { DecodedUser } from '@shared/domain/Types'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 @Injectable()
 export class ResetPasswordGuard implements CanActivate {
@@ -30,8 +30,8 @@ export class ResetPasswordGuard implements CanActivate {
     const body = request?.body
 
     const roleType = currentUser.roleType
-    const isSuperAdmin = roleType === UserRoleEntiyEnum.SUPER_ADMIN
-    const isAdmin = roleType === UserRoleEntiyEnum.ADMIN
+    const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
+    const isAdmin = roleType === UserRoleEntityEnum.ADMIN
 
     if (!isSuperAdmin && !isAdmin) return false
 

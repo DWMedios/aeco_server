@@ -84,7 +84,23 @@ export class JwtService implements IJwtService {
 
   async verifyResetPassword(token: string): Promise<ForgotPasswordDecodedUser> {
     try {
-      return jwt.verify(token, this.secretReset) as ForgotPasswordDecodedUser
+      const decoded = jwt.verify(
+        token,
+        this.secretReset,
+      ) as ForgotPasswordDecodedUser
+
+      const role = await this.roleRepository.findBy({
+        userEmail: decoded.email,
+        apiKey: decoded.sub,
+        isActive: true,
+        isUserVerified: true,
+      })
+
+      if (!role) {
+        throw new UnauthorizedException('Usuario no permitido')
+      }
+
+      return decoded
     } catch (error) {
       this.logger.error(error)
       throw new UnauthorizedException('Token no válido')

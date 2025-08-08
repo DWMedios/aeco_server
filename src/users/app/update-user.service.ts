@@ -19,7 +19,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { IUser } from '@common/domain/entities'
 import type { UpdateUserDto } from '@users/domain/dto/UpdateUser.dto'
 import type { IUpdateUserService } from '@users/domain/services/IUpdateUserService'
@@ -77,7 +77,7 @@ export class UpdateUserService implements IUpdateUserService {
             await this.roleRepository.partialUpdate(
               findUser.role,
               {
-                role: role as unknown as UserRoleEntiyEnum,
+                role: role as unknown as UserRoleEntityEnum,
               },
               manager,
             )

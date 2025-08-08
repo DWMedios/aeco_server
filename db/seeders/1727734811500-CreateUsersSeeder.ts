@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt'
 import { MigrationInterface, QueryRunner } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 const usersTable = 'users'
 const permissionsTable = 'user_role_permissions'
@@ -66,17 +66,17 @@ export class CreateUsersSeeder1727734811500 implements MigrationInterface {
 
     await queryRunner.query(
       `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
-        VALUES ('${UserRoleEntiyEnum.SUPER_ADMIN}', ${superAdminId}, '${uuidv4()}')`,
+        VALUES ('${UserRoleEntityEnum.SUPER_ADMIN}', ${superAdminId}, '${uuidv4()}')`,
     )
 
     await queryRunner.query(
       `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
-        VALUES ('${UserRoleEntiyEnum.ADMIN}', ${adminUserId}, '${uuidv4()}')`,
+        VALUES ('${UserRoleEntityEnum.ADMIN}', ${adminUserId}, '${uuidv4()}')`,
     )
 
     await queryRunner.query(
       `INSERT INTO ${permissionsTable} (role, "userId", "apiKey")
-        VALUES ('${UserRoleEntiyEnum.OPERATOR}', ${regularUserId}, '${uuidv4()}')`,
+        VALUES ('${UserRoleEntityEnum.OPERATOR}', ${regularUserId}, '${uuidv4()}')`,
     )
 
     console.log('Permissions created')

@@ -1,7 +1,7 @@
 import {
-  Injectable,
   Inject,
   Logger,
+  Injectable,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common'
@@ -9,10 +9,8 @@ import {
   COMPANY_REPOSITORY,
   DASHBOARD_REPOSITORY,
   MEDIA_ASSET_REPOSITORY,
-  REWARD_REPOSITORY,
   type IDashboardRepository,
   type IMediaAssetRepository,
-  type IRewardRepository,
   type ICompanyRepository,
 } from '@shared/domain/repositories'
 import {
@@ -31,8 +29,6 @@ export class DeleteCompanyService implements IDeleteCompanyService {
     private readonly companyRepository: ICompanyRepository,
     @Inject(MEDIA_ASSET_REPOSITORY)
     private readonly mediaRepository: IMediaAssetRepository,
-    @Inject(REWARD_REPOSITORY)
-    private readonly rewardRepository: IRewardRepository,
     @Inject(DASHBOARD_REPOSITORY)
     private readonly dashbordRepository: IDashboardRepository,
     @Inject(TRANSACTION_SERVICE)
@@ -74,13 +70,6 @@ export class DeleteCompanyService implements IDeleteCompanyService {
         }
 
         try {
-          await this.rewardRepository.softDeleteByCompany(id, manager)
-        } catch (error) {
-          this.logger.error(error)
-          throw new BadRequestException('Error al eliminar las recompensas')
-        }
-
-        try {
           await this.dashbordRepository.softDeleteDailyStatsByCompany(
             id,
             manager,
@@ -98,7 +87,18 @@ export class DeleteCompanyService implements IDeleteCompanyService {
           throw new BadRequestException('Error al eliminar estadísticas')
         }
 
+        // Falta eliminar Advertisements, Aecos, Campaigns (images too), Users (images too)
+        // Contractors (image too), Ticket and items
+
         try {
+          await this.companyRepository.updateById(
+            company.id,
+            {
+              name: `${company.name}_deleted_${Number(new Date())}`,
+              rfc: `${company.rfc}_deleted_${Number(new Date())}`,
+            },
+            manager,
+          )
           deletedCompany = await this.companyRepository.softDelete(id, manager)
         } catch (error) {
           this.logger.error(error)

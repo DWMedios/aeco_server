@@ -8,7 +8,7 @@ import {
   REWARD_REPOSITORY,
   type IRewardRepository,
 } from '@shared/domain/repositories'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { DecodedUser } from '@shared/domain/Types'
@@ -30,7 +30,7 @@ export class FindAllRewardService implements IFindAllRewardService {
     filters: RewardFiltersDto,
   ): Promise<PageMetaDto<IReward>> {
     let companyId: number | null = null
-    const isSuperAdmin = currentUser.roleType === UserRoleEntiyEnum.SUPER_ADMIN
+    const isSuperAdmin = currentUser.roleType === UserRoleEntityEnum.SUPER_ADMIN
 
     if (!isSuperAdmin) {
       companyId = currentUser.company.id

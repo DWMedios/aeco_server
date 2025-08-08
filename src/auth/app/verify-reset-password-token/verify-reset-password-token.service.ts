@@ -23,6 +23,7 @@ export class VerifyResetPasswordTokenService
       userEmail: email,
       apiKey: sub,
       isActive: true,
+      isUserVerified: true,
     })
 
     return !!userRole

@@ -1,10 +1,11 @@
-import type { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import type { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 export interface UserRoleFilters {
   apiKey?: string
-  role?: UserRoleEntiyEnum
+  role?: UserRoleEntityEnum
   isActive?: boolean
   companyId?: number
   userId?: number
   userEmail?: string
+  isUserVerified?: boolean
 }

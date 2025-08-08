@@ -1,7 +1,7 @@
 import {
-  Injectable,
   Inject,
   Logger,
+  Injectable,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common'
@@ -17,7 +17,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { type IS3Service, S3_SERVICE } from '@shared/domain/services/IS3Service'
+import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import type { IDeleteUserService } from '@users/domain/services/IDeleteUserService'
 
 @Injectable()
@@ -72,7 +72,10 @@ export class DeleteUserService implements IDeleteUserService {
         try {
           await this.userRepository.partialUpdate(
             user,
-            { isActive: false },
+            {
+              isActive: false,
+              email: `${user.email}_deleted_${Number(new Date())}`,
+            },
             manager,
           )
           deletedUSer = await this.userRepository.softDelete(id, manager)

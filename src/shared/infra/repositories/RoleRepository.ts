@@ -2,7 +2,7 @@ import type { EntityManager, Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRolePermissions } from '@common/infra/entities'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { IUserRolePermissions } from '@common/domain/entities'
 import type { IRoleRepository } from '@shared/domain/repositories'
 import type { UserRoleFilters } from '@shared/domain/Filters'
@@ -76,12 +76,18 @@ export class RoleRepository
       qb.andWhere('user.email = :userEmail', { userEmail: filters.userEmail })
     }
 
+    if (filters?.isUserVerified !== undefined) {
+      qb.andWhere('user.isVerified = :isUserVerified', {
+        isUserVerified: filters.isUserVerified,
+      })
+    }
+
     return qb.getOne()
   }
 
   findByApiKey(
     apiKey: string,
-    type?: UserRoleEntiyEnum,
+    type?: UserRoleEntityEnum,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null> {
     const qb = this.repository(manager)
