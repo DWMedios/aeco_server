@@ -1,11 +1,22 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 import type { IAecoPayload } from '@aecos/domain/Types'
-import type { DecodedAeco, DecodedUser } from '@shared/domain/Types'
+import type {
+  DecodedAeco,
+  DecodedUser,
+  ForgotPasswordDecodedUser,
+} from '@shared/domain/Types'
 
 export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): DecodedUser => {
     const request = ctx.switchToHttp().getRequest()
     return request['user'] as DecodedUser
+  },
+)
+
+export const CurrentForgotPasswordUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext): ForgotPasswordDecodedUser => {
+    const request = ctx.switchToHttp().getRequest()
+    return request['forgotPasswordUser'] as ForgotPasswordDecodedUser
   },
 )
 

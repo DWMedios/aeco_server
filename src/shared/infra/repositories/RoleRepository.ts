@@ -2,9 +2,10 @@ import type { EntityManager, Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRolePermissions } from '@common/infra/entities'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { IUserRolePermissions } from '@common/domain/entities'
 import type { IRoleRepository } from '@shared/domain/repositories'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import type { UserRoleFilters } from '@shared/domain/Filters'
 import { TransactionalRepository } from '../base/transactional.repository'
 
 @Injectable()
@@ -29,9 +30,64 @@ export class RoleRepository
     })
   }
 
+  findBy(
+    filters: UserRoleFilters,
+    manager?: EntityManager,
+  ): Promise<IUserRolePermissions | null> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('role')
+      .leftJoinAndSelect('role.user', 'user')
+      .leftJoinAndSelect('user.company', 'company')
+      .select([
+        'role.id',
+        'role.role',
+        'role.apiKey',
+        'role.token',
+        'role.userId',
+        'user.name',
+        'user.email',
+        'user.isActive',
+        'company.id',
+        'company.name',
+      ])
+      .where('role.deletedAt IS NULL')
+      .andWhere('user.deletedAt IS NULL')
+      .andWhere('company.deletedAt IS NULL')
+
+    if (filters?.apiKey) {
+      qb.andWhere('role.apiKey = :apiKey', { apiKey: filters.apiKey })
+    }
+    if (filters?.role) {
+      qb.andWhere('role.role = :type', { type: filters.role })
+    }
+    if (filters?.isActive !== undefined) {
+      qb.andWhere('user.isActive = :isActive', { isActive: filters.isActive })
+    }
+    if (filters?.companyId) {
+      qb.andWhere('role.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
+    }
+    if (filters?.userId) {
+      qb.andWhere('role.userId = :userId', { userId: filters.userId })
+    }
+
+    if (filters?.userEmail) {
+      qb.andWhere('user.email = :userEmail', { userEmail: filters.userEmail })
+    }
+
+    if (filters?.isUserVerified !== undefined) {
+      qb.andWhere('user.isVerified = :isUserVerified', {
+        isUserVerified: filters.isUserVerified,
+      })
+    }
+
+    return qb.getOne()
+  }
+
   findByApiKey(
     apiKey: string,
-    type?: UserRoleEntiyEnum,
+    type?: UserRoleEntityEnum,
     manager?: EntityManager,
   ): Promise<IUserRolePermissions | null> {
     const qb = this.repository(manager)

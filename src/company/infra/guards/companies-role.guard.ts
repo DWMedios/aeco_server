@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common'
 import type { DecodedUser } from '@shared/domain/Types'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 @Injectable()
 export class CompaniesRoleGuard implements CanActivate {
@@ -19,7 +19,7 @@ export class CompaniesRoleGuard implements CanActivate {
     const user = request['user'] as DecodedUser
 
     const roleType = user.roleType
-    const isSuperAdmin = roleType === UserRoleEntiyEnum.SUPER_ADMIN
+    const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
 
     return isSuperAdmin
   }

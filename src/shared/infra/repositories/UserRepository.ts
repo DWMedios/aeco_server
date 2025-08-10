@@ -76,6 +76,7 @@ export class UserRepository
   findByEmail(email: string, manager?: EntityManager): Promise<IUser | null> {
     return this.repository(manager)
       .createQueryBuilder('user')
+      .leftJoinAndSelect('user.company', 'company')
       .where('user.email = :email', { email })
       .getOne()
   }

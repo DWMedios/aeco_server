@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import {
-  NestMiddleware,
-  Injectable,
-  UnauthorizedException,
   Logger,
   Inject,
+  Injectable,
+  NestMiddleware,
   ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common'
 import {
   JWT_SERVICE,

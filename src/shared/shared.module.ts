@@ -20,6 +20,7 @@ import {
   Reward,
   Ticket,
   User,
+  UserInvite,
   UserRolePermissions,
 } from '@common/infra/entities'
 import {
@@ -62,6 +63,10 @@ import { S3_SERVICE } from './domain/services/IS3Service'
 import { S3Service } from './app/files/s3.service'
 import { TRANSACTION_SERVICE } from './domain/services/transaction-service.interface'
 import { TransactionService } from './app/transaction/transaction.service'
+import { EMAIL_SERVICE } from './domain/services/email-service.interface'
+import { MailService } from './app/mail/mail.service'
+import { USER_INVITE_REPOSITORY } from './domain/repositories/IUserInviteRepository'
+import { UserInviteRepository } from './infra/repositories/UserInviteRepository'
 
 @Module({
   imports: [
@@ -84,6 +89,7 @@ import { TransactionService } from './app/transaction/transaction.service'
       MediaAsset,
       AecoAttempts,
       AecoRequestHistory,
+      UserInvite,
     ]),
   ],
   providers: [
@@ -156,6 +162,10 @@ import { TransactionService } from './app/transaction/transaction.service'
       useClass: AdvertisingRepository,
     },
     {
+      provide: USER_INVITE_REPOSITORY,
+      useClass: UserInviteRepository,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -171,6 +181,10 @@ import { TransactionService } from './app/transaction/transaction.service'
         })
       },
       inject: [ConfigService],
+    },
+    {
+      provide: EMAIL_SERVICE,
+      useClass: MailService,
     },
   ],
   exports: [
@@ -188,10 +202,12 @@ import { TransactionService } from './app/transaction/transaction.service'
     CONTRACTOR_REPOSITORY,
     CAMPAIGN_REPOSITORY,
     ADVERTISING_REPOSITORY,
+    USER_INVITE_REPOSITORY,
     AECO_ATTEMPTS_REPOSITORY,
     AECO_REQUEST_HISTORY_REPOSITORY,
     TRANSACTION_SERVICE,
     S3_SERVICE,
+    EMAIL_SERVICE,
   ],
 })
 export class SharedModule {}

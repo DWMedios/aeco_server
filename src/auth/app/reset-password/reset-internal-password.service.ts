@@ -11,11 +11,13 @@ import {
   USER_REPOSITORY,
   type IUserRepository,
 } from '@shared/domain/repositories'
-import type { IResetPasswordService } from '@auth/domain/services/IResetPasswordService'
+import type { IResetInternalPasswordService } from '@auth/domain/services/IResetInternalPasswordService'
 
 @Injectable()
-export class ResetPasswordService implements IResetPasswordService {
-  logger = new Logger(ResetPasswordService.name)
+export class ResetInternalPasswordService
+  implements IResetInternalPasswordService
+{
+  logger = new Logger(ResetInternalPasswordService.name)
 
   constructor(
     @Inject(USER_REPOSITORY)

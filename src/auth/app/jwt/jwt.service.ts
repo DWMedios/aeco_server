@@ -10,7 +10,10 @@ import {
   ROLE_REPOSITORY,
   type IRoleRepository,
 } from '@shared/domain/repositories'
-import type { DecodedUser } from '@shared/domain/Types'
+import type {
+  DecodedUser,
+  ForgotPasswordDecodedUser,
+} from '@shared/domain/Types'
 import type { IJwtService } from '@auth/domain/services/IJwtService'
 
 @Injectable()
@@ -18,20 +21,28 @@ export class JwtService implements IJwtService {
   logger = new Logger(JwtService.name)
   private readonly expiresIn: string
   private readonly secret: string
+  private readonly secretReset: string
 
   constructor(
     @Inject(ROLE_REPOSITORY)
     private readonly roleRepository: IRoleRepository,
     private readonly configService: ConfigService,
   ) {
-    const expInt = this.configService.get<number>('jwt.expInt')
-    const timeStr = this.configService.get<string>('jwt.timeStr')
+    const expInt = this.configService.get<number>('jwt.exp_int')
+    const timeStr = this.configService.get<string>('jwt.time_str')
     this.expiresIn = `${expInt} ${timeStr}`
     this.secret = this.configService.get<string>('jwt.secret')
+    this.secretReset = this.configService.get<string>(
+      'jwt.secret_reset_password',
+    )
   }
 
   sign(payload: Partial<DecodedUser>): string {
     return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
+  }
+
+  signResetPassword(payload: { email: string; sub: string }): string {
+    return jwt.sign(payload, this.secretReset, { expiresIn: this.expiresIn })
   }
 
   async verify(token: string): Promise<DecodedUser> {
@@ -68,6 +79,31 @@ export class JwtService implements IJwtService {
     } catch (error) {
       this.logger.error(error)
       throw new UnauthorizedException('Usuario no permitido')
+    }
+  }
+
+  async verifyResetPassword(token: string): Promise<ForgotPasswordDecodedUser> {
+    try {
+      const decoded = jwt.verify(
+        token,
+        this.secretReset,
+      ) as ForgotPasswordDecodedUser
+
+      const role = await this.roleRepository.findBy({
+        userEmail: decoded.email,
+        apiKey: decoded.sub,
+        isActive: true,
+        isUserVerified: true,
+      })
+
+      if (!role) {
+        throw new UnauthorizedException('Usuario no permitido')
+      }
+
+      return decoded
+    } catch (error) {
+      this.logger.error(error)
+      throw new UnauthorizedException('Token no válido')
     }
   }
 }

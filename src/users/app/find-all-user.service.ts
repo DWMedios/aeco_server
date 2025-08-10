@@ -8,7 +8,7 @@ import {
   USER_REPOSITORY,
   type IUserRepository,
 } from '@shared/domain/repositories'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import { PageOptionsDto } from '@shared/domain/pagination/dto/page-options.dto'
 import { PageMetaDto } from '@shared/domain/pagination/dto/page-meta.dto'
 import type { DecodedUser } from '@shared/domain/Types'
@@ -32,7 +32,7 @@ export class FindAllUserService implements IFindAllUserService {
     const companyIds: number[] = []
     const roleType = currentUser.roleType
 
-    if (roleType !== UserRoleEntiyEnum.SUPER_ADMIN) {
+    if (roleType !== UserRoleEntityEnum.SUPER_ADMIN) {
       const userCompany = currentUser.company
       companyIds.push(userCompany.id)
     }

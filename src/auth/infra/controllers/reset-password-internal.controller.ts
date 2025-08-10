@@ -12,20 +12,20 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import {
-  RESET_PASSWORD_SERVICE,
-  type IResetPasswordService,
-} from '@auth/domain/services/IResetPasswordService'
-import { ResetPasswordDto } from '@auth/domain/dto/ResetPassword.dto'
+  RESET_INTERNAL_PASSWORD_SERVICE,
+  type IResetInternalPasswordService,
+} from '@auth/domain/services/IResetInternalPasswordService'
+import { ResetPasswordDto } from '@auth/domain/dto/reset-password.dto'
 import { ResetPasswordGuard } from '../guards/reset-password.guard'
 
 @ApiTags('Autenticación')
 @Controller('auth')
-export class ResetPasswordController {
-  logger = new Logger(ResetPasswordController.name)
+export class ResetPasswordInternalController {
+  logger = new Logger(ResetPasswordInternalController.name)
 
   constructor(
-    @Inject(RESET_PASSWORD_SERVICE)
-    private readonly service: IResetPasswordService,
+    @Inject(RESET_INTERNAL_PASSWORD_SERVICE)
+    private readonly service: IResetInternalPasswordService,
   ) {}
 
   @Put('users/:id/reset-password')
@@ -45,7 +45,7 @@ export class ResetPasswordController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'No autorizado',
   })
-  async login(
+  async resetPasswordInternal(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: ResetPasswordDto,
   ) {

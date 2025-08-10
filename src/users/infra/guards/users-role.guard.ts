@@ -1,17 +1,17 @@
 import { Request } from 'express'
 import {
+  Inject,
+  Logger,
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Inject,
-  Injectable,
-  Logger,
 } from '@nestjs/common'
-import type { DecodedUser } from '@shared/domain/Types'
 import {
   type IUserRepository,
   USER_REPOSITORY,
 } from '@shared/domain/repositories'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
+import type { DecodedUser } from '@shared/domain/Types'
 
 @Injectable()
 export class UsersRoleGuard implements CanActivate {
@@ -30,8 +30,8 @@ export class UsersRoleGuard implements CanActivate {
     const body = request?.body
 
     const roleType = user.roleType
-    const isSuperAdmin = roleType === UserRoleEntiyEnum.SUPER_ADMIN
-    const isAdmin = roleType === UserRoleEntiyEnum.ADMIN
+    const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
+    const isAdmin = roleType === UserRoleEntityEnum.ADMIN
 
     if (!isSuperAdmin && !isAdmin) return false
 
