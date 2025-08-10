@@ -20,8 +20,8 @@ import { ResetPasswordGuard } from '../guards/reset-password.guard'
 
 @ApiTags('Autenticación')
 @Controller('auth')
-export class ResetPasswordController {
-  logger = new Logger(ResetPasswordController.name)
+export class ResetPasswordInternalController {
+  logger = new Logger(ResetPasswordInternalController.name)
 
   constructor(
     @Inject(RESET_INTERNAL_PASSWORD_SERVICE)
@@ -45,7 +45,7 @@ export class ResetPasswordController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'No autorizado',
   })
-  async login(
+  async resetPasswordInternal(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: ResetPasswordDto,
   ) {

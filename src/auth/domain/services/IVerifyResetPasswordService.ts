@@ -5,5 +5,5 @@ export const VERIFY_RESET_PASSWORD_TOKEN_SERVICE = Symbol(
 )
 
 export interface IVerifyResetPasswordTokenService {
-  run(userToReset: ForgotPasswordDecodedUser): Promise<boolean>
+  run(payload: ForgotPasswordDecodedUser): Promise<{ success: boolean }>
 }

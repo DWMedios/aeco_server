@@ -29,8 +29,8 @@ export class VerifyResetPasswordTokenController {
   @HttpCode(HttpStatus.OK)
   async verifyResetPasswordToken(
     @CurrentForgotPasswordUser()
-    passwordResetUser: ForgotPasswordDecodedUser,
-  ): Promise<boolean> {
-    return await this.service.run(passwordResetUser)
+    payload: ForgotPasswordDecodedUser,
+  ): Promise<{ success: boolean }> {
+    return await this.service.run(payload)
   }
 }

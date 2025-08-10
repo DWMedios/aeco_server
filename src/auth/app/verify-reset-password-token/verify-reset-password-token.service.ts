@@ -17,8 +17,8 @@ export class VerifyResetPasswordTokenService
     private readonly roleRepository: IRoleRepository,
   ) {}
 
-  async run(userToReset: ForgotPasswordDecodedUser): Promise<boolean> {
-    const { sub, email } = userToReset
+  async run(payload: ForgotPasswordDecodedUser): Promise<{ success: boolean }> {
+    const { sub, email } = payload
     const userRole = await this.roleRepository.findBy({
       userEmail: email,
       apiKey: sub,
@@ -26,6 +26,6 @@ export class VerifyResetPasswordTokenService
       isUserVerified: true,
     })
 
-    return !!userRole
+    return { success: !!userRole }
   }
 }

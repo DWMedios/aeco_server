@@ -1,16 +1,17 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { Base } from './Base'
 import { User } from './User.entity'
-import { UserInviteStatusEnum } from '@common/domain/enums/UserInvite.status.enum'
+import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
+import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
 import type { IUserInvite } from '@common/domain/entities/IUserInvite'
 
 @Entity({ name: 'user_invites' })
 export class UserInvite extends Base implements IUserInvite {
-  @Column({ nullable: false, length: 100 })
-  name: string
-
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text' })
   email: string
+
+  @Column({ type: 'enum', enum: UserInviteTypeEnum })
+  inviteType: UserInviteTypeEnum
 
   @Column({
     type: 'enum',

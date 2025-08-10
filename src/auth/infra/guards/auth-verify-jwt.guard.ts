@@ -11,6 +11,12 @@ import {
   JWT_SERVICE,
   type IJwtService,
 } from '@auth/domain/services/IJwtService'
+import {
+  USER_INVITE_REPOSITORY,
+  type IUserInviteRepository,
+} from '@shared/domain/repositories'
+import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
+import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
 
 @Injectable()
 export class AuthVerifyJwtGuard implements CanActivate {
@@ -18,6 +24,8 @@ export class AuthVerifyJwtGuard implements CanActivate {
   constructor(
     @Inject(JWT_SERVICE)
     private readonly jwtService: IJwtService,
+    @Inject(USER_INVITE_REPOSITORY)
+    private readonly userInviteRepository: IUserInviteRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,16 +34,34 @@ export class AuthVerifyJwtGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException('El token es requerido')
     }
+    const existingInvite = await this.userInviteRepository.findBy({
+      token,
+      inviteType: UserInviteTypeEnum.FORGOT_PASSWORD,
+      status: UserInviteStatusEnum.PENDING,
+    })
+    if (!existingInvite) {
+      throw new UnauthorizedException('Token no válido')
+    }
 
     try {
       const decoded = await this.jwtService.verifyResetPassword(token)
       if (!decoded) {
+        await this.userInviteRepository.partialUpdate(existingInvite, {
+          status: UserInviteStatusEnum.CANCELLED,
+        })
         throw new UnauthorizedException('Token no válido')
       }
-      request['forgotPasswordUser'] = decoded
+      request['forgotPasswordUser'] = {
+        ...decoded,
+        inviteId: existingInvite.id,
+      }
       return true
-    } catch (err) {
-      this.logger.error(err)
+    } catch (error) {
+      this.logger.error(error)
+      await this.userInviteRepository.partialUpdate(existingInvite, {
+        status: UserInviteStatusEnum.CANCELLED,
+      })
+
       throw new UnauthorizedException('Token no válido')
     }
   }
