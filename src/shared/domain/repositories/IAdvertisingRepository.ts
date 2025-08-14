@@ -29,9 +29,14 @@ export interface IAdvertisingRepository {
     advertising: Partial<IAdvertising>,
     manager?: EntityManager,
   ): Promise<IAdvertising>
+  updateManyByCompany(
+    companyId: number,
+    advertising: Partial<IAdvertising>,
+    manager?: EntityManager,
+  ): Promise<IAdvertising[]>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
-  softDeleteByCompany(
+  softDeleteManyByCompany(
     companyId: number,
     manager?: EntityManager,
   ): Promise<boolean>

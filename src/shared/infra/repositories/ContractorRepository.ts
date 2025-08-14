@@ -173,6 +173,22 @@ export class ContractorRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    contractor: Partial<IContractor>,
+    manager?: EntityManager,
+  ): Promise<IContractor[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('contractor')
+      .update()
+      .set(contractor)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('contractor')
@@ -193,7 +209,7 @@ export class ContractorRepository
     return qb.affected !== 0
   }
 
-  async softDeleteByCompany(
+  async softDeleteManyByCompany(
     companyId: number,
     manager?: EntityManager,
   ): Promise<boolean> {

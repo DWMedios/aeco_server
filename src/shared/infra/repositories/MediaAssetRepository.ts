@@ -31,6 +31,31 @@ export class MediaAssetRepository
     })
   }
 
+  findManyByCompanyId(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IMediaAsset[]> {
+    return this.repository(manager)
+      .createQueryBuilder('media')
+      .leftJoinAndSelect('media.campaignMedia', 'campaignMedia')
+      .leftJoinAndSelect('media.contractorLogo', 'contractorLogo')
+      .leftJoinAndSelect('media.companyLogo', 'companyLogo')
+      .leftJoinAndSelect('media.userImage', 'userImage')
+      .where('media.companyLogo.id = :companyId', { companyId })
+      .orWhere('media.contractorLogo.companyId = :companyId', { companyId })
+      .orWhere('media.campaignMedia.companyId = :companyId', { companyId })
+      .orWhere('media.userImage.companyId = :companyId', { companyId })
+      .select([
+        'media.id',
+        'media.fileKey',
+        'campaignMedia.id',
+        'contractorLogo.id',
+        'companyLogo.id',
+        'userImage.id',
+      ])
+      .getMany()
+  }
+
   create(
     media: Partial<IMediaAsset>,
     manager?: EntityManager,

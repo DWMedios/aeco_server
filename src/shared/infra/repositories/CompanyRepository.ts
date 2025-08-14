@@ -144,6 +144,22 @@ export class CompanyRepository
     return qb.getManyAndCount()
   }
 
+  findToDelete(id: number, manager?: EntityManager): Promise<ICompany | null> {
+    return this.repository(manager)
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.users', 'users')
+      .leftJoinAndSelect('company.rewards', 'rewards')
+      .leftJoinAndSelect('company.aecos', 'aecos')
+      .leftJoinAndSelect('company.dailyStats', 'dailyStats')
+      .leftJoinAndSelect('company.productStats', 'productStats')
+      .leftJoinAndSelect('company.packagingStats', 'packagingStats')
+      .leftJoinAndSelect('company.advertisings', 'advertisings')
+      .leftJoinAndSelect('company.contractors', 'contractors')
+      .leftJoinAndSelect('company.campaigns', 'campaigns')
+      .where('company.id = :id', { id })
+      .getOne()
+  }
+
   create(
     company: Partial<ICompany>,
     manager?: EntityManager,

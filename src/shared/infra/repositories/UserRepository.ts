@@ -184,6 +184,16 @@ export class UserRepository
     return qb.getManyAndCount()
   }
 
+  findManyByCompanyId(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IUser[]> {
+    return this.repository(manager)
+      .createQueryBuilder('user')
+      .where('user.companyId = :companyId', { companyId })
+      .getMany()
+  }
+
   create(user: Partial<IUser>, manager?: EntityManager): Promise<IUser> {
     const newUser = this.repository(manager).create(user)
     return this.repository(manager).save(newUser)
@@ -213,6 +223,22 @@ export class UserRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    user: Partial<IUser>,
+    manager?: EntityManager,
+  ): Promise<IUser[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('user')
+      .update()
+      .set(user)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const result = await this.repository(manager)
       .createQueryBuilder('user')
@@ -228,6 +254,19 @@ export class UserRepository
       .createQueryBuilder('user')
       .softDelete()
       .where('id = :id', { id })
+      .execute()
+
+    return result.affected !== 0
+  }
+
+  async softDeleteManyByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const result = await this.repository(manager)
+      .createQueryBuilder('user')
+      .softDelete()
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return result.affected !== 0

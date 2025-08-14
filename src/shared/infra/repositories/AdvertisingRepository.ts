@@ -174,6 +174,22 @@ export class AdvertisingRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    advertising: Partial<IAdvertising>,
+    manager?: EntityManager,
+  ): Promise<IAdvertising[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('advertising')
+      .update()
+      .set(advertising)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('advertising')
@@ -194,7 +210,7 @@ export class AdvertisingRepository
     return qb.affected !== 0
   }
 
-  async softDeleteByCompany(
+  async softDeleteManyByCompany(
     companyId: number,
     manager?: EntityManager,
   ): Promise<boolean> {
