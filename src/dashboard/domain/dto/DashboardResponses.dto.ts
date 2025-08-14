@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import {
-  IDailyStats,
-  IPackagingStats,
-  IProductStats,
-} from '@common/domain/entities'
-import { PackingType } from '@common/domain/Types'
+import type { IDailyStats, IPackagingStats } from '@common/domain/entities'
+import type { PackingType } from '@common/domain/Types'
 
 export class DailyStatsResponseDto implements IDailyStats {
   @ApiProperty({
@@ -90,44 +86,6 @@ export class PackagingStatsResponseDto implements IPackagingStats {
   readonly aecoId?: number
 
   // Las relaciones company y aeco no se incluyen en la documentación
-  company?: any
-  aeco?: any
-}
-
-export class ProductStatsResponseDto implements IProductStats {
-  @ApiProperty({
-    description: 'Cantidad total del producto',
-    example: 42,
-    type: Number,
-  })
-  readonly totalCount: number
-
-  @ApiProperty({
-    description: 'ID del producto asociado a las estadísticas',
-    example: 5,
-    required: false,
-    type: Number,
-  })
-  readonly productId?: number
-
-  @ApiProperty({
-    description: 'ID de la compañía asociada a las estadísticas',
-    example: 1,
-    required: false,
-    type: Number,
-  })
-  readonly companyId?: number
-
-  @ApiProperty({
-    description: 'ID del AECO asociado a las estadísticas',
-    example: 2,
-    required: false,
-    type: Number,
-  })
-  readonly aecoId?: number
-
-  // Las relaciones product, company y aeco no se incluyen en la documentación
-  product?: any
   company?: any
   aeco?: any
 }
