@@ -129,7 +129,10 @@ export class DashboardRepository
       )
     }
 
-    return qb.groupBy('packagingStats.packagingType').getRawMany()
+    return qb
+      .groupBy('packagingStats.packagingType')
+      .orderBy('"totalCount"', filters.orderByDirection)
+      .getRawMany()
   }
 
   totalPackingsPerDay(
