@@ -15,7 +15,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { setDateToMidDay } from '@shared/utils/functions'
+import { setDateToMidDayV2 } from '@shared/utils/functions'
 import type { DecodedAeco } from '@shared/domain/Types'
 import type { IAecoPayload } from '@aecos/domain/Types'
 import { AecoAttemptsEnum } from '@common/domain/enums/AecoAttempts.enum'
@@ -43,7 +43,7 @@ export class InsertDailyStatsAecoService
     request: CreateDailyStatsDto,
   ): Promise<{ success: boolean }> {
     const { requestPayload } = currentAeco
-    const createdAt = setDateToMidDay(request.createdAt)
+    const createdAt = setDateToMidDayV2(request.createdAt)
 
     if (!createdAt) {
       await this.logAttempt(

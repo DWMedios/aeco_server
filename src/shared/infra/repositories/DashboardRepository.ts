@@ -162,7 +162,10 @@ export class DashboardRepository
       })
     }
 
-    return qb.groupBy('dailyStats.createdAt').getRawMany()
+    return qb
+      .groupBy('dailyStats.createdAt')
+      .orderBy('"createdAt"', 'ASC')
+      .getRawMany()
   }
 
   insertDailyStats(

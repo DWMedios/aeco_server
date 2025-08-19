@@ -26,6 +26,16 @@ export const setDateToMidDay = (date: Date): Date | null => {
   return createdAtLuxon.toJSDate()
 }
 
+export const setDateToMidDayV2 = (date: Date): Date | null => {
+  const createdAtLuxon = DateTime.fromJSDate(new Date(date), {
+    zone: 'America/Mexico_City',
+  }).set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
+
+  if (!createdAtLuxon.isValid) return null
+
+  return createdAtLuxon.toJSDate()
+}
+
 /**
  * The function `currentDateTZ` returns the current date and time in the 'America/Mexico_City' time zone.
  * @returns A Date object representing the current date and time in the 'America/Mexico_City' time zone.
