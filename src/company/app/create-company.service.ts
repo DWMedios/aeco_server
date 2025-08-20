@@ -1,6 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
 import { ConfigService } from '@nestjs/config'
-import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
+import {
+  Inject,
+  Logger,
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   ROLE_REPOSITORY,
   USER_REPOSITORY,
@@ -135,7 +141,7 @@ export class CreateCompanyService implements ICreateCompanyService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al crear el logo de la empresa',
             )
           }
@@ -154,7 +160,7 @@ export class CreateCompanyService implements ICreateCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al crear la empresa')
+          throw new InternalServerErrorException('Error al crear la empresa')
         }
 
         if (userAdmin) {
@@ -169,7 +175,8 @@ export class CreateCompanyService implements ICreateCompanyService {
               manager,
             )
           } catch (error) {
-            throw new BadRequestException('Error al crear el usuario')
+            this.logger.error(error)
+            throw new InternalServerErrorException('Error al crear el usuario')
           }
 
           try {
@@ -193,7 +200,10 @@ export class CreateCompanyService implements ICreateCompanyService {
               manager,
             )
           } catch (error) {
-            throw new BadRequestException('Error al asignar el rol al usuario')
+            this.logger.error(error)
+            throw new InternalServerErrorException(
+              'Error al asignar el rol al usuario',
+            )
           }
         }
 

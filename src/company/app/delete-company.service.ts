@@ -3,7 +3,7 @@ import {
   Logger,
   Injectable,
   NotFoundException,
-  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import {
   AECO_REPOSITORY,
@@ -86,7 +86,9 @@ export class DeleteCompanyService implements IDeleteCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al eliminar estadísticas')
+          throw new InternalServerErrorException(
+            'Error al eliminar estadísticas',
+          )
         }
 
         // Falta eliminar Tickets and items (preguntar)
@@ -116,7 +118,7 @@ export class DeleteCompanyService implements IDeleteCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException(
+          throw new InternalServerErrorException(
             'Error al eliminar campañas o contratistas',
           )
         }
@@ -135,7 +137,7 @@ export class DeleteCompanyService implements IDeleteCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al eliminar los AECOs')
+          throw new InternalServerErrorException('Error al eliminar los AECOs')
         }
 
         // Disable and Soft Delete Company
@@ -152,7 +154,7 @@ export class DeleteCompanyService implements IDeleteCompanyService {
           deletedCompany = await this.companyRepository.softDelete(id, manager)
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al eliminar la empresa')
+          throw new InternalServerErrorException('Error al eliminar la empresa')
         }
 
         const users = await this.userRepository.findManyByCompanyId(
@@ -180,7 +182,7 @@ export class DeleteCompanyService implements IDeleteCompanyService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException('Error al eliminar usuarios')
+            throw new InternalServerErrorException('Error al eliminar usuarios')
           }
         }
 
@@ -204,7 +206,9 @@ export class DeleteCompanyService implements IDeleteCompanyService {
                 }
               } catch (error) {
                 this.logger.error(error)
-                throw new BadRequestException('Error al eliminar el archivo')
+                throw new InternalServerErrorException(
+                  'Error al eliminar el archivo',
+                )
               }
             }
           }
