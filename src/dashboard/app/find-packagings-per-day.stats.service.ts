@@ -27,8 +27,6 @@ export class FindPackagingsPerDayStatsService
       throw new NotFoundException('Estatísticas de embalage no encontradas')
     }
 
-    console.log('packagingsPerDayStats', packagingsPerDayStats)
-
     if (packagingsPerDayStats.length === 0) {
       this.logger.warn('No packagings found for the given filters')
       return []
