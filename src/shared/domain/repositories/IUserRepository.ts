@@ -13,6 +13,7 @@ export interface IUserRepository {
   findById(
     id: number,
     isActive?: boolean,
+    isVerified?: boolean,
     manager?: EntityManager,
   ): Promise<IUser | null>
   findByEmail(email: string, manager?: EntityManager): Promise<IUser | null>

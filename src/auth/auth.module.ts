@@ -19,6 +19,9 @@ import { ResetExternalPasswordService } from './app/reset-password/reset-externa
 import { ResetPasswordExternalController } from './infra/controllers/reset-password-external.controller'
 import { VERIFY_EMAIL_TOKEN_SERVICE } from './domain/services/IVerifyEmailTokenService'
 import { VerifyEmailTokenService } from './app/verify-token/verify-email-token.service'
+import { RESEND_VERIFY_EMAIL_SERVICE } from './domain/services/IResendVerifyEmailService'
+import { ResendVerifyEmailService } from './app/resend-verify-email.service'
+import { ResendVerifyEmailController } from './infra/controllers/resend-verify-email.controller'
 
 @Module({
   imports: [SharedModule],
@@ -51,6 +54,10 @@ import { VerifyEmailTokenService } from './app/verify-token/verify-email-token.s
       provide: VERIFY_EMAIL_TOKEN_SERVICE,
       useClass: VerifyEmailTokenService,
     },
+    {
+      provide: RESEND_VERIFY_EMAIL_SERVICE,
+      useClass: ResendVerifyEmailService,
+    },
   ],
   controllers: [
     LoginController,
@@ -58,6 +65,7 @@ import { VerifyEmailTokenService } from './app/verify-token/verify-email-token.s
     ForgotPasswordController,
     VerifyResetPasswordTokenController,
     ResetPasswordExternalController,
+    ResendVerifyEmailController,
   ],
   exports: [JWT_SERVICE, AUTH_SERVICE],
 })

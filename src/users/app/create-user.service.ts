@@ -6,6 +6,7 @@ import {
   Logger,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import {
   USER_REPOSITORY,
@@ -36,8 +37,8 @@ import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
 import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
 import type { IMediaAsset, IUser } from '@common/domain/entities'
 import type { CreateUserDto } from '@users/domain/dto/CreateUser.dto'
+import type { ResetPasswordEmailTemplateModel } from '@shared/domain/Types'
 import type { ICreateUserService } from '@users/domain/services/ICreateUserService'
-import { ResetPasswordEmailTemplateModel } from '@shared/domain/Types'
 
 @Injectable()
 export class CreateUserService implements ICreateUserService {
@@ -107,7 +108,7 @@ export class CreateUserService implements ICreateUserService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al crear la imagen del usuario',
             )
           }
@@ -123,7 +124,8 @@ export class CreateUserService implements ICreateUserService {
             manager,
           )
         } catch (error) {
-          throw new BadRequestException('Error al crear el usuario')
+          this.logger.error(error)
+          throw new InternalServerErrorException('Error al crear el usuario')
         }
 
         try {
@@ -131,7 +133,7 @@ export class CreateUserService implements ICreateUserService {
             {
               userId: newUser.id,
               role: role as unknown as UserRoleEntityEnum,
-              apiKey: uuidv4(),
+              apiKey,
             },
             manager,
           )
@@ -147,7 +149,10 @@ export class CreateUserService implements ICreateUserService {
             manager,
           )
         } catch (error) {
-          throw new BadRequestException('Error al asignar el rol al usuario')
+          this.logger.error(error)
+          throw new InternalServerErrorException(
+            'Error al asignar el rol al usuario',
+          )
         }
         return newUser
       },

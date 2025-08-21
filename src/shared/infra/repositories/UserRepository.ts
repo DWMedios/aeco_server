@@ -36,6 +36,7 @@ export class UserRepository
   findById(
     id: number,
     isActive?: boolean,
+    isVerified?: boolean,
     manager?: EntityManager,
   ): Promise<IUser | null> {
     const qb = this.repository(manager)
@@ -69,6 +70,10 @@ export class UserRepository
 
     if (isActive !== undefined) {
       qb.andWhere('user.isActive = :isActive', { isActive })
+    }
+
+    if (isVerified !== undefined) {
+      qb.andWhere('user.isVerified = :isVerified', { isVerified })
     }
 
     return qb.getOne()

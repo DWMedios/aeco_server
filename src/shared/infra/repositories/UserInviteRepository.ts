@@ -61,6 +61,11 @@ export class UserInviteRepository
         invitedById: filters.invitedById,
       })
     }
+    if (filters?.invitedUserId) {
+      qb.andWhere('invite.invitedUserId = :invitedUserId', {
+        invitedUserId: filters.invitedUserId,
+      })
+    }
 
     return qb.getOne()
   }

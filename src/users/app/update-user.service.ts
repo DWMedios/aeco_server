@@ -5,6 +5,7 @@ import {
   Logger,
   BadRequestException,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import {
   USER_REPOSITORY,
@@ -30,13 +31,13 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { IUser } from '@common/domain/entities'
 import type { UpdateUserDto } from '@users/domain/dto/UpdateUser.dto'
-import type { IUpdateUserService } from '@users/domain/services/IUpdateUserService'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
 import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
-import { ResetPasswordEmailTemplateModel } from '@shared/domain/Types'
+import type { ResetPasswordEmailTemplateModel } from '@shared/domain/Types'
+import type { IUpdateUserService } from '@users/domain/services/IUpdateUserService'
 
 @Injectable()
 export class UpdateUserService implements IUpdateUserService {
@@ -112,7 +113,10 @@ export class UpdateUserService implements IUpdateUserService {
             manager,
           )
         } catch (error) {
-          throw new BadRequestException('Error al actualizar el usuario')
+          this.logger.error(error)
+          throw new InternalServerErrorException(
+            'Error al actualizar el usuario',
+          )
         }
 
         if (role && findUser.role) {
@@ -125,7 +129,8 @@ export class UpdateUserService implements IUpdateUserService {
               manager,
             )
           } catch (error) {
-            throw new BadRequestException('Error al actualizar el rol')
+            this.logger.error(error)
+            throw new InternalServerErrorException('Error al actualizar el rol')
           }
         }
 
@@ -138,7 +143,7 @@ export class UpdateUserService implements IUpdateUserService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al actualizar la imagen del usuario',
             )
           }
@@ -156,7 +161,7 @@ export class UpdateUserService implements IUpdateUserService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al crear la imagen del usuario',
             )
           }
@@ -183,7 +188,8 @@ export class UpdateUserService implements IUpdateUserService {
               manager,
             )
           } catch (error) {
-            throw new BadRequestException(
+            this.logger.error(error)
+            throw new InternalServerErrorException(
               'Error al crear la invitación de verificación de email',
             )
           }
