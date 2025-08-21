@@ -51,6 +51,7 @@ export class AppModule implements NestModule {
         },
         { path: '/auth/forgot-password', method: RequestMethod.POST },
         { path: '/auth/forgot-password/verify', method: RequestMethod.GET },
+        { path: '/auth/email/verify', method: RequestMethod.GET },
         { path: '/auth/forgot-password/reset', method: RequestMethod.POST },
       )
       .exclude(

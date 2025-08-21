@@ -4,6 +4,7 @@ import type {
   DecodedAeco,
   DecodedUser,
   ForgotPasswordDecodedUser,
+  VerifiiedUserDecodedUser,
 } from '@shared/domain/Types'
 
 export const CurrentUser = createParamDecorator(
@@ -17,6 +18,13 @@ export const CurrentForgotPasswordUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): ForgotPasswordDecodedUser => {
     const request = ctx.switchToHttp().getRequest()
     return request['forgotPasswordUser'] as ForgotPasswordDecodedUser
+  },
+)
+
+export const CurrentVerifyEmailUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext): VerifiiedUserDecodedUser => {
+    const request = ctx.switchToHttp().getRequest()
+    return request['verifyEmailUser'] as VerifiiedUserDecodedUser
   },
 )
 
