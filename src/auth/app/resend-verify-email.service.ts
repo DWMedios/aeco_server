@@ -60,6 +60,7 @@ export class ResendVerifyEmailService implements IResendVerifyEmailService {
       invitedUserId: user.id,
       inviteType: UserInviteTypeEnum.EMAIL_VERIFICATION,
       status: UserInviteStatusEnum.PENDING,
+      userActive: true,
     })
 
     if (!userInvite) {

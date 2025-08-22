@@ -38,7 +38,10 @@ export class AuthVerifyEmailJwtGuard implements CanActivate {
       token,
       inviteType: UserInviteTypeEnum.EMAIL_VERIFICATION,
       status: UserInviteStatusEnum.PENDING,
+      userActive: true,
+      userVerified: false,
     })
+
     if (!existingInvite) {
       throw new UnauthorizedException('Token no válido')
     }

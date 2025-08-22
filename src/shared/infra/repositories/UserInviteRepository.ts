@@ -36,8 +36,18 @@ export class UserInviteRepository
       .leftJoinAndSelect('invite.invitedUser', 'invitedUser')
       .where('invite.deletedAt IS NULL')
       .andWhere('invitedUser.deletedAt IS NULL')
-      .andWhere('invitedUser.isActive = :isActive', { isActive: true })
-      .andWhere('invitedUser.isVerified = :isVerified', { isVerified: true })
+
+    if (filters?.userActive !== undefined) {
+      qb.andWhere('invitedUser.isActive = :isActive', {
+        isActive: filters.userActive,
+      })
+    }
+
+    if (filters?.userVerified !== undefined) {
+      qb.andWhere('invitedUser.isVerified = :isVerified', {
+        isVerified: filters.userVerified,
+      })
+    }
 
     if (filters?.name) {
       qb.andWhere('invite.name = :name', { name: filters.name })

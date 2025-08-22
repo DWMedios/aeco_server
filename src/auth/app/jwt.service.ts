@@ -141,7 +141,6 @@ export class JwtService implements IJwtService {
         userEmail: decoded.email,
         apiKey: decoded.sub,
         isActive: true,
-        isUserVerified: true,
       })
 
       if (!role) {
