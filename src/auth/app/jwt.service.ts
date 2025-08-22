@@ -137,6 +137,8 @@ export class JwtService implements IJwtService {
         this.secretReset,
       ) as VerifiiedUserDecodedUser
 
+      console.log('Decoded:', decoded)
+
       const role = await this.roleRepository.findBy({
         userEmail: decoded.email,
         apiKey: decoded.sub,
@@ -144,11 +146,13 @@ export class JwtService implements IJwtService {
       })
 
       if (!role) {
+        this.logger.warn('Role not found for the provided token')
         throw new UnauthorizedException('Usuario no permitido')
       }
 
       const user = role?.user
       if (!user) {
+        this.logger.warn('User not found for the provided role')
         throw new UnauthorizedException('Usuario no permitido')
       }
 
@@ -163,6 +167,7 @@ export class JwtService implements IJwtService {
         },
       }
     } catch (error) {
+      this.logger.warn('Error verifying email token')
       this.logger.error(error)
       throw new UnauthorizedException('Token no válido')
     }

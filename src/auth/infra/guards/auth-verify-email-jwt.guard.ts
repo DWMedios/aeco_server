@@ -52,6 +52,7 @@ export class AuthVerifyEmailJwtGuard implements CanActivate {
         await this.userInviteRepository.partialUpdate(existingInvite, {
           status: UserInviteStatusEnum.CANCELLED,
         })
+        this.logger.warn('Decoded user is null')
         throw new UnauthorizedException('Token no válido')
       }
       request['verifyEmailUser'] = {
@@ -60,11 +61,11 @@ export class AuthVerifyEmailJwtGuard implements CanActivate {
       }
       return true
     } catch (error) {
-      this.logger.error(error)
       await this.userInviteRepository.partialUpdate(existingInvite, {
         status: UserInviteStatusEnum.CANCELLED,
       })
-
+      this.logger.warn('Error verifying token')
+      this.logger.error(error)
       throw new UnauthorizedException('Token no válido')
     }
   }
