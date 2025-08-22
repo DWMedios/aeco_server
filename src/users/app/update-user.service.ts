@@ -94,7 +94,7 @@ export class UpdateUserService implements IUpdateUserService {
       const role = findUser?.role
       const company = findUser?.company
       emailVerificationToken = this.jwtService.signVerifiedEmail({
-        email: findUser?.email,
+        email: userToUpdate.email,
         sub: role.apiKey,
         companyName: company.name,
       })
@@ -108,7 +108,9 @@ export class UpdateUserService implements IUpdateUserService {
             findUser,
             {
               ...userToUpdate,
-              ...(hasChangeEmail ? { isVerified: false } : {}),
+              ...(hasChangeEmail
+                ? { isVerified: false, email: userToUpdate.email }
+                : {}),
             },
             manager,
           )
@@ -180,7 +182,7 @@ export class UpdateUserService implements IUpdateUserService {
             await this.userInviteRepository.create(
               {
                 token: emailVerificationToken,
-                email: findUser.email,
+                email: userToUpdate.email,
                 invitedUserId: findUser.id,
                 inviteType: UserInviteTypeEnum.EMAIL_VERIFICATION,
                 status: UserInviteStatusEnum.PENDING,
@@ -213,7 +215,7 @@ export class UpdateUserService implements IUpdateUserService {
 
       try {
         const response = await this.emailService.sendEmailWithTemplate({
-          to: findUser?.email,
+          to: userTransaction.email,
           templateId: this.templateId,
           templateModel,
         })

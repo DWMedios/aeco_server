@@ -137,8 +137,6 @@ export class JwtService implements IJwtService {
         this.secretReset,
       ) as VerifiiedUserDecodedUser
 
-      console.log('Decoded:', decoded)
-
       const role = await this.roleRepository.findBy({
         userEmail: decoded.email,
         apiKey: decoded.sub,
