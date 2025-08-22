@@ -22,6 +22,7 @@ import { VerifyEmailTokenService } from './app/verify-token/verify-email-token.s
 import { RESEND_VERIFY_EMAIL_SERVICE } from './domain/services/IResendVerifyEmailService'
 import { ResendVerifyEmailService } from './app/resend-verify-email.service'
 import { ResendVerifyEmailController } from './infra/controllers/resend-verify-email.controller'
+import { VerifyEmailTokenController } from './infra/controllers/verify-email-token.controller'
 
 @Module({
   imports: [SharedModule],
@@ -64,6 +65,7 @@ import { ResendVerifyEmailController } from './infra/controllers/resend-verify-e
     ResetPasswordInternalController,
     ForgotPasswordController,
     VerifyResetPasswordTokenController,
+    VerifyEmailTokenController,
     ResetPasswordExternalController,
     ResendVerifyEmailController,
   ],
