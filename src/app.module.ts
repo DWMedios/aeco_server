@@ -1,10 +1,11 @@
-import { APP_INTERCEPTOR } from '@nestjs/core'
 import {
   MiddlewareConsumer,
   Module,
   NestModule,
   RequestMethod,
 } from '@nestjs/common'
+import { APP_INTERCEPTOR } from '@nestjs/core'
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager'
 import { AecosModule } from '@aecos/aecos.module'
 import { AdvertisingsModule } from '@advertisings/advertisings.module'
 import { AppController } from './app.controller'
@@ -26,6 +27,9 @@ import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true,
+    }),
     SharedModule,
     CommonModule,
     UsersModule,
@@ -46,6 +50,11 @@ import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+    AppService,
   ],
   controllers: [AppController],
 })
