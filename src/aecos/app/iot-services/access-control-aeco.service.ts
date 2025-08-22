@@ -2,16 +2,16 @@ import { Injectable, Inject, Logger } from '@nestjs/common'
 import {
   // AECO_REQUEST_HISTORY_REPOSITORY,
   // type IAecoRequestHistoryRepository,
-  AECO_ATTEMPTS_REPOSITORY,
+  // AECO_ATTEMPTS_REPOSITORY,
+  // type IAecoAttemptsRepository,
   AECO_REPOSITORY,
-  type IAecoAttemptsRepository,
   type IAecoRepository,
 } from '@shared/domain/repositories'
 // import { AecoAttemptsEnum } from '@common/domain/enums/AecoAttempts.enum'
 import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 // import { formatDate, currentDateTZ } from '@shared/utils/functions'
 import type { IAecoPayload } from '@aecos/domain/Types'
-import type { IAecoAttempts } from '@common/domain/entities'
+// import type { IAecoAttempts } from '@common/domain/entities'
 import type { IAccessControlAecoService } from '@aecos/domain/services/iot-services/IAccessControlAecoService'
 
 @Injectable()
@@ -21,8 +21,8 @@ export class AccessControlAecoService implements IAccessControlAecoService {
   constructor(
     @Inject(AECO_REPOSITORY)
     private readonly aecoRepository: IAecoRepository,
-    @Inject(AECO_ATTEMPTS_REPOSITORY)
-    private readonly aecoAttemptsRepository: IAecoAttemptsRepository,
+    // @Inject(AECO_ATTEMPTS_REPOSITORY)
+    // private readonly aecoAttemptsRepository: IAecoAttemptsRepository,
     // @Inject(AECO_REQUEST_HISTORY_REPOSITORY)
     // private readonly aecoRequestHistoryRepository: IAecoRequestHistoryRepository,
   ) {}
@@ -84,11 +84,11 @@ export class AccessControlAecoService implements IAccessControlAecoService {
     return { success: true, message: 'Request procesada correctamente' }
   }
 
-  private async logAttempt(data: Partial<IAecoAttempts>) {
-    try {
-      await this.aecoAttemptsRepository.create(data)
-    } catch (error) {
-      this.logger.error('Failed to save attempt log', error.stack)
-    }
-  }
+  // private async logAttempt(data: Partial<IAecoAttempts>) {
+  //   try {
+  //     await this.aecoAttemptsRepository.create(data)
+  //   } catch (error) {
+  //     this.logger.error('Failed to save attempt log', error.stack)
+  //   }
+  // }
 }
