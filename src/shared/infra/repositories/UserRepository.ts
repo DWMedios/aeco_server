@@ -33,6 +33,39 @@ export class UserRepository
     })
   }
 
+  findByIdResponse(id: number, manager?: EntityManager): Promise<IUser | null> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.company', 'company')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.mediaAsset', 'mediaAsset')
+      .select([
+        'user.id',
+        'user.name',
+        'user.email',
+        'user.phone',
+        'user.position',
+        'user.isActive',
+        'user.isVerified',
+        'user.createdAt',
+        'user.companyId',
+        'user.imageId',
+        'role.id',
+        'role.role',
+        'company.id',
+        'company.name',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+      ])
+      .where('user.id = :id', { id })
+
+    return qb.getOne()
+  }
+
   findById(
     id: number,
     isActive?: boolean,

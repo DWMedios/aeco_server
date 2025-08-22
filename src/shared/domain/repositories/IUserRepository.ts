@@ -10,6 +10,7 @@ export interface IUserRepository {
     id: number,
     manager?: EntityManager,
   ): Promise<IUser | null>
+  findByIdResponse(id: number, manager?: EntityManager): Promise<IUser | null>
   findById(
     id: number,
     isActive?: boolean,

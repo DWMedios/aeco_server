@@ -179,6 +179,6 @@ export class CreateUserService implements ICreateUserService {
       this.logger.error(error)
     }
 
-    return await this.userRepository.findById(userTransaction.id)
+    return await this.userRepository.findByIdResponse(userTransaction.id)
   }
 }

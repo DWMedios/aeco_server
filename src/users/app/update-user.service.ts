@@ -223,6 +223,6 @@ export class UpdateUserService implements IUpdateUserService {
       }
     }
 
-    return await this.userRepository.findById(userTransaction.id)
+    return await this.userRepository.findByIdResponse(userTransaction.id)
   }
 }
