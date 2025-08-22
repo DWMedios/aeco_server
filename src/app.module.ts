@@ -1,4 +1,3 @@
-import { PrometheusModule } from '@willsoto/nestjs-prometheus'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import {
   MiddlewareConsumer,
@@ -27,7 +26,6 @@ import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
 
 @Module({
   imports: [
-    PrometheusModule.register(),
     SharedModule,
     CommonModule,
     UsersModule,
