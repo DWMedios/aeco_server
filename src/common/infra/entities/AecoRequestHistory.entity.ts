@@ -26,6 +26,7 @@ export class AecoRequestHistory extends Base implements IAecoRequestHistory {
   geolocation?: IAecoCoords
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   aecoId: number
 
   @ManyToOne(() => Aeco, (aeco) => aeco.requestHistory)

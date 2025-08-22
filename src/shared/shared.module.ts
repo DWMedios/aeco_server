@@ -19,6 +19,7 @@ import {
   ProductStats,
   Reward,
   Ticket,
+  TicketItem,
   User,
   UserInvite,
   UserRolePermissions,
@@ -56,6 +57,7 @@ import {
   ProductRepository,
   RewardRepository,
   RoleRepository,
+  TicketItemRepository,
   TicketRepository,
   UserRepository,
 } from './infra/repositories'
@@ -67,6 +69,7 @@ import { EMAIL_SERVICE } from './domain/services/email-service.interface'
 import { MailService } from './app/mail/mail.service'
 import { USER_INVITE_REPOSITORY } from './domain/repositories/IUserInviteRepository'
 import { UserInviteRepository } from './infra/repositories/UserInviteRepository'
+import { TICKET_ITEM_REPOSITORY } from './domain/repositories/ITicketItemRepository'
 
 @Module({
   imports: [
@@ -79,6 +82,7 @@ import { UserInviteRepository } from './infra/repositories/UserInviteRepository'
       Page,
       Reward,
       Ticket,
+      TicketItem,
       User,
       UserRolePermissions,
       Product,
@@ -166,6 +170,14 @@ import { UserInviteRepository } from './infra/repositories/UserInviteRepository'
       useClass: UserInviteRepository,
     },
     {
+      provide: TICKET_ITEM_REPOSITORY,
+      useClass: TicketItemRepository,
+    },
+    {
+      provide: S3_SERVICE,
+      useClass: S3Service,
+    },
+    {
       provide: S3_SERVICE,
       useClass: S3Service,
     },
@@ -198,6 +210,7 @@ import { UserInviteRepository } from './infra/repositories/UserInviteRepository'
     PRODUCT_CAPACITY_REPOSITORY,
     DASHBOARD_REPOSITORY,
     TICKET_REPOSITORY,
+    TICKET_ITEM_REPOSITORY,
     MEDIA_ASSET_REPOSITORY,
     CONTRACTOR_REPOSITORY,
     CAMPAIGN_REPOSITORY,

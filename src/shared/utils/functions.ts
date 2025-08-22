@@ -59,6 +59,32 @@ export const formatDate = (date: Date): string => {
 }
 
 /**
+ * The function `formatDateOnly` takes a Date object as input and returns a formatted string representing only the date
+ * @param date - A Date object representing the date to be formatted.
+ * @returns A formatted date string in the format 'yyyy-MM-dd'.
+ */
+export const formatDateOnly = (date: Date): string => {
+  const dateTime = DateTime.fromJSDate(date, {
+    zone: 'America/Mexico_City',
+  }).setLocale('es')
+  return dateTime.toFormat('yyyy-MM-dd')
+}
+
+/**
+ * The function `formatHoursAndMinutes` takes a Date object as input and returns a formatted string representing the
+ * hours and minutes in the format "hh:mm a" for the "America/Mexico_City" timezone.
+ * @param {Date} date - A JavaScript Date object that represents a specific date and time.
+ * @returns The `formatHoursAndMinutes` function returns a formatted string representing the hours and minutes of the
+ * given date in the format "hh:mm a".
+ */
+export const formatHoursAndMinutes = (date: Date): string => {
+  const dateTime = DateTime.fromJSDate(date, {
+    zone: 'America/Mexico_City',
+  }).setLocale('es')
+  return dateTime.toFormat('hh:mm a')
+}
+
+/**
  * Takes a string as input and removes special characters and slashes, returning a modified version of the input string.
  * @param {string} text - A string representing the file name that needs to be cleared.
  * @returns A modified version of the input `text` string.

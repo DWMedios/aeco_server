@@ -6,6 +6,9 @@ import { GetAllTicketController } from './infra/controllers/get-all-ticket.contr
 import { FIND_TICKET_SERVICE } from './domain/services/IFindTicketService'
 import { FindTicketService } from './app/find-ticket.service'
 import { GetTicketController } from './infra/controllers/get-ticket.controller'
+import { ANAHUAC_GENERATE_REPORT_SERVICE } from './domain/services/IAnahuacGenerateReportService'
+import { AnahuacGenerateReportService } from './app/anahuac-generate-report.service'
+import { GetAnahuacReportController } from './infra/controllers/get-anahuac-report.controller'
 
 @Module({
   imports: [SharedModule],
@@ -18,7 +21,15 @@ import { GetTicketController } from './infra/controllers/get-ticket.controller'
       provide: FIND_TICKET_SERVICE,
       useClass: FindTicketService,
     },
+    {
+      provide: ANAHUAC_GENERATE_REPORT_SERVICE,
+      useClass: AnahuacGenerateReportService,
+    },
   ],
-  controllers: [GetAllTicketController, GetTicketController],
+  controllers: [
+    GetAnahuacReportController,
+    GetAllTicketController,
+    GetTicketController,
+  ],
 })
 export class TicketsModule {}

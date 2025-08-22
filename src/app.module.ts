@@ -106,6 +106,7 @@ export class AppModule implements NestModule {
         path: 'media-assets/aecos/download-url/:key',
         method: RequestMethod.GET,
       })
+      // .exclude({ path: 'tickets/anahuac-report', method: RequestMethod.GET })
       .forRoutes('*')
   }
 }

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
+import { Entity, Column, ManyToOne, OneToMany, Index } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
 import { TicketItem } from './TicketItems.entity'
@@ -22,6 +22,7 @@ export class Ticket extends Base implements ITicket {
   totalBottles: number
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   aecoId?: number
 
   @ManyToOne(() => Aeco, (aeco) => aeco.tickets)
