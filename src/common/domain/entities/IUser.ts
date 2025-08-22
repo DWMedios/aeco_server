@@ -1,11 +1,13 @@
 import type { IBase } from './IBase'
 import type { ICompany } from './ICompany'
 import type { IMediaAsset } from './IMediaAsset'
+import type { IUserInvite } from './IUserInvite'
 import type { IUserRolePermissions } from './IUserRolePermissions'
 
 export interface IUser extends IBase {
   readonly name: string
   readonly email: string
+  readonly isVerified: boolean
   readonly phone?: string
   readonly position?: string
   readonly password?: string
@@ -15,4 +17,6 @@ export interface IUser extends IBase {
   company?: ICompany
   role?: IUserRolePermissions
   mediaAsset?: IMediaAsset
+  invitedUsers?: IUserInvite[]
+  invites?: IUserInvite[]
 }

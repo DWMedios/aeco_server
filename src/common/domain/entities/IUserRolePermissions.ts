@@ -1,10 +1,10 @@
 import type { IBase } from './IBase'
 import type { IUser } from './IUser'
-import type { UserRoleEntiyEnum } from '../enums/UserRole.enum'
+import type { UserRoleEntityEnum } from '../enums/UserRole.enum'
 
 export interface IUserRolePermissions extends IBase {
   permissions: Record<string, boolean>[]
-  readonly role: UserRoleEntiyEnum
+  readonly role: UserRoleEntityEnum
   readonly apiKey: string
   readonly token: string
   readonly userId: number

@@ -56,10 +56,15 @@ export class AppModule implements NestModule {
     consumer.apply(CorrelationIdMiddleware).forRoutes('*')
     consumer
       .apply(AuthMiddleware)
-      .exclude({
-        path: 'auth/login',
-        method: RequestMethod.POST,
-      })
+      .exclude(
+        {
+          path: 'auth/login',
+          method: RequestMethod.POST,
+        },
+        { path: '/auth/forgot-password', method: RequestMethod.POST },
+        { path: '/auth/forgot-password/verify', method: RequestMethod.GET },
+        { path: '/auth/forgot-password/reset', method: RequestMethod.POST },
+      )
       .exclude(
         {
           path: 'aecos/initial-setup/:serialNumber',

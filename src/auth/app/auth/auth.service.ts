@@ -1,17 +1,17 @@
 import * as bcrypt from 'bcrypt'
 import { ForbiddenException, Inject, Injectable, Logger } from '@nestjs/common'
 import {
-  IRoleRepository,
-  ROLE_REPOSITORY,
   USER_REPOSITORY,
+  ROLE_REPOSITORY,
   type IUserRepository,
+  type IRoleRepository,
 } from '@shared/domain/repositories'
 import {
   JWT_SERVICE,
   type IJwtService,
 } from '@auth/domain/services/IJwtService'
-import { DecodedUser } from '@shared/domain/Types'
-import { LoginUserDto } from '@auth/domain/dto/LoginUser.dto'
+import type { DecodedUser } from '@shared/domain/Types'
+import type { LoginUserDto } from '@auth/domain/dto/login-user.dto'
 import type { IAuthService } from '@auth/domain/services/IAuthService'
 
 @Injectable()

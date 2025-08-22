@@ -5,7 +5,7 @@ export enum UserRoleEnum {
   RECOLECTOR = 'recolector',
 }
 
-export enum UserRoleEntiyEnum {
+export enum UserRoleEntityEnum {
   SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
   OPERATOR = 'operator',

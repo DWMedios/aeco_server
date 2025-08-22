@@ -24,7 +24,7 @@ import type {
   IUser,
 } from '@common/domain/entities'
 import type { ICreateCompanyService } from '@company/domain/services/ICreateCompanyService'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 
 @Injectable()
 export class CreateCompanyService implements ICreateCompanyService {
@@ -139,7 +139,7 @@ export class CreateCompanyService implements ICreateCompanyService {
             await this.roleRepository.create(
               {
                 userId: newUserAdmin.id,
-                role: UserRoleEntiyEnum.ADMIN,
+                role: UserRoleEntityEnum.ADMIN,
                 apiKey: uuidv4(),
               },
               manager,

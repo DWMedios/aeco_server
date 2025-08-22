@@ -20,7 +20,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { UserRoleEntiyEnum } from '@common/domain/enums/UserRole.enum'
+import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
 import type { IMediaAsset, IUser } from '@common/domain/entities'
 import type { CreateUserDto } from '@users/domain/dto/CreateUser.dto'
 import type { ICreateUserService } from '@users/domain/services/ICreateUserService'
@@ -95,7 +95,7 @@ export class CreateUserService implements ICreateUserService {
           await this.roleRepository.create(
             {
               userId: newUser.id,
-              role: role as unknown as UserRoleEntiyEnum,
+              role: role as unknown as UserRoleEntityEnum,
               apiKey: uuidv4(),
             },
             manager,
