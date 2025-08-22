@@ -57,6 +57,7 @@ export class UserRepository
         'user.imageId',
         'role.id',
         'role.role',
+        'role.apiKey',
         'company.id',
         'company.name',
         'mediaAsset.id',
