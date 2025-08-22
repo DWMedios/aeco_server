@@ -7,7 +7,9 @@ import {
   Inject,
   Logger,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager'
 import {
   ACCESS_CONTROL_AECO_SERVICE,
   type IAccessControlAecoService,
@@ -27,6 +29,8 @@ export class GetAccessControlAecoController {
   ) {}
 
   @Get('access-control')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(60)
   @UseGuards(AccessControlAecosGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
