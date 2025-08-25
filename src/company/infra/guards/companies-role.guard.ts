@@ -16,11 +16,14 @@ export class CompaniesRoleGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>()
-    const user = request['user'] as DecodedUser
+    const currentUser = request['user'] as DecodedUser
+    // const method = request.method
+    // const userId = Number(request?.params.id ?? 0)
 
-    const roleType = user.roleType
+    const roleType = currentUser.roleType
     const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
+    const isAdmin = roleType === UserRoleEntityEnum.ADMIN
 
-    return isSuperAdmin
+    return !isSuperAdmin && !isAdmin
   }
 }
