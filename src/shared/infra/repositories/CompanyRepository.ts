@@ -135,6 +135,10 @@ export class CompanyRepository
       qb.andWhere('companies.status = :status', { status: filters.status })
     }
 
+    if (filters?.companyId) {
+      qb.andWhere('companies.id = :companyId', { companyId: filters.companyId })
+    }
+
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)
 
     if (filters?.orderByDirection && filters?.orderByField) {
