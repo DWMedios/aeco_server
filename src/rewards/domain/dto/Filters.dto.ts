@@ -97,14 +97,15 @@ export class RewardFiltersDto extends BaseFiltersDto {
   @ApiProperty({
     description: 'Campo por el cual ordenar los resultados',
     example: 'name',
-    enum: ['createdAt', 'name', 'order', 'status', 'establishment', 'id'],
+    enum: ['createdAt', 'name', 'order', 'status', 'id'],
     default: 'createdAt',
     required: false,
   })
   @IsOptional()
-  @Transform(({ value }) => (value ? String(value) : value))
+  @IsString({ message: 'orderByField debe ser una cadena de texto' })
   @IsIn(['createdAt', 'name', 'order', 'status', 'id'], {
     message: 'orderByField debe ser createdAt, name, order, status o id',
   })
+  @Transform(({ value }) => (value ? String(value) : value))
   readonly orderByField?: OrderByFieldRewardType
 }
