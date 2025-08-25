@@ -102,7 +102,8 @@ export class RewardFiltersDto extends BaseFiltersDto {
     required: false,
   })
   @IsOptional()
-  @IsIn(['createdAt', 'name', 'order', 'status', 'establishment', 'id'], {
+  @Transform(({ value }) => (value ? String(value) : value))
+  @IsIn(['createdAt', 'name', 'order', 'status', 'id'], {
     message: 'orderByField debe ser createdAt, name, order, status o id',
   })
   readonly orderByField?: OrderByFieldRewardType
