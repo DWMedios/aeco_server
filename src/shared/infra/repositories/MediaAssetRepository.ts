@@ -41,10 +41,10 @@ export class MediaAssetRepository
       .leftJoinAndSelect('media.contractorLogo', 'contractorLogo')
       .leftJoinAndSelect('media.companyLogo', 'companyLogo')
       .leftJoinAndSelect('media.userImage', 'userImage')
-      .where('media.companyLogo.id = :companyId', { companyId })
-      .orWhere('media.contractorLogo.companyId = :companyId', { companyId })
-      .orWhere('media.campaignMedia.companyId = :companyId', { companyId })
-      .orWhere('media.userImage.companyId = :companyId', { companyId })
+      .where('companyLogo.id = :companyId', { companyId })
+      .orWhere('contractorLogo.companyId = :companyId', { companyId })
+      .orWhere('campaignMedia.companyId = :companyId', { companyId })
+      .orWhere('userImage.companyId = :companyId', { companyId })
       .select([
         'media.id',
         'media.fileKey',
