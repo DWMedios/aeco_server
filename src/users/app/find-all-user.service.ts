@@ -2,6 +2,7 @@ import {
   Injectable,
   Inject,
   Logger,
+  BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common'
 import {
@@ -32,8 +33,19 @@ export class FindAllUserService implements IFindAllUserService {
     const companyIds: number[] = []
     const roleType = currentUser.roleType
 
-    if (roleType !== UserRoleEntityEnum.SUPER_ADMIN) {
+    if (roleType !== UserRoleEntityEnum.SUPER_ADMIN && filters?.companyId) {
       const userCompany = currentUser.company
+      if (!userCompany) {
+        throw new BadRequestException(
+          'El usuario no tiene una compañía asignada',
+        )
+      }
+
+      if (userCompany.id !== filters.companyId) {
+        throw new BadRequestException(
+          'No tienes permiso para ver usuarios de esta compañía',
+        )
+      }
       companyIds.push(userCompany.id)
     }
     try {
