@@ -1,13 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import {
-  IsBoolean,
-  IsEnum,
-  IsIn,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator'
+import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
@@ -98,7 +91,6 @@ export class RewardFiltersDto extends BaseFiltersDto {
     required: false,
   })
   @IsOptional()
-  @IsNumber({}, { message: 'companyId debe ser un número' })
   @Transform(({ value }) => (value ? Number(value) : value))
   readonly companyId?: number
 
