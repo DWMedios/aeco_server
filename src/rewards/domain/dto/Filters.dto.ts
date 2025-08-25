@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsEnum,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { RewardTypeEnum } from '@common/domain/enums/RewardType.enum'
@@ -83,6 +90,17 @@ export class RewardFiltersDto extends BaseFiltersDto {
     message: 'type debe ser un tipo de recompensa válido',
   })
   readonly type?: RewardTypeEnum
+
+  @ApiProperty({
+    description: 'ID de la compañía para filtrar campañas',
+    example: 1,
+    type: Number,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
 
   @ApiProperty({
     description: 'Campo por el cual ordenar los resultados',
