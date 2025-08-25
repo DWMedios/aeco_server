@@ -24,6 +24,7 @@ export class CompaniesRoleGuard implements CanActivate {
     const isSuperAdmin = roleType === UserRoleEntityEnum.SUPER_ADMIN
     const isAdmin = roleType === UserRoleEntityEnum.ADMIN
 
-    return !isSuperAdmin && !isAdmin
+    // pass only admin and super admin
+    return isSuperAdmin || isAdmin
   }
 }
