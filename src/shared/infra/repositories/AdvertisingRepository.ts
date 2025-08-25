@@ -120,6 +120,12 @@ export class AdvertisingRepository
       })
     }
 
+    if (filters?.companyId) {
+      qb.andWhere('advertisings.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
+    }
+
     if (filters?.isEnabled) {
       qb.andWhere('advertisings.isEnabled = :isEnabled', {
         isEnabled: filters.isEnabled,

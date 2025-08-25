@@ -71,15 +71,15 @@ export class ContractorRepository
         'mediaAsset.mimeType',
       ])
 
-    if (filters?.companyId) {
-      qb.andWhere('contractors.companyId = :companyId', {
-        companyId: filters.companyId,
-      })
-    }
-
     if (filters?.companyName) {
       qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
+      })
+    }
+
+    if (filters?.companyId) {
+      qb.andWhere('contractors.companyId = :companyId', {
+        companyId: filters.companyId,
       })
     }
 

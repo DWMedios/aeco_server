@@ -118,6 +118,12 @@ export class CampaignRepository
       )
     }
 
+    if (filters?.companyId) {
+      qb.andWhere('campaigns.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
+    }
+
     if (filters?.description) {
       qb.andWhere(
         'LOWER(unaccent(BTRIM(campaigns.description))) ILIKE :description',
@@ -129,12 +135,6 @@ export class CampaignRepository
     if (filters?.companyName) {
       qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
-      })
-    }
-
-    if (filters?.companyId) {
-      qb.andWhere('campaigns.companyId = :companyId', {
-        companyId: filters.companyId,
       })
     }
 

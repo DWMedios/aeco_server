@@ -243,6 +243,16 @@ export class FilterAdvertisingDto extends BaseFiltersDto {
   )
   readonly isEnabled?: boolean
 
+  @ApiProperty({
+    description: 'Filtrar por ID de la compañía',
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
+
   @ApiPropertyOptional({
     description: 'Campo por el cual ordenar los resultados',
     enum: ['createdAt', 'id', 'companyName', 'isEnabled'],
