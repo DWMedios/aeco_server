@@ -126,7 +126,7 @@ export class AdvertisingRepository
       })
     }
 
-    if (filters?.isEnabled) {
+    if (filters?.isEnabled !== undefined) {
       qb.andWhere('advertisings.isEnabled = :isEnabled', {
         isEnabled: filters.isEnabled,
       })
