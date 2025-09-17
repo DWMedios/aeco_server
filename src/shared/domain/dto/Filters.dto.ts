@@ -14,6 +14,6 @@ export class BaseFiltersDto extends PageOptionsDto {
   @IsIn(['ASC', 'DESC'], {
     message: 'orderByDirection debe ser ASC o DESC',
   })
-  @Transform(({ value }) => (value ? value.toUpperCase() : value))
+  @Transform(({ value }) => (value ? String(value)?.toUpperCase() : value))
   readonly orderByDirection?: OrderByDirectionType
 }

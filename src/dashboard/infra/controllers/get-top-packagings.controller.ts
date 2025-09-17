@@ -18,6 +18,7 @@ import {
   FIND_TOP_PACKAGINGS_SERVICE,
   type IFindTopPackagingsService,
 } from '@dashboard/domain/services/IFindTopPackagingsService'
+import type { IProductStats } from '@common/domain/entities'
 import { PackgingStatsFiltersDto } from '@dashboard/domain/dto/DasboardFilters.dto'
 import { PackagingStatsResponseDto } from '@dashboard/domain/dto/DashboardResponses.dto'
 
@@ -63,7 +64,9 @@ export class GetTopPackagingsController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Usuario no autorizado para acceder a estas estadísticas',
   })
-  async getTopPackagingsStats(@Query() filters: PackgingStatsFiltersDto) {
+  async getTopPackagingsStats(
+    @Query() filters: PackgingStatsFiltersDto,
+  ): Promise<IProductStats[]> {
     return await this.service.run(filters)
   }
 }

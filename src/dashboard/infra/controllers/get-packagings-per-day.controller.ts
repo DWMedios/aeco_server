@@ -16,11 +16,11 @@ import {
 } from '@nestjs/common'
 import {
   FIND_PACKAGINGS_PER_DAY_SERVICE,
-  IFindPackagingsPerDayService,
+  type IFindPackagingsPerDayService,
 } from '@dashboard/domain/services/IFindPackagingsPerDayService'
+import type { IDailyStats } from '@common/domain/entities'
 import { PackingsPerDayDto } from '@dashboard/domain/dto/DasboardFilters.dto'
 import { PackagingsPerDayResponseDto } from '@dashboard/domain/dto/DashboardResponses.dto'
-import { IDailyStats } from '@common/domain/entities'
 
 @ApiTags('Dashboard')
 @Controller('dashboard')

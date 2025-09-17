@@ -3,6 +3,7 @@ import type {
   IDailyStats,
   IPackagingStats,
   IProductStats,
+  ITopProductResult,
 } from '@common/domain/entities'
 import type {
   DailyStatsFiltersDto,
@@ -21,7 +22,7 @@ export interface IDashboardRepository {
   topProducts(
     filters: TopStatsFiltersDto,
     manager?: EntityManager,
-  ): Promise<IProductStats[]>
+  ): Promise<ITopProductResult[]>
   topPackagings(
     filters: PackgingStatsFiltersDto,
     manager?: EntityManager,

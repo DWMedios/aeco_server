@@ -2,6 +2,8 @@ import type { EntityManager, Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserInvite } from '@common/infra/entities'
+import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
+import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
 import type { IUserInvite } from '@common/domain/entities/IUserInvite'
 import type { IUserInviteFilters } from '@shared/domain/Filters'
 import type { IUserInviteRepository } from '@shared/domain/repositories/IUserInviteRepository'
@@ -34,8 +36,18 @@ export class UserInviteRepository
       .leftJoinAndSelect('invite.invitedUser', 'invitedUser')
       .where('invite.deletedAt IS NULL')
       .andWhere('invitedUser.deletedAt IS NULL')
-      .andWhere('invitedUser.isActive = :isActive', { isActive: true })
-      .andWhere('invitedUser.isVerified = :isVerified', { isVerified: true })
+
+    if (filters?.userActive !== undefined) {
+      qb.andWhere('invitedUser.isActive = :isActive', {
+        isActive: filters.userActive,
+      })
+    }
+
+    if (filters?.userVerified !== undefined) {
+      qb.andWhere('invitedUser.isVerified = :isVerified', {
+        isVerified: filters.userVerified,
+      })
+    }
 
     if (filters?.name) {
       qb.andWhere('invite.name = :name', { name: filters.name })
@@ -57,6 +69,11 @@ export class UserInviteRepository
     if (filters?.invitedById) {
       qb.andWhere('invite.invitedById = :invitedById', {
         invitedById: filters.invitedById,
+      })
+    }
+    if (filters?.invitedUserId) {
+      qb.andWhere('invite.invitedUserId = :invitedUserId', {
+        invitedUserId: filters.invitedUserId,
       })
     }
 
@@ -96,9 +113,33 @@ export class UserInviteRepository
     return qb.raw[0]
   }
 
+  async updateManyByUser(
+    userId: number,
+    userInvite: Partial<IUserInvite>,
+    inviteType?: UserInviteTypeEnum,
+    status?: UserInviteStatusEnum,
+    manager?: EntityManager,
+  ): Promise<IUserInvite[]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('userInvite')
+      .update()
+      .set(userInvite)
+      .where('invitedUserId = :userId', { userId })
+
+    if (inviteType) {
+      qb.andWhere('inviteType = :inviteType', { inviteType })
+    }
+    if (status) {
+      qb.andWhere('status = :status', { status })
+    }
+
+    const result = await qb.returning('*').execute()
+    return result.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
-      .createQueryBuilder('invite')
+      .createQueryBuilder('userInvite')
       .delete()
       .where('id = :id', { id })
       .execute()
@@ -108,7 +149,7 @@ export class UserInviteRepository
 
   async softDelete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
-      .createQueryBuilder('invite')
+      .createQueryBuilder('userInvite')
       .softDelete()
       .where('id = :id', { id })
       .execute()
@@ -116,9 +157,29 @@ export class UserInviteRepository
     return qb.affected !== 0
   }
 
+  async softDeleteManyByUser(
+    userId: number,
+    inviteType?: UserInviteTypeEnum,
+    status?: UserInviteStatusEnum,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('userInvite')
+      .softDelete()
+      .where('invitedUserId = :userId', { userId })
+    if (inviteType) {
+      qb.andWhere('inviteType = :inviteType', { inviteType })
+    }
+    if (status) {
+      qb.andWhere('status = :status', { status })
+    }
+    const result = await qb.execute()
+    return result.affected !== 0
+  }
+
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
-      .createQueryBuilder('invite')
+      .createQueryBuilder('userInvite')
       .restore()
       .where('id = :id', { id })
       .execute()

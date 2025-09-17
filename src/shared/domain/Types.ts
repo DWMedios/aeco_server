@@ -37,6 +37,23 @@ export type DecodedUser = BaseDecoded & {
 export type ForgotPasswordDecodedUser = BaseDecoded & {
   email: string
   inviteId?: number
+  userId?: number
+  roleType?: UserRoleEntityEnum
+  company?: {
+    id: number
+    name: string
+  }
+}
+
+export type VerifiiedUserDecodedUser = BaseDecoded & {
+  email: string
+  inviteId?: number
+  userId?: number
+  roleType?: UserRoleEntityEnum
+  company?: {
+    id: number
+    name: string
+  }
 }
 
 export type DecodedAeco = {

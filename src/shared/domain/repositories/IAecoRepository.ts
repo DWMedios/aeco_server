@@ -43,6 +43,11 @@ export interface IAecoRepository {
     aeco: Partial<IAeco>,
     manager?: EntityManager,
   ): Promise<IAeco>
+  updateManyByCompany(
+    companyId: number,
+    aeco: Partial<IAeco>,
+    manager?: EntityManager,
+  ): Promise<IAeco[]>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>

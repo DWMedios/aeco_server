@@ -6,11 +6,17 @@ export const TICKET_REPOSITORY = Symbol('ITicketRepository')
 
 export interface ITicketRepository {
   findById(id: number, manager?: EntityManager): Promise<ITicket | null>
+  // This method is only for Anahuac College
+  findManyCardCodes(
+    startDate?: string,
+    endDate?: string,
+    manager?: EntityManager,
+  ): Promise<ITicket[]>
   findAll(
     filters: TicketsFiltersDto,
     manager?: EntityManager,
   ): Promise<[ITicket[], number]>
-  create(
+  createMany(
     tickets: DeepPartial<ITicket>[],
     manager?: EntityManager,
   ): Promise<ITicket[]>

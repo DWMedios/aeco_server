@@ -3,20 +3,33 @@ import {
   Logger,
   Injectable,
   NotFoundException,
-  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import {
+  AECO_REPOSITORY,
+  ROLE_REPOSITORY,
+  USER_REPOSITORY,
   COMPANY_REPOSITORY,
+  CAMPAIGN_REPOSITORY,
   DASHBOARD_REPOSITORY,
+  CONTRACTOR_REPOSITORY,
+  ADVERTISING_REPOSITORY,
   MEDIA_ASSET_REPOSITORY,
-  type IDashboardRepository,
-  type IMediaAssetRepository,
+  type IAecoRepository,
+  type IRoleRepository,
+  type IUserRepository,
   type ICompanyRepository,
+  type ICampaignRepository,
+  type IDashboardRepository,
+  type IContractorRepository,
+  type IAdvertisingRepository,
+  type IMediaAssetRepository,
 } from '@shared/domain/repositories'
 import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
+import { AecoStatusEnum } from '@common/domain/enums/AecoStatus.enum'
 import { S3_SERVICE, type IS3Service } from '@shared/domain/services/IS3Service'
 import type { IDeleteCompanyService } from '@company/domain/services/IDeleteCompanyService'
 
@@ -30,7 +43,19 @@ export class DeleteCompanyService implements IDeleteCompanyService {
     @Inject(MEDIA_ASSET_REPOSITORY)
     private readonly mediaRepository: IMediaAssetRepository,
     @Inject(DASHBOARD_REPOSITORY)
-    private readonly dashbordRepository: IDashboardRepository,
+    private readonly dashboardRepository: IDashboardRepository,
+    @Inject(AECO_REPOSITORY)
+    private readonly aecoRepository: IAecoRepository,
+    @Inject(CAMPAIGN_REPOSITORY)
+    private readonly campaignRepository: ICampaignRepository,
+    @Inject(CONTRACTOR_REPOSITORY)
+    private readonly contractorRepository: IContractorRepository,
+    @Inject(ADVERTISING_REPOSITORY)
+    private readonly advertisingRepository: IAdvertisingRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
+    @Inject(ROLE_REPOSITORY)
+    private readonly roleRepository: IRoleRepository,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
     @Inject(S3_SERVICE)
@@ -45,64 +70,148 @@ export class DeleteCompanyService implements IDeleteCompanyService {
     const isDeleted = await this.transactionService.executeTransaction(
       async (manager) => {
         let deletedCompany: boolean = false
-
-        if (company?.logoId) {
-          try {
-            const logo = await this.mediaRepository.findById(
-              company.logoId,
-              manager,
-            )
-            if (logo) {
-              const s3Key = `dw/${decodeURIComponent(logo.fileKey)}`
-              const fileExists = await this.s3Service.fileExist(s3Key)
-              let fileDeleted = false
-              if (fileExists) {
-                fileDeleted = await this.s3Service.deleteFile(s3Key)
-              }
-              if (fileDeleted) {
-                await this.mediaRepository.softDelete(company.logoId, manager)
-              }
-            }
-          } catch (error) {
-            this.logger.error(error)
-            throw new BadRequestException('Error al eliminar el logo')
-          }
-        }
-
+        // Soft Delete Stats
         try {
-          await this.dashbordRepository.softDeleteDailyStatsByCompany(
-            id,
+          await this.dashboardRepository.softDeleteDailyStatsByCompany(
+            company.id,
             manager,
           )
-          await this.dashbordRepository.softDeletePackagingStatsByCompany(
-            id,
+          await this.dashboardRepository.softDeletePackagingStatsByCompany(
+            company.id,
             manager,
           )
-          await this.dashbordRepository.softDeleteProductStatsByCompany(
-            id,
+          await this.dashboardRepository.softDeleteProductStatsByCompany(
+            company.id,
             manager,
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al eliminar estadísticas')
+          throw new InternalServerErrorException(
+            'Error al eliminar estadísticas',
+          )
         }
 
-        // Falta eliminar Advertisements, Aecos, Campaigns (images too), Users (images too)
-        // Contractors (image too), Ticket and items
+        // Falta eliminar Tickets and items (preguntar)
+        // Soft Delete Campaigns, Contractors and Advertisings
+        try {
+          await this.campaignRepository.updateManyByCompany(
+            company.id,
+            { isEnabled: false },
+            manager,
+          )
+          await this.campaignRepository.softDeleteManyByCompany(
+            company.id,
+            manager,
+          )
+          await this.contractorRepository.softDeleteManyByCompany(
+            company.id,
+            manager,
+          )
+          await this.advertisingRepository.updateManyByCompany(
+            company.id,
+            { isEnabled: false },
+            manager,
+          )
+          await this.advertisingRepository.softDeleteManyByCompany(
+            company.id,
+            manager,
+          )
+        } catch (error) {
+          this.logger.error(error)
+          throw new InternalServerErrorException(
+            'Error al eliminar campañas o contratistas',
+          )
+        }
 
+        // Disable and Soft Delete AECOs
+        try {
+          await this.aecoRepository.updateManyByCompany(
+            id,
+            {
+              status: AecoStatusEnum.DISABLED,
+              isOnline: false,
+              initialSetup: false,
+              needsUpdate: false,
+            },
+            manager,
+          )
+        } catch (error) {
+          this.logger.error(error)
+          throw new InternalServerErrorException('Error al eliminar los AECOs')
+        }
+
+        // Disable and Soft Delete Company
         try {
           await this.companyRepository.updateById(
             company.id,
             {
               name: `${company.name}_deleted_${Number(new Date())}`,
               rfc: `${company.rfc}_deleted_${Number(new Date())}`,
+              status: false,
             },
             manager,
           )
           deletedCompany = await this.companyRepository.softDelete(id, manager)
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al eliminar la empresa')
+          throw new InternalServerErrorException('Error al eliminar la empresa')
+        }
+
+        const users = await this.userRepository.findManyByCompanyId(
+          company.id,
+          manager,
+        )
+        // Disable and Soft Delete Users and Roles
+        if (users.length > 0) {
+          const userIds = users.map((user) => user.id)
+          try {
+            await this.roleRepository.softDeleteManyByUsers(userIds, manager)
+            for (const user of users) {
+              await this.userRepository.updateById(
+                user.id,
+                {
+                  isActive: false,
+                  email: `${user.email}_deleted_${Number(new Date())}`,
+                },
+                manager,
+              )
+            }
+            await this.userRepository.softDeleteManyByCompany(
+              company.id,
+              manager,
+            )
+          } catch (error) {
+            this.logger.error(error)
+            throw new InternalServerErrorException('Error al eliminar usuarios')
+          }
+        }
+
+        // Delete Media Assets from S3 and Soft Delete from DB
+        if (deletedCompany) {
+          const mediaAssets = await this.mediaRepository.findManyByCompanyId(
+            company.id,
+            manager,
+          )
+          if (mediaAssets.length > 0) {
+            for (const media of mediaAssets) {
+              try {
+                const s3Key = `dw/${decodeURIComponent(media.fileKey)}`
+                const fileExists = await this.s3Service.fileExist(s3Key)
+                let fileDeleted = false
+                if (fileExists) {
+                  fileDeleted = await this.s3Service.deleteFile(s3Key)
+                }
+                if (fileDeleted) {
+                  await this.mediaRepository.softDelete(media.id, manager)
+                }
+              } catch (error) {
+                this.logger.error(error)
+                throw new InternalServerErrorException(
+                  'Error al eliminar el archivo',
+                )
+              }
+            }
+          }
         }
         return deletedCompany
       },

@@ -18,9 +18,9 @@ import {
   FIND_DAILY_STATS_SERVICE,
   type IFindDailyStatsService,
 } from '@dashboard/domain/services/IFindDailyStatsService'
+import type { IDailyStats } from '@common/domain/entities'
 import { DailyStatsFiltersDto } from '@dashboard/domain/dto/DasboardFilters.dto'
 import { DailyStatsResponseDto } from '@dashboard/domain/dto/DashboardResponses.dto'
-import { IDailyStats } from '@common/domain/entities'
 
 @ApiTags('Dashboard')
 @Controller('dashboard')

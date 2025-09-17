@@ -13,6 +13,7 @@ import {
 import type {
   DecodedUser,
   ForgotPasswordDecodedUser,
+  VerifiiedUserDecodedUser,
 } from '@shared/domain/Types'
 import type { IJwtService } from '@auth/domain/services/IJwtService'
 
@@ -42,6 +43,14 @@ export class JwtService implements IJwtService {
   }
 
   signResetPassword(payload: { email: string; sub: string }): string {
+    return jwt.sign(payload, this.secretReset, { expiresIn: this.expiresIn })
+  }
+
+  signVerifiedEmail(payload: {
+    email: string
+    sub: string
+    companyName: string
+  }): string {
     return jwt.sign(payload, this.secretReset, { expiresIn: this.expiresIn })
   }
 
@@ -100,8 +109,63 @@ export class JwtService implements IJwtService {
         throw new UnauthorizedException('Usuario no permitido')
       }
 
-      return decoded
+      const user = role?.user
+      if (!user) {
+        throw new UnauthorizedException('Usuario no permitido')
+      }
+
+      return {
+        ...decoded,
+        email: user.email,
+        userId: role.userId,
+        roleType: role.role,
+        company: {
+          id: user.company?.id,
+          name: user.company?.name,
+        },
+      }
     } catch (error) {
+      this.logger.error(error)
+      throw new UnauthorizedException('Token no válido')
+    }
+  }
+
+  async verifyEmail(token: string): Promise<VerifiiedUserDecodedUser> {
+    try {
+      const decoded = jwt.verify(
+        token,
+        this.secretReset,
+      ) as VerifiiedUserDecodedUser
+
+      const role = await this.roleRepository.findBy({
+        userEmail: decoded.email,
+        apiKey: decoded.sub,
+        isActive: true,
+      })
+
+      if (!role) {
+        this.logger.warn('Role not found for the provided token')
+        throw new UnauthorizedException('Usuario no permitido')
+      }
+
+      const user = role?.user
+      if (!user) {
+        this.logger.warn('User not found for the provided role')
+        throw new UnauthorizedException('Usuario no permitido')
+      }
+
+      return {
+        ...decoded,
+        email: user.email,
+        userId: role.userId,
+        roleType: role.role,
+        company: {
+          id: user.company?.id,
+          name: user.company?.name,
+        },
+      }
+    } catch (error) {
+      this.logger.warn('Error verifying email token')
       this.logger.error(error)
       throw new UnauthorizedException('Token no válido')
     }

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { AuthModule } from '@auth/auth.module'
 import { SharedModule } from '@shared/shared.module'
 import { FIND_ALL_USER_SERVICE } from './domain/services/IFindAllUserService'
 import { FindAllUserService } from './app/find-all-user.service'
@@ -17,7 +18,7 @@ import { DeleteUserService } from './app/delete-user.service'
 import { DeleteUserController } from './infra/controllers/delete-user.controller'
 
 @Module({
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   providers: [
     {
       provide: FIND_ALL_USER_SERVICE,

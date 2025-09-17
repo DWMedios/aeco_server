@@ -38,6 +38,8 @@ export class AuthVerifyJwtGuard implements CanActivate {
       token,
       inviteType: UserInviteTypeEnum.FORGOT_PASSWORD,
       status: UserInviteStatusEnum.PENDING,
+      userActive: true,
+      userVerified: true,
     })
     if (!existingInvite) {
       throw new UnauthorizedException('Token no válido')

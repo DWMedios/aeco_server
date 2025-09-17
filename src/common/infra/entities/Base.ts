@@ -1,8 +1,9 @@
 import {
+  Index,
   CreateDateColumn,
+  UpdateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm'
 
 export abstract class Base {
@@ -14,6 +15,7 @@ export abstract class Base {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
+  @Index()
   createdAt?: Date
 
   @UpdateDateColumn({

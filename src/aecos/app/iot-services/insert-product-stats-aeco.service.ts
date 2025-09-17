@@ -17,7 +17,7 @@ import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import { setDateToMidDay } from '@shared/utils/functions'
+import { setDateToMidDayV2 } from '@shared/utils/functions'
 import type { DecodedAeco } from '@shared/domain/Types'
 import type { IAecoPayload } from '@aecos/domain/Types'
 import { AecoAttemptsEnum } from '@common/domain/enums/AecoAttempts.enum'
@@ -58,7 +58,7 @@ export class InsertProductStatsAecoService
       throw new BadRequestException('No hay estadísticas para insertar')
     }
 
-    const mapCreatedAt = stats.map((stat) => setDateToMidDay(stat.createdAt))
+    const mapCreatedAt = stats.map((stat) => setDateToMidDayV2(stat.createdAt))
 
     if (mapCreatedAt.some((date) => date === null)) {
       await this.logAttempt(
@@ -88,7 +88,7 @@ export class InsertProductStatsAecoService
       ...stat,
       aecoId: currentAeco.aecoId,
       companyId: currentAeco.company.id,
-      createdAt: setDateToMidDay(stat.createdAt),
+      createdAt: setDateToMidDayV2(stat.createdAt),
     }))
 
     const productStatsTransaction =

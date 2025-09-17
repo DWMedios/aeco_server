@@ -5,6 +5,7 @@ import type {
   IDailyStats,
   IPackagingStats,
   IProductStats,
+  ITopProductResult,
 } from '@common/domain/entities'
 import {
   DailyStats,
@@ -78,15 +79,14 @@ export class DashboardRepository
   topProducts(
     filters: TopStatsFiltersDto,
     manager?: EntityManager,
-  ): Promise<IProductStats[]> {
+  ): Promise<ITopProductResult[]> {
     const qb = this.repository('product', manager)
       .createQueryBuilder('productStats')
       .leftJoinAndSelect('productStats.product', 'product')
       .select([
-        'productStats.id',
-        'productStats.totalCount',
-        'product.id',
-        'product.name',
+        'product.id AS "productId"',
+        'product.name AS "productName"',
+        'SUM(productStats.totalCount)::int AS "totalCount"',
       ])
 
     if (filters?.companyId) {
@@ -96,9 +96,10 @@ export class DashboardRepository
     }
 
     return qb
-      .orderBy('productStats.totalCount', filters.orderByDirection)
+      .groupBy('product.id, productStats.totalCount')
+      .orderBy('"totalCount"', filters.orderByDirection)
       .limit(filters.limit)
-      .getMany()
+      .getRawMany()
   }
 
   topPackagings(
@@ -128,7 +129,10 @@ export class DashboardRepository
       )
     }
 
-    return qb.groupBy('packagingStats.packagingType').getRawMany()
+    return qb
+      .groupBy('packagingStats.packagingType')
+      .orderBy('"totalCount"', filters.orderByDirection)
+      .getRawMany()
   }
 
   totalPackingsPerDay(
@@ -158,7 +162,10 @@ export class DashboardRepository
       })
     }
 
-    return qb.groupBy('dailyStats.createdAt').getRawMany()
+    return qb
+      .groupBy('dailyStats.createdAt')
+      .orderBy('"createdAt"', 'ASC')
+      .getRawMany()
   }
 
   insertDailyStats(

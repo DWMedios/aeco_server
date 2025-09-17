@@ -9,6 +9,10 @@ export interface IMediaAssetRepository {
     fileKey: string,
     manager?: EntityManager,
   ): Promise<IMediaAsset | null>
+  findManyByCompanyId(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IMediaAsset[]>
   create(
     media: Partial<IMediaAsset>,
     manager?: EntityManager,

@@ -10,9 +10,11 @@ export interface IUserRepository {
     id: number,
     manager?: EntityManager,
   ): Promise<IUser | null>
+  findByIdResponse(id: number, manager?: EntityManager): Promise<IUser | null>
   findById(
     id: number,
     isActive?: boolean,
+    isVerified?: boolean,
     manager?: EntityManager,
   ): Promise<IUser | null>
   findByEmail(email: string, manager?: EntityManager): Promise<IUser | null>
@@ -30,6 +32,10 @@ export interface IUserRepository {
     companies?: number[],
     manager?: EntityManager,
   ): Promise<[IUser[], number]>
+  findManyByCompanyId(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IUser[]>
   create(user: Partial<IUser>, manager?: EntityManager): Promise<IUser>
   partialUpdate(
     exists: IUser,
@@ -41,7 +47,16 @@ export interface IUserRepository {
     user: Partial<IUser>,
     manager?: EntityManager,
   ): Promise<IUser>
+  updateManyByCompany(
+    companyId: number,
+    user: Partial<IUser>,
+    manager?: EntityManager,
+  ): Promise<IUser[]>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  softDeleteManyByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>
 }

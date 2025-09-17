@@ -67,6 +67,8 @@ export class ForgotPasswordService implements IForgotPasswordService {
       invitedUserId: user.id,
       inviteType: UserInviteTypeEnum.FORGOT_PASSWORD,
       status: UserInviteStatusEnum.PENDING,
+      userActive: true,
+      userVerified: true,
     })
 
     const resetToken = this.jwtService.signResetPassword({

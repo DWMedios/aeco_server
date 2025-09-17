@@ -4,8 +4,8 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common'
-import { APP_INTERCEPTOR } from '@nestjs/core'
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager'
+// import { APP_INTERCEPTOR } from '@nestjs/core'
+// import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager'
 import { AecosModule } from '@aecos/aecos.module'
 import { AdvertisingsModule } from '@advertisings/advertisings.module'
 import { AppController } from './app.controller'
@@ -25,9 +25,9 @@ import { UsersModule } from '@users/users.module'
 
 @Module({
   imports: [
-    CacheModule.register({
-      isGlobal: true,
-    }),
+    // CacheModule.register({
+    //   isGlobal: true,
+    // }),
     SharedModule,
     CommonModule,
     UsersModule,
@@ -43,10 +43,10 @@ import { UsersModule } from '@users/users.module'
     AdvertisingsModule,
   ],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor,
+    // },
     AppService,
   ],
   controllers: [AppController],
@@ -62,6 +62,7 @@ export class AppModule implements NestModule {
         },
         { path: '/auth/forgot-password', method: RequestMethod.POST },
         { path: '/auth/forgot-password/verify', method: RequestMethod.GET },
+        { path: '/auth/email/verify', method: RequestMethod.GET },
         { path: '/auth/forgot-password/reset', method: RequestMethod.POST },
       )
       .exclude(
@@ -116,6 +117,7 @@ export class AppModule implements NestModule {
         path: 'media-assets/aecos/download-url/:key',
         method: RequestMethod.GET,
       })
+      // .exclude({ path: 'tickets/anahuac-report', method: RequestMethod.GET })
       .forRoutes('*')
   }
 }

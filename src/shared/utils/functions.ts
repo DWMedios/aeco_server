@@ -26,6 +26,16 @@ export const setDateToMidDay = (date: Date): Date | null => {
   return createdAtLuxon.toJSDate()
 }
 
+export const setDateToMidDayV2 = (date: Date): Date | null => {
+  const createdAtLuxon = DateTime.fromJSDate(new Date(date), {
+    zone: 'America/Mexico_City',
+  }).set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
+
+  if (!createdAtLuxon.isValid) return null
+
+  return createdAtLuxon.toJSDate()
+}
+
 /**
  * The function `currentDateTZ` returns the current date and time in the 'America/Mexico_City' time zone.
  * @returns A Date object representing the current date and time in the 'America/Mexico_City' time zone.
@@ -46,6 +56,32 @@ export const formatDate = (date: Date): string => {
     zone: 'America/Mexico_City',
   }).setLocale('es')
   return dateTime.toFormat('yyyy-MM-dd hh:mm:ss a')
+}
+
+/**
+ * The function `formatDateOnly` takes a Date object as input and returns a formatted string representing only the date
+ * @param date - A Date object representing the date to be formatted.
+ * @returns A formatted date string in the format 'yyyy-MM-dd'.
+ */
+export const formatDateOnly = (date: Date): string => {
+  const dateTime = DateTime.fromJSDate(date, {
+    zone: 'America/Mexico_City',
+  }).setLocale('es')
+  return dateTime.toFormat('yyyy-MM-dd')
+}
+
+/**
+ * The function `formatHoursAndMinutes` takes a Date object as input and returns a formatted string representing the
+ * hours and minutes in the format "hh:mm a" for the "America/Mexico_City" timezone.
+ * @param {Date} date - A JavaScript Date object that represents a specific date and time.
+ * @returns The `formatHoursAndMinutes` function returns a formatted string representing the hours and minutes of the
+ * given date in the format "hh:mm a".
+ */
+export const formatHoursAndMinutes = (date: Date): string => {
+  const dateTime = DateTime.fromJSDate(date, {
+    zone: 'America/Mexico_City',
+  }).setLocale('es')
+  return dateTime.toFormat('hh:mm a')
 }
 
 /**

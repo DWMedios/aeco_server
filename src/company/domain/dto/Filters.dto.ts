@@ -1,6 +1,12 @@
-import { ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
 import { OrderByFieldCompanyType } from '@shared/domain/enums/Filters.enum'
@@ -91,6 +97,16 @@ export class CompanyFiltersDto extends BaseFiltersDto {
     value === 'true' ? true : value === 'false' ? false : value,
   )
   readonly status?: boolean
+
+  @ApiProperty({
+    description: 'Filtrar por ID de la compañía',
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
 
   @ApiPropertyOptional({
     description: 'Campo por el cual ordenar los resultados',

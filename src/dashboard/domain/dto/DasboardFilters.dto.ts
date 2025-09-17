@@ -123,6 +123,19 @@ export class PackgingStatsFiltersDto {
     message: 'endDate debe tener el formato yyyy-MM-DD',
   })
   readonly endDate?: string
+
+  @ApiProperty({
+    description: 'Dirección del ordenamiento',
+    example: 'DESC',
+    required: true,
+    enum: ['ASC', 'DESC'],
+  })
+  @IsNotEmpty({ message: 'orderByDirection es requerido' })
+  @IsIn(['ASC', 'DESC'], {
+    message: 'orderByDirection debe ser ASC o DESC',
+  })
+  @Transform(({ value }) => (value ? value.toUpperCase() : value))
+  readonly orderByDirection: OrderByDirectionType
 }
 
 export class PackingsPerDayDto {
