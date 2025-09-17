@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm'
+import { Column, Entity, Index, ManyToOne } from 'typeorm'
 import { Base } from './Base'
 import { Aeco } from './Aeco.entity'
 import { Product } from './Product.entity'
@@ -11,12 +11,15 @@ export class ProductStats extends Base implements IProductStats {
   totalCount: number
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   productId?: number
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   companyId?: number
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   aecoId?: number
 
   @ManyToOne(() => Product, (product) => product.stats)

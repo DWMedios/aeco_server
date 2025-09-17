@@ -10,6 +10,10 @@ import {
   type ITicketRepository,
 } from '@shared/domain/repositories/ITicketRepository'
 import {
+  TICKET_ITEM_REPOSITORY,
+  type ITicketItemRepository,
+} from '@shared/domain/repositories/ITicketItemRepository'
+import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
@@ -31,6 +35,8 @@ export class InsertTicketsAecoService implements IInsertTicketsAecoService {
   constructor(
     @Inject(TICKET_REPOSITORY)
     private readonly ticketRepository: ITicketRepository,
+    @Inject(TICKET_ITEM_REPOSITORY)
+    private readonly ticketItemRepository: ITicketItemRepository,
     @Inject(AECO_ATTEMPTS_REPOSITORY)
     private readonly aecoAttemptsRepository: IAecoAttemptsRepository,
     @Inject(TRANSACTION_SERVICE)
@@ -52,7 +58,6 @@ export class InsertTicketsAecoService implements IInsertTicketsAecoService {
       this.logger.warn('No hay tickets para insertar')
       throw new BadRequestException('No hay tickets para insertar')
     }
-
     const mapTickets = tickets.map((ticket) => ({
       ...ticket,
       ...(ticket?.summary && { summary: ticket.summary }),
@@ -64,7 +69,24 @@ export class InsertTicketsAecoService implements IInsertTicketsAecoService {
       async (manager) => {
         let newTickets: ITicket[] = []
         try {
-          newTickets = await this.ticketRepository.create(mapTickets, manager)
+          newTickets = await this.ticketRepository.createMany(
+            mapTickets,
+            manager,
+          )
+
+          if (newTickets.length > 0) {
+            for (const ticket of newTickets) {
+              const ticketFounded = mapTickets.find(
+                (t) => t.folio === ticket.folio && t.aecoId === ticket.aecoId,
+              )
+              if (!ticketFounded || !ticketFounded.items) continue
+              const ticketItems = ticketFounded.items.map((item) => ({
+                ...item,
+                ticketId: ticket.id,
+              }))
+              await this.ticketItemRepository.createMany(ticketItems, manager)
+            }
+          }
         } catch (error) {
           await this.logAttempt(
             currentAeco.aecoSerialNumber,

@@ -118,6 +118,12 @@ export class CampaignRepository
       )
     }
 
+    if (filters?.companyId) {
+      qb.andWhere('campaigns.companyId = :companyId', {
+        companyId: filters.companyId,
+      })
+    }
+
     if (filters?.description) {
       qb.andWhere(
         'LOWER(unaccent(BTRIM(campaigns.description))) ILIKE :description',
@@ -129,12 +135,6 @@ export class CampaignRepository
     if (filters?.companyName) {
       qb.andWhere('LOWER(unaccent(BTRIM(company.name))) ILIKE :companyName', {
         companyName: `%${filters.companyName}%`,
-      })
-    }
-
-    if (filters?.companyId) {
-      qb.andWhere('campaigns.companyId = :companyId', {
-        companyId: filters.companyId,
       })
     }
 
@@ -251,6 +251,22 @@ export class CampaignRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    campaign: Partial<ICampaign>,
+    manager?: EntityManager,
+  ): Promise<ICampaign[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('campaign')
+      .update()
+      .set(campaign)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('campaign')
@@ -266,6 +282,19 @@ export class CampaignRepository
       .createQueryBuilder('campaign')
       .softDelete()
       .where('id = :id', { id })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
+  async softDeleteManyByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('campaign')
+      .softDelete()
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return qb.affected !== 0

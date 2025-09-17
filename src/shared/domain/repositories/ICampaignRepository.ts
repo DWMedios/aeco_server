@@ -36,7 +36,16 @@ export interface ICampaignRepository {
     campaign: Partial<ICampaign>,
     manager?: EntityManager,
   ): Promise<ICampaign>
+  updateManyByCompany(
+    companyId: number,
+    campaign: Partial<ICampaign>,
+    manager?: EntityManager,
+  ): Promise<ICampaign[]>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  softDeleteManyByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>
 }

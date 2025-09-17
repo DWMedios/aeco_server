@@ -33,11 +33,7 @@ export class UserRepository
     })
   }
 
-  findById(
-    id: number,
-    isActive?: boolean,
-    manager?: EntityManager,
-  ): Promise<IUser | null> {
+  findByIdResponse(id: number, manager?: EntityManager): Promise<IUser | null> {
     const qb = this.repository(manager)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.company', 'company')
@@ -50,6 +46,7 @@ export class UserRepository
         'user.phone',
         'user.position',
         'user.isActive',
+        'user.isVerified',
         'user.createdAt',
         'user.companyId',
         'user.imageId',
@@ -66,8 +63,51 @@ export class UserRepository
       ])
       .where('user.id = :id', { id })
 
+    return qb.getOne()
+  }
+
+  findById(
+    id: number,
+    isActive?: boolean,
+    isVerified?: boolean,
+    manager?: EntityManager,
+  ): Promise<IUser | null> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.company', 'company')
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('user.mediaAsset', 'mediaAsset')
+      .select([
+        'user.id',
+        'user.name',
+        'user.email',
+        'user.phone',
+        'user.position',
+        'user.isActive',
+        'user.isVerified',
+        'user.createdAt',
+        'user.companyId',
+        'user.imageId',
+        'role.id',
+        'role.role',
+        'role.apiKey',
+        'company.id',
+        'company.name',
+        'mediaAsset.id',
+        'mediaAsset.fileKey',
+        'mediaAsset.originalName',
+        'mediaAsset.mimeType',
+        'mediaAsset.fileSize',
+        'mediaAsset.assetType',
+      ])
+      .where('user.id = :id', { id })
+
     if (isActive !== undefined) {
       qb.andWhere('user.isActive = :isActive', { isActive })
+    }
+
+    if (isVerified !== undefined) {
+      qb.andWhere('user.isVerified = :isVerified', { isVerified })
     }
 
     return qb.getOne()
@@ -107,6 +147,7 @@ export class UserRepository
         'user.email',
         'user.password',
         'user.isActive',
+        'user.isVerified',
         'company.id',
         'company.name',
         'role.id',
@@ -138,6 +179,7 @@ export class UserRepository
         'user.phone',
         'user.position',
         'user.isActive',
+        'user.isVerified',
         'user.createdAt',
         'user.companyId',
         'user.imageId',
@@ -181,6 +223,16 @@ export class UserRepository
     return qb.getManyAndCount()
   }
 
+  findManyByCompanyId(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<IUser[]> {
+    return this.repository(manager)
+      .createQueryBuilder('user')
+      .where('user.companyId = :companyId', { companyId })
+      .getMany()
+  }
+
   create(user: Partial<IUser>, manager?: EntityManager): Promise<IUser> {
     const newUser = this.repository(manager).create(user)
     return this.repository(manager).save(newUser)
@@ -210,6 +262,22 @@ export class UserRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    user: Partial<IUser>,
+    manager?: EntityManager,
+  ): Promise<IUser[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('user')
+      .update()
+      .set(user)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const result = await this.repository(manager)
       .createQueryBuilder('user')
@@ -225,6 +293,19 @@ export class UserRepository
       .createQueryBuilder('user')
       .softDelete()
       .where('id = :id', { id })
+      .execute()
+
+    return result.affected !== 0
+  }
+
+  async softDeleteManyByCompany(
+    companyId: number,
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const result = await this.repository(manager)
+      .createQueryBuilder('user')
+      .softDelete()
+      .where('companyId = :companyId', { companyId })
       .execute()
 
     return result.affected !== 0

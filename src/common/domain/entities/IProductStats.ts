@@ -11,3 +11,9 @@ export interface IProductStats {
   company?: ICompany
   aeco?: IAeco
 }
+
+export interface ITopProductResult {
+  productId: number
+  productName: string
+  totalCount: number
+}

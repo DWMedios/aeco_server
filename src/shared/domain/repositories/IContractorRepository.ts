@@ -34,9 +34,14 @@ export interface IContractorRepository {
     contractor: Partial<IContractor>,
     manager?: EntityManager,
   ): Promise<IContractor>
+  updateManyByCompany(
+    companyId: number,
+    contractor: Partial<IContractor>,
+    manager?: EntityManager,
+  ): Promise<IContractor[]>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
-  softDeleteByCompany(
+  softDeleteManyByCompany(
     companyId: number,
     manager?: EntityManager,
   ): Promise<boolean>

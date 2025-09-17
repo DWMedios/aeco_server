@@ -312,6 +312,22 @@ export class AecoRepository
     return qb.raw[0]
   }
 
+  async updateManyByCompany(
+    companyId: number,
+    aeco: Partial<IAeco>,
+    manager?: EntityManager,
+  ): Promise<IAeco[]> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('aeco')
+      .update()
+      .set(aeco)
+      .where('companyId = :companyId', { companyId })
+      .returning('*')
+      .execute()
+
+    return qb.raw
+  }
+
   async delete(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('aeco')

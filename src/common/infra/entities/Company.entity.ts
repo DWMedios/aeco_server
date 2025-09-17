@@ -18,10 +18,10 @@ import type { ICompany, ILegalRepresentative } from '@common/domain/entities'
   where: '"deletedAt" IS NULL',
 })
 export class Company extends Base implements ICompany {
-  @Column({ length: 100 })
+  @Column({ length: 255 })
   name: string
 
-  @Column({ length: 13 })
+  @Column({ length: 255 })
   rfc: string
 
   @Column({ nullable: true, length: 100 })

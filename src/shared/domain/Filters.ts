@@ -20,4 +20,6 @@ export interface IUserInviteFilters {
   token?: string
   invitedById?: number
   invitedUserId?: number
+  userActive?: boolean
+  userVerified?: boolean
 }

@@ -135,6 +135,10 @@ export class CompanyRepository
       qb.andWhere('companies.status = :status', { status: filters.status })
     }
 
+    if (filters?.companyId) {
+      qb.andWhere('companies.id = :companyId', { companyId: filters.companyId })
+    }
+
     qb.take(filters.perpage).skip((filters.page - 1) * filters.perpage)
 
     if (filters?.orderByDirection && filters?.orderByField) {
@@ -142,6 +146,22 @@ export class CompanyRepository
     }
 
     return qb.getManyAndCount()
+  }
+
+  findToDelete(id: number, manager?: EntityManager): Promise<ICompany | null> {
+    return this.repository(manager)
+      .createQueryBuilder('company')
+      .leftJoinAndSelect('company.users', 'users')
+      .leftJoinAndSelect('company.rewards', 'rewards')
+      .leftJoinAndSelect('company.aecos', 'aecos')
+      .leftJoinAndSelect('company.dailyStats', 'dailyStats')
+      .leftJoinAndSelect('company.productStats', 'productStats')
+      .leftJoinAndSelect('company.packagingStats', 'packagingStats')
+      .leftJoinAndSelect('company.advertisings', 'advertisings')
+      .leftJoinAndSelect('company.contractors', 'contractors')
+      .leftJoinAndSelect('company.campaigns', 'campaigns')
+      .where('company.id = :id', { id })
+      .getOne()
   }
 
   create(

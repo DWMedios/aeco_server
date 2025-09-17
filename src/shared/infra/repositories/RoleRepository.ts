@@ -154,6 +154,19 @@ export class RoleRepository
     return qb.affected !== 0
   }
 
+  async softDeleteManyByUsers(
+    userIds: number[],
+    manager?: EntityManager,
+  ): Promise<boolean> {
+    const qb = await this.repository(manager)
+      .createQueryBuilder('role')
+      .softDelete()
+      .where('userId IN (:...userIds)', { userIds })
+      .execute()
+
+    return qb.affected !== 0
+  }
+
   async restore(id: number, manager?: EntityManager): Promise<boolean> {
     const qb = await this.repository(manager)
       .createQueryBuilder('role')

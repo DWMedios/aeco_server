@@ -1,6 +1,10 @@
 import { DataSource, EntityManager, QueryRunner } from 'typeorm'
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
-import { TransactionServiceInterface } from '@shared/domain/services/transaction-service.interface'
+import {
+  Logger,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common'
+import type { TransactionServiceInterface } from '@shared/domain/services/transaction-service.interface'
 
 @Injectable()
 export class TransactionService implements TransactionServiceInterface {
@@ -22,7 +26,7 @@ export class TransactionService implements TransactionServiceInterface {
     } catch (error) {
       await queryRunner.rollbackTransaction()
       this.logger.error(error)
-      throw new BadRequestException(error.message)
+      throw new InternalServerErrorException(error.message)
     } finally {
       await queryRunner.release()
     }

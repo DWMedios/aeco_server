@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToMany,
   ManyToOne,
@@ -23,6 +24,7 @@ import type { IAecoCoords } from '@common/domain/Types'
 @Entity({ name: 'aecos' })
 export class Aeco extends Base implements IAeco {
   @Column({ length: 100 })
+  @Index()
   folio: string
 
   @Column({ length: 100 })
@@ -33,6 +35,7 @@ export class Aeco extends Base implements IAeco {
     default: AecoStatusEnum.DISABLED,
     nullable: false,
   })
+  @Index()
   status: AecoStatusEnum
 
   @Column({ type: 'boolean', default: false })
@@ -45,12 +48,14 @@ export class Aeco extends Base implements IAeco {
   needsUpdate: boolean
 
   @Column({ type: 'text', unique: true })
+  @Index()
   serialNumber: string
 
   @Column({ type: 'jsonb', nullable: true })
   currentCoords?: IAecoCoords
 
   @Column({ type: 'int', nullable: true })
+  @Index()
   companyId?: number
 
   @Column({ type: 'varchar', length: 100, nullable: true })

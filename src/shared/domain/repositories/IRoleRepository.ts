@@ -30,5 +30,9 @@ export interface IRoleRepository {
   ): Promise<IUserRolePermissions>
   delete(id: number, manager?: EntityManager): Promise<boolean>
   softDelete(id: number, manager?: EntityManager): Promise<boolean>
+  softDeleteManyByUsers(
+    userIds: number[],
+    manager?: EntityManager,
+  ): Promise<boolean>
   restore(id: number, manager?: EntityManager): Promise<boolean>
 }

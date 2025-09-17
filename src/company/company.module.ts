@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { AuthModule } from '@auth/auth.module'
 import { SharedModule } from '@shared/shared.module'
 import { FIND_ALL_COMPANY_SERVICE } from './domain/services/IFindAllCompanyService'
 import { FindAllCompanyService } from './app/find-all-company.service'
@@ -17,7 +18,7 @@ import { DeleteCompanyService } from './app/delete-company.service'
 import { DeleteCompanyController } from './infra/controllers/delete-company.controller'
 
 @Module({
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   providers: [
     {
       provide: FIND_ALL_COMPANY_SERVICE,

@@ -1,3 +1,4 @@
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger'
 import {
   Controller,
   Get,
@@ -11,16 +12,8 @@ import {
   FIND_TOP_PRODUCTS_SERVICE,
   type IFindTopProductsService,
 } from '@dashboard/domain/services/IFindTopProductsService'
+import type { ITopProductResult } from '@common/domain/entities'
 import { TopStatsFiltersDto } from '@dashboard/domain/dto/DasboardFilters.dto'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiQuery,
-  ApiOkResponse,
-  ApiResponse,
-} from '@nestjs/swagger'
-import { ProductStatsResponseDto } from '@dashboard/domain/dto/DashboardResponses.dto'
-import { IProductStats } from '@common/domain/entities'
 
 @ApiTags('Dashboard')
 @Controller('dashboard')
@@ -53,12 +46,6 @@ export class GetTopProductsController {
     enum: ['ASC', 'DESC'],
     description: 'Dirección de ordenamiento (ASC o DESC)',
   })
-  @ApiOkResponse({
-    description:
-      'Estadísticas de los productos más registrados obtenidas correctamente',
-    type: ProductStatsResponseDto,
-    isArray: true,
-  })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
     description: 'Usuario no autorizado para acceder a estas estadísticas',
@@ -69,7 +56,7 @@ export class GetTopProductsController {
   })
   async getTopProductsStats(
     @Query() filters: TopStatsFiltersDto,
-  ): Promise<IProductStats[]> {
+  ): Promise<ITopProductResult[]> {
     return await this.service.run(filters)
   }
 }

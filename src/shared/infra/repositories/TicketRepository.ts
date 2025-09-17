@@ -49,6 +49,55 @@ export class TicketRepository
     return qb.getOne()
   }
 
+  // This method is only for Anahuac College
+  findManyCardCodes(
+    startDate?: string,
+    endDate?: string,
+    manager?: EntityManager,
+  ): Promise<ITicket[]> {
+    const qb = this.repository(manager)
+      .createQueryBuilder('tickets')
+      .leftJoinAndSelect('tickets.items', 'items')
+      .leftJoinAndSelect('items.product', 'product')
+      .leftJoinAndSelect('tickets.aeco', 'aeco')
+      .select([
+        'tickets.id',
+        'tickets.folio',
+        'tickets.method',
+        'tickets.summary',
+        'tickets.totalCans',
+        'tickets.totalBottles',
+        'tickets.createdAt',
+        'items.id',
+        'items.quantity',
+        'items.packagingType',
+        'product.id',
+        'product.name',
+        'product.code',
+        'product.family',
+        'aeco.id',
+        'aeco.folio',
+        'aeco.name',
+      ])
+      .where('tickets.summary IS NOT NULL')
+      .andWhere("tickets.summary ? 'cardCode'")
+      .andWhere(
+        "(tickets.summary->>'cardCode') IS NOT NULL AND (tickets.summary->>'cardCode') <> ''",
+      )
+
+    if (startDate && endDate) {
+      qb.andWhere(
+        `tickets.createdAt >= date_trunc('day', CAST(:start_date AS TIMESTAMP WITH TIME ZONE))`,
+        { start_date: startDate },
+      ).andWhere(
+        `tickets.createdAt < date_trunc('day', CAST(:end_date AS TIMESTAMP WITH TIME ZONE)) + INTERVAL '1 day'`,
+        { end_date: endDate },
+      )
+    }
+
+    return qb.getMany()
+  }
+
   findAll(
     filters: TicketsFiltersDto,
     manager?: EntityManager,
@@ -107,7 +156,7 @@ export class TicketRepository
     return qb.getManyAndCount()
   }
 
-  create(
+  createMany(
     tickets: DeepPartial<ITicket>[],
     manager?: EntityManager,
   ): Promise<ITicket[]> {

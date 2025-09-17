@@ -4,8 +4,6 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common'
-import { APP_INTERCEPTOR } from '@nestjs/core'
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager'
 import { AecosModule } from '@aecos/aecos.module'
 import { AdvertisingsModule } from '@advertisings/advertisings.module'
 import { AppController } from './app.controller'
@@ -23,13 +21,9 @@ import { RewardsModule } from '@rewards/rewards.module'
 import { SharedModule } from '@shared/shared.module'
 import { TicketsModule } from '@tickets/tickets.module'
 import { UsersModule } from '@users/users.module'
-import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
 
 @Module({
   imports: [
-    CacheModule.register({
-      isGlobal: true,
-    }),
     SharedModule,
     CommonModule,
     UsersModule,
@@ -44,18 +38,7 @@ import { LoggingInterceptor } from '@shared/app/middlewares/logging.interceptor'
     TicketsModule,
     AdvertisingsModule,
   ],
-  providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-    AppService,
-  ],
+  providers: [AppService],
   controllers: [AppController],
 })
 export class AppModule implements NestModule {
@@ -70,6 +53,7 @@ export class AppModule implements NestModule {
         },
         { path: '/auth/forgot-password', method: RequestMethod.POST },
         { path: '/auth/forgot-password/verify', method: RequestMethod.GET },
+        { path: '/auth/email/verify', method: RequestMethod.GET },
         { path: '/auth/forgot-password/reset', method: RequestMethod.POST },
       )
       .exclude(
@@ -124,10 +108,7 @@ export class AppModule implements NestModule {
         path: 'media-assets/aecos/download-url/:key',
         method: RequestMethod.GET,
       })
-      .exclude({
-        path: 'metrics',
-        method: RequestMethod.GET,
-      })
+      // .exclude({ path: 'tickets/anahuac-report', method: RequestMethod.GET })
       .forRoutes('*')
   }
 }

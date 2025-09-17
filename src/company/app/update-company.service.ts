@@ -1,4 +1,10 @@
-import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import {
   COMPANY_REPOSITORY,
   AECO_REPOSITORY,
@@ -84,7 +90,9 @@ export class UpdateCompanyService implements IUpdateCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al actualizar la empresa')
+          throw new InternalServerErrorException(
+            'Error al actualizar la empresa',
+          )
         }
 
         if (mediaAsset && company?.logoId) {
@@ -96,7 +104,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al actualizar el logo de la empresa',
             )
           }
@@ -114,7 +122,7 @@ export class UpdateCompanyService implements IUpdateCompanyService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al crear el logo de la empresa',
             )
           }

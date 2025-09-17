@@ -1,6 +1,13 @@
-import { ApiPropertyOptional } from '@nestjs/swagger'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsBoolean, IsEnum, IsIn, IsOptional, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsEnum,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { normalizeString } from '@shared/utils/functions'
 import { UserRoleEnum } from '@common/domain/enums/UserRole.enum'
 import { BaseFiltersDto } from '@shared/domain/dto/Filters.dto'
@@ -60,4 +67,14 @@ export class UserFiltersDto extends BaseFiltersDto {
     value === 'true' ? true : value === 'false' ? false : value,
   )
   readonly isActive?: boolean
+
+  @ApiProperty({
+    description: 'Filtrar por ID de la compañía',
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber({}, { message: 'companyId debe ser un número' })
+  @Transform(({ value }) => (value ? Number(value) : value))
+  readonly companyId?: number
 }

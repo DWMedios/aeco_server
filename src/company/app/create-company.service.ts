@@ -1,34 +1,56 @@
 import { v4 as uuidv4 } from 'uuid'
-import { Injectable, Inject, BadRequestException, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import {
-  COMPANY_REPOSITORY,
+  Inject,
+  Logger,
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common'
+import {
   ROLE_REPOSITORY,
   USER_REPOSITORY,
   AECO_REPOSITORY,
+  COMPANY_REPOSITORY,
+  USER_INVITE_REPOSITORY,
   MEDIA_ASSET_REPOSITORY,
   type IRoleRepository,
-  type ICompanyRepository,
   type IUserRepository,
   type IAecoRepository,
+  type ICompanyRepository,
   type IMediaAssetRepository,
+  type IUserInviteRepository,
 } from '@shared/domain/repositories'
+import {
+  JWT_SERVICE,
+  type IJwtService,
+} from '@auth/domain/services/IJwtService'
+import {
+  EMAIL_SERVICE,
+  type IEmailService,
+} from '@shared/domain/services/email-service.interface'
 import {
   TRANSACTION_SERVICE,
   type TransactionServiceInterface,
 } from '@shared/domain/services/transaction-service.interface'
-import type { CreateCompanyDto } from '@company/domain/dto/CreateCompany.dto'
 import type {
   IAeco,
   ICompany,
   IMediaAsset,
   IUser,
 } from '@common/domain/entities'
-import type { ICreateCompanyService } from '@company/domain/services/ICreateCompanyService'
 import { UserRoleEntityEnum } from '@common/domain/enums/UserRole.enum'
+import { UserInviteTypeEnum } from '@common/domain/enums/UserInviteType.enum'
+import { UserInviteStatusEnum } from '@common/domain/enums/UserInviteStatus.enum'
+import type { ResetPasswordEmailTemplateModel } from '@shared/domain/Types'
+import type { CreateCompanyDto } from '@company/domain/dto/CreateCompany.dto'
+import type { ICreateCompanyService } from '@company/domain/services/ICreateCompanyService'
 
 @Injectable()
 export class CreateCompanyService implements ICreateCompanyService {
   logger = new Logger(CreateCompanyService.name)
+  private readonly templateId: number
+  private readonly frontUrl: string
 
   constructor(
     @Inject(USER_REPOSITORY)
@@ -41,9 +63,22 @@ export class CreateCompanyService implements ICreateCompanyService {
     private readonly aecoRepository: IAecoRepository,
     @Inject(MEDIA_ASSET_REPOSITORY)
     private readonly mediaRepository: IMediaAssetRepository,
+    @Inject(USER_INVITE_REPOSITORY)
+    private readonly userInviteRepository: IUserInviteRepository,
+    @Inject(JWT_SERVICE)
+    private readonly jwtService: IJwtService,
+    @Inject(EMAIL_SERVICE)
+    private readonly emailService: IEmailService,
     @Inject(TRANSACTION_SERVICE)
     private readonly transactionService: TransactionServiceInterface,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.frontUrl = this.configService.get<string>('config.frontend_url')
+
+    this.templateId = this.configService.get<number>(
+      'postmark.templates.email_verification',
+    )
+  }
 
   async run(request: CreateCompanyDto): Promise<ICompany> {
     const { userAdmin, legalRepresentative, mediaAsset, aecos, ...reqCompany } =
@@ -80,6 +115,13 @@ export class CreateCompanyService implements ICreateCompanyService {
       }
     }
 
+    const apiKey = uuidv4()
+    const emailVerificationToken = this.jwtService.signVerifiedEmail({
+      email: userAdmin?.email,
+      sub: apiKey,
+      companyName: reqCompany.name,
+    })
+
     const companyTransaction = await this.transactionService.executeTransaction(
       async (manager) => {
         let newCompany: ICompany | null = null
@@ -99,7 +141,7 @@ export class CreateCompanyService implements ICreateCompanyService {
             )
           } catch (error) {
             this.logger.error(error)
-            throw new BadRequestException(
+            throw new InternalServerErrorException(
               'Error al crear el logo de la empresa',
             )
           }
@@ -118,7 +160,7 @@ export class CreateCompanyService implements ICreateCompanyService {
           )
         } catch (error) {
           this.logger.error(error)
-          throw new BadRequestException('Error al crear la empresa')
+          throw new InternalServerErrorException('Error al crear la empresa')
         }
 
         if (userAdmin) {
@@ -128,11 +170,13 @@ export class CreateCompanyService implements ICreateCompanyService {
               {
                 ...userAdmin,
                 companyId: newCompany.id,
+                isVerified: false,
               },
               manager,
             )
           } catch (error) {
-            throw new BadRequestException('Error al crear el usuario')
+            this.logger.error(error)
+            throw new InternalServerErrorException('Error al crear el usuario')
           }
 
           try {
@@ -140,18 +184,53 @@ export class CreateCompanyService implements ICreateCompanyService {
               {
                 userId: newUserAdmin.id,
                 role: UserRoleEntityEnum.ADMIN,
-                apiKey: uuidv4(),
+                apiKey,
+              },
+              manager,
+            )
+
+            await this.userInviteRepository.create(
+              {
+                token: emailVerificationToken,
+                email: newUserAdmin.email,
+                invitedUserId: newUserAdmin.id,
+                inviteType: UserInviteTypeEnum.EMAIL_VERIFICATION,
+                status: UserInviteStatusEnum.PENDING,
               },
               manager,
             )
           } catch (error) {
-            throw new BadRequestException('Error al asignar el rol al usuario')
+            this.logger.error(error)
+            throw new InternalServerErrorException(
+              'Error al asignar el rol al usuario',
+            )
           }
         }
 
         return newCompany
       },
     )
+
+    const emailVerificationUrl = `${this.frontUrl}/verify-email?token=${emailVerificationToken}`
+    const templateModel: ResetPasswordEmailTemplateModel = {
+      product_url: 'AECO',
+      product_name: 'AECO',
+      name: userAdmin?.name,
+      company_name: reqCompany.name,
+      company_address: reqCompany?.address,
+      action_url: emailVerificationUrl,
+    }
+
+    try {
+      const response = await this.emailService.sendEmailWithTemplate({
+        to: userAdmin?.email,
+        templateId: this.templateId,
+        templateModel,
+      })
+      this.logger.log(`Email sent successfully: ${response?.MessageID}`)
+    } catch (error) {
+      this.logger.error(error)
+    }
 
     return await this.companyRepository.findById(companyTransaction.id)
   }
